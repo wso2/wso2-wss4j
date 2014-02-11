@@ -31,7 +31,7 @@
     <packaging>bundle</packaging>
     <name>wss4j.wso2</name>
     <description>org.wso2.carbon.wss4j</description>
-    <version>1.5.11.wso2v7.SNAPSHOT</version>
+    <version>1.5.11.wso2v7-SNAPSHOT</version>
     <url>http://wso2.org</url>
 
     <repositories>
