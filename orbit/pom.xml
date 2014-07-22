@@ -92,9 +92,9 @@
             <optional>true</optional>
         </dependency>
 	    <dependency>
-            <groupId>bouncycastle</groupId>
+            <groupId>org.bouncycastle.wso2</groupId>
             <artifactId>bcprov-jdk15</artifactId>
-            <version>132</version>
+            <version>1.32.wso2v1</version>
             <optional>true</optional>
         </dependency>
     </dependencies>
@@ -116,8 +116,7 @@
                             org.apache.ws.axis.security.*; version=${exp.pkg.version.wss4j},
                             javax.xml.crypto.*; version=${exp.pkg.version.xmlsec},
                             org.apache.xml.security.*; version=${exp.pkg.version.xmlsec},
-                            org.jcp.xml.dsig.internal.*; version=${exp.pkg.version.xmlsec},
-			    org.bouncycastle.*; version=${exp.pkg.version.bc}
+                            org.jcp.xml.dsig.internal.*; version=${exp.pkg.version.xmlsec}
                         </Export-Package>
                         <Import-Package>
                             !org.apache.ws.security.*; version="${imp.pkg.version.wss4j}",
@@ -125,13 +124,12 @@
                             !javax.xml.crypto.*; version="${imp.pkg.version.xmlsec}",
                             !org.apache.xml.security.*; version="${imp.pkg.version.xmlsec}",
                             !org.jcp.xml.dsig.internal.*; version="${imp.pkg.version.xmlsec}",
+                            org.bouncycastle.*; version="[1.32.wso2v1,1.33)",
                             org.apache.axis.*;version=1.4.0;resolution:=optional,
                             javax.xml.soap; version="1.0.0";resolution:=optional,
                             *;resolution:=optional
                         </Import-Package>
-			<Embed-Dependency>bcprov-jdk15;scope=compile|runtime;inline=false</Embed-Dependency>
                         <Embed-Transitive>true</Embed-Transitive>
-                        <DynamicImport-Package>*</DynamicImport-Package>
                     </instructions>
                 </configuration>
             </plugin>
@@ -148,10 +146,5 @@
 	<version.xmlsec>1.4.2-patched</version.xmlsec>
         <exp.pkg.version.xmlsec>1.4.2-patched</exp.pkg.version.xmlsec>
         <imp.pkg.version.xmlsec>[1.4.2,2)</imp.pkg.version.xmlsec>
-  
-        <!-- bouncycastle -->
-        <bouncycastle.version>132</bouncycastle.version>
-        <exp.pkg.version.bc>132</exp.pkg.version.bc>
-        <imp.pkg.version.bc>132</imp.pkg.version.bc>
      </properties>
 </project>
