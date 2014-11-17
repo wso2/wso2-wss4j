@@ -20,9 +20,9 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
     <parent>
-        <groupId>org.wso2.carbon</groupId>
+        <groupId>org.apache.ws.security</groupId>
         <artifactId>wss4j-parent</artifactId>
-        <version>4.3.0-SNAPSHOT</version>
+        <version>1.5.11-wso2v7-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
