@@ -93,8 +93,8 @@
         </dependency>
 	    <dependency>
             <groupId>org.bouncycastle.wso2</groupId>
-            <artifactId>bcprov-jdk15</artifactId>
-            <version>1.32.wso2v1</version>
+            <artifactId>bcprov-jdk15on</artifactId>
+            <version>1.49.0.wso2v2</version>
             <optional>true</optional>
         </dependency>
     </dependencies>
@@ -124,7 +124,7 @@
                             !javax.xml.crypto.*; version="${imp.pkg.version.xmlsec}",
                             !org.apache.xml.security.*; version="${imp.pkg.version.xmlsec}",
                             !org.jcp.xml.dsig.internal.*; version="${imp.pkg.version.xmlsec}",
-                            org.bouncycastle.*; version="[1.32.wso2v1,1.33)",
+                            org.bouncycastle.*; version="${imp.pkg.version.bcp}",
                             org.apache.axis.*;version=1.4.0;resolution:=optional,
                             javax.xml.soap; version="1.0.0";resolution:=optional,
                             *;resolution:=optional
@@ -146,5 +146,8 @@
 	<version.xmlsec>1.4.2-patched</version.xmlsec>
         <exp.pkg.version.xmlsec>1.4.2-patched</exp.pkg.version.xmlsec>
         <imp.pkg.version.xmlsec>[1.4.2,2)</imp.pkg.version.xmlsec>
+
+	<!-- bcprov version -->
+        <imp.pkg.version.bcp>[1.49.0.wso2v2, 1.50.0)</imp.pkg.version.bcp>
      </properties>
 </project>
