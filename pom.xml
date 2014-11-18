@@ -21,7 +21,7 @@
     <groupId>org.apache.ws.security</groupId>
     <artifactId>wss4j-parent</artifactId>
     <packaging>pom</packaging>
-    <version>1.5.11-wso2v7</version>
+    <version>1.5.11-wso2v8-SNAPSHOT</version>
     <description>
         Apache WSS4J Parent.
     </description>
