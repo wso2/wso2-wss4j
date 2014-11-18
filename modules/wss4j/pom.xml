@@ -19,8 +19,15 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+    <parent>
+        <groupId>org.apache.ws.security</groupId>
+        <artifactId>wss4j-parent</artifactId>
+        <version>1.5.11-wso2v7-SNAPSHOT</version>
+        <relativePath>../../pom.xml</relativePath>
+    </parent>
+
     <modelVersion>4.0.0</modelVersion>
-    <groupId>org.apache.ws.security</groupId>
     <artifactId>wss4j</artifactId>
     <packaging>bundle</packaging>
     <name>WSS4J</name>
@@ -35,10 +42,10 @@
         server/clients.
     </description>
     <url>http://ws.apache.org/wss4j/</url>
-    <issueManagement>
+    <!--issueManagement>
         <system>JIRA</system>
         <url>http://issues.apache.org/jira/browse/WSS</url>
-    </issueManagement>
+    </issueManagement-->
     <mailingLists>
         <mailingList>
             <name>WSS4J Developer List</name>
@@ -108,7 +115,7 @@
             <distribution>repo</distribution>
         </license>
     </licenses>
-    <scm>
+    <!--scm>
         <connection>
             scm:svn:http://svn.apache.org/repos/asf/webservices/wss4j/trunk/
         </connection>
@@ -116,7 +123,7 @@
             scm:svn:https://svn.apache.org/repos/asf/webservices/wss4j/trunk/
         </developerConnection>
         <url>http://svn.apache.org/viewvc/webservices/wss4j/trunk</url>
-    </scm>
+    </scm-->
     <organization>
         <name>The Apache Software Foundation</name>
         <url>http://www.apache.org/</url>
@@ -165,7 +172,6 @@
 		    </execution> 
 		</executions> 
 	    </plugin>
-
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-pmd-plugin</artifactId>
@@ -267,13 +273,13 @@
                         <argLine>-Djava.endorsed.dirs=${basedir}/endorsed</argLine>
                         <forkMode>once</forkMode>
                         <childDelegation>false</childDelegation>
-			<testFailureIgnore>true</testFailureIgnore>
+			            <testFailureIgnore>true</testFailureIgnore>
                         <includes>
                             <include>**/PackageTests.java</include>
                         </includes>
                     </configuration>
                 </plugin>
-                <plugin>
+                <!--plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-release-plugin</artifactId>
                     <version>2.0</version>
@@ -282,7 +288,7 @@
                             https://svn.apache.org/repos/asf/webservices/wss4j/tags/
                         </tagBase>
                     </configuration>
-                </plugin>
+                </plugin-->
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-compiler-plugin</artifactId>
@@ -343,8 +349,6 @@
         
         <defaultGoal>install</defaultGoal>
     </build>
-    
-
 
     <profiles>
         <profile>
