@@ -21,7 +21,7 @@
     <groupId>org.apache.ws.security</groupId>
     <artifactId>wss4j-parent</artifactId>
     <packaging>pom</packaging>
-    <version>1.5.11-wso2v7</version>
+    <version>1.5.11-wso2v8-SNAPSHOT</version>
     <description>
         Apache WSS4J Parent.
     </description>
@@ -30,7 +30,7 @@
         <url>https://github.com/wso2/wso2-wss4j.git</url>
         <developerConnection>scm:git:https://github.com/wso2/wso2-wss4j.git</developerConnection>
         <connection>scm:git:https://github.com/wso2/wso2-wss4j.git</connection>
-        <tag>wso2-wss4j-1.5.11-wso2v7-rc2</tag>
+        <tag>HEAD</tag>
     </scm>
 
     <repositories>
