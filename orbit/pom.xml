@@ -15,14 +15,12 @@
  ~ specific language governing permissions and limitations
  ~ under the License.
  -->
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
     <parent>
         <groupId>org.apache.ws.security</groupId>
         <artifactId>wss4j-parent</artifactId>
-        <version>1.5.11-wso2v7-SNAPSHOT</version>
+        <version>1.5.11-wso2v7</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
@@ -31,7 +29,7 @@
     <packaging>bundle</packaging>
     <name>wss4j.wso2</name>
     <description>org.wso2.carbon.wss4j</description>
-    <version>1.5.11.wso2v7-SNAPSHOT</version>
+    <version>1.5.11.wso2v7</version>
     <url>http://wso2.org</url>
 
     <repositories>
@@ -69,7 +67,7 @@
         <dependency>
             <groupId>org.apache.ws.security</groupId>
             <artifactId>wss4j</artifactId>
-            <version>1.5.11-wso2v7-SNAPSHOT</version>
+            <version>1.5.11-wso2v7</version>
             <optional>true</optional>
             <exclusions>
                 <exclusion>
