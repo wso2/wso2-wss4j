@@ -438,6 +438,7 @@
         <xerces.version>2.9.1</xerces.version>
         <axis.version>1.4</axis.version>
         <junit.version>3.8.1</junit.version>
+        <project.scm.id>scm-server</project.scm.id>
     </properties>
     
 
