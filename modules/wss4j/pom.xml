@@ -16,15 +16,13 @@
   specific language governing permissions and limitations
   under the License.
 -->
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.apache.ws.security</groupId>
     <artifactId>wss4j</artifactId>
     <packaging>bundle</packaging>
     <name>WSS4J</name>
-    <version>1.5.11-wso2v7-SNAPSHOT</version>
+    <version>1.5.11-wso2v7</version>
     <description>
         Apache WSS4J is an implementation of the Web Services Security
         (WS-Security) being developed at OASIS Web Services Security TC.
@@ -62,43 +60,43 @@
             <name>Davanum Srinivas</name>
             <id>dims</id>
             <email>dims@yahoo.com</email>
-            <organization></organization>
+            <organization />
         </developer>
         <developer>
             <name>Werner Dittmann</name>
             <id>werner</id>
             <email>werner@apache.org</email>
-            <organization></organization>
+            <organization />
         </developer>
         <developer>
             <name>Ias</name>
             <id>ias</id>
             <email>ias@apache.org</email>
-            <organization></organization>
+            <organization />
         </developer>
         <developer>
             <name>Ruchith Fernando</name>
             <id>ruchithf</id>
             <email>ruchithf@apache.org</email>
-            <organization></organization>
+            <organization />
         </developer>
         <developer>
             <name>Fred Dushin</name>
             <id>fadushin</id>
             <email>fadushin@apache.org</email>
-            <organization></organization>
+            <organization />
         </developer>
         <developer>
             <name>Colm O hEigeartaigh</name>
             <id>coheigea</id>
             <email>coheigea@apache.org</email>
-            <organization></organization>
+            <organization />
         </developer>
         <developer>
             <name>Nandana Mihindukulasooriya</name>
             <id>nandana</id>
             <email>nandana@apache.org</email>
-            <organization></organization>
+            <organization />
         </developer>
     </developers>
     <licenses>
@@ -352,7 +350,7 @@
             <activation>
                 <property>
                     <name>release</name>
-                    <value></value>
+                    <value />
                 </property>
             </activation>
             <build>
@@ -375,7 +373,7 @@
             <activation>
                 <property>
                     <name>deploy</name>
-                    <value></value>
+                    <value />
                 </property>
             </activation>
             <build>
