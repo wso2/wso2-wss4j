@@ -150,7 +150,7 @@
 
     <properties>
         <!-- Wss4j -->
-        <version.wss4j>1.5.11-wso2v7-SNAPSHOT</version.wss4j>
+        <version.wss4j>1.5.11-wso2v7</version.wss4j>
         <exp.pkg.version.wss4j>1.5.11-wso2v7</exp.pkg.version.wss4j>
         <imp.pkg.version.wss4j>[1.5.11-wso2v7,2)</imp.pkg.version.wss4j>
 
