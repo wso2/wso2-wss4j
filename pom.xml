@@ -68,7 +68,7 @@
 
     <modules>
         <module>modules/wss4j</module>
-        <module>orbit</module>
+        <module>modules/orbit</module>
     </modules>
 
     <build>
