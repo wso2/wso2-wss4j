@@ -20,14 +20,14 @@
     <parent>
         <groupId>org.apache.ws.security</groupId>
         <artifactId>wss4j-parent</artifactId>
-        <version>1.5.11-wso2v8-SNAPSHOT</version>
+        <version>1.5.11-wso2v7</version>
         <relativePath>../../pom.xml</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <artifactId>wss4j</artifactId>
     <packaging>bundle</packaging>
     <name>WSS4J</name>
-    <version>1.5.11-wso2v8-SNAPSHOT</version>
+    <version>1.5.11-wso2v7</version>
     <description>
         Apache WSS4J is an implementation of the Web Services Security
         (WS-Security) being developed at OASIS Web Services Security TC.
