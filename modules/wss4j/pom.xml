@@ -427,21 +427,6 @@
         </profile>
     </profiles>
 
-
-    <properties>
-        <xmlsec.version>1.5.2</xmlsec.version>
-        <opensaml.version>1.1</opensaml.version>
-        <xml.apis.version>1.3.04</xml.apis.version>
-        <bcprov.jdk14.version>1.45</bcprov.jdk14.version>
-        <bcprov.jdk15.version>1.45</bcprov.jdk15.version>
-        <commons.logging.version>1.1</commons.logging.version>
-        <xerces.version>2.9.1</xerces.version>
-        <axis.version>1.4</axis.version>
-        <junit.version>3.8.1</junit.version>
-        <project.scm.id>scm-server</project.scm.id>
-    </properties>
-
-
     <dependencies>
         <dependency>
             <groupId>commons-logging</groupId>
@@ -452,13 +437,13 @@
         <dependency>
             <groupId>commons-discovery</groupId>
             <artifactId>commons-discovery</artifactId>
-            <version>0.2</version>
+            <version>${commons.discovery.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>commons-codec</groupId>
             <artifactId>commons-codec</artifactId>
-            <version>1.3</version>
+            <version>${commons.codec.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -488,7 +473,7 @@
         <dependency>
             <groupId>org.opensaml</groupId>
             <artifactId>opensaml1</artifactId>
-            <version>${opensaml.version}</version>
+            <version>${opensaml1.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -518,7 +503,7 @@
         <dependency>
             <groupId>org.opensaml</groupId>
             <artifactId>opensaml</artifactId>
-            <version>2.2.3</version>
+            <version>${opensaml.version}</version>
             <exclusions>
                 <exclusion>
                     <groupId>org.bouncycastle</groupId>
@@ -529,7 +514,7 @@
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-jdk14</artifactId>
-            <version>1.5.2</version>
+            <version>${slf4j.jdk14.version}</version>
         </dependency>
     </dependencies>
 
@@ -570,47 +555,6 @@
         </plugins>
     </reporting>
 
-
-    <!--<distributionManagement>
-        <repository>
-            <id>apache-repo</id>
-            <name>Maven Central Repository</name>
-            <url>
-                scpexe://people.apache.org/www/people.apache.org/repo/m2-ibiblio-rsync-repository
-            </url>
-        </repository>
-        <snapshotRepository>
-            <id>apache.snapshots.https</id>
-            <name>Apache Development Snapshot Repository</name>
-            <url>https://repository.apache.org/content/repositories/snapshots</url>
-            <uniqueVersion>false</uniqueVersion>
-        </snapshotRepository>
-        <site>
-            <id>website</id>
-            <url>
-                scpexe://people.apache.org/www/ws.apache.org/wss4j/
-            </url>
-        </site>
-    </distributionManagement>-->
-    <distributionManagement>
-        <!--repository>
-            <id>wso2-maven2-repository</id>
-            <name>WSO2 Maven2 Repository</name>
-            <url>scp://dist.wso2.org/home/httpd/dist.wso2.org/maven2/</url>
-        </repository-->
-        <repository>
-            <id>nexus-releases</id>
-            <name>WSO2 Nexus Release Repository</name>
-            <url>http://maven.wso2.org/nexus/service/local/staging/deploy/maven2/</url>
-        </repository>
-        <!--
-                <snapshotRepository>
-                    <id>wso2-maven2-snapshot-repository</id>
-                    <name>WSO2 Maven2 Snapshot Repository</name>
-                    <url>scp://dist.wso2.org/home/httpd/dist.wso2.org/snapshots/maven2/</url>
-                </snapshotRepository>
-        -->
-    </distributionManagement>
 
     <repositories>
         <repository>

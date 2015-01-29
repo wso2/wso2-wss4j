@@ -26,10 +26,10 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.apache.ws.security.wso2</groupId>
     <artifactId>wss4j</artifactId>
+    <version>1.5.11.wso2v8-SNAPSHOT</version>
     <packaging>bundle</packaging>
     <name>wss4j.wso2</name>
     <description>org.wso2.carbon.wss4j</description>
-    <version>1.5.11.wso2v8-SNAPSHOT</version>
     <url>http://wso2.org</url>
 
     <repositories>
@@ -45,29 +45,11 @@
         </repository>
     </repositories>
 
-    <distributionManagement>
-        <!--repository>
-            <id>wso2-maven2-repository</id>
-            <name>WSO2 Maven2 Repository</name>
-            <url>scp://dist.wso2.org/home/httpd/dist.wso2.org/maven2/</url>
-        </repository-->
-        <repository>
-            <id>nexus-releases</id>
-            <name>WSO2 Nexus Release Repository</name>
-            <url>http://maven.wso2.org/nexus/service/local/staging/deploy/maven2/</url>
-        </repository>
-        <snapshotRepository>
-            <id>wso2-maven2-snapshot-repository</id>
-            <name>WSO2 Maven2 Snapshot Repository</name>
-            <url>scp://dist.wso2.org/home/httpd/dist.wso2.org/snapshots/maven2/</url>
-        </snapshotRepository>
-    </distributionManagement>
 
     <dependencies>
         <dependency>
             <groupId>org.apache.ws.security</groupId>
             <artifactId>wss4j</artifactId>
-            <version>1.5.11-wso2v8-SNAPSHOT</version>
             <optional>true</optional>
             <exclusions>
                 <exclusion>
@@ -91,13 +73,13 @@
         <dependency>
             <groupId>org.apache.santuario</groupId>
             <artifactId>xmlsec</artifactId>
-            <version>1.5.2</version>
+            <version>${xmlsec.version}</version>
             <optional>true</optional>
         </dependency>
         <dependency>
             <groupId>org.bouncycastle.wso2</groupId>
             <artifactId>bcprov-jdk15on</artifactId>
-            <version>1.49.0.wso2v2</version>
+            <version>${bcprov.jdk15on.version}</version>
             <optional>true</optional>
         </dependency>
     </dependencies>
@@ -147,18 +129,4 @@
         </plugins>
     </build>
 
-    <properties>
-        <!-- Wss4j -->
-        <version.wss4j>1.5.11-wso2v8-SNAPSHOT</version.wss4j>
-        <exp.pkg.version.wss4j>1.5.11-wso2v8-SNAPSHOT</exp.pkg.version.wss4j>
-        <imp.pkg.version.wss4j>[1.5.11-wso2v8-SNAPSHOT,2)</imp.pkg.version.wss4j>
-
-        <!-- xmlsec version -->
-        <version.xmlsec>1.4.2-patched</version.xmlsec>
-        <exp.pkg.version.xmlsec>1.4.2-patched</exp.pkg.version.xmlsec>
-        <imp.pkg.version.xmlsec>[1.4.2,2)</imp.pkg.version.xmlsec>
-
-        <!-- bcprov version -->
-        <imp.pkg.version.bcp>[1.49.0.wso2v2, 1.50.0)</imp.pkg.version.bcp>
-    </properties>
 </project>
