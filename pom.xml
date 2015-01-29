@@ -91,7 +91,7 @@
         <exp.pkg.version.xmlsec>1.4.2-patched</exp.pkg.version.xmlsec>
         <imp.pkg.version.xmlsec>[1.4.2,2)</imp.pkg.version.xmlsec>
         <imp.pkg.version.bcp>[1.49.0.wso2v2, 1.50.0)</imp.pkg.version.bcp>
-        <project.scm.id>scm-server</project.scm.id>
+        <project.scm.id>my-scm-server</project.scm.id>
     </properties>
 
 </project>
