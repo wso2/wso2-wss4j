@@ -37,25 +37,26 @@ import org.apache.ws.security.saml.SAMLKeyInfo;
 import org.apache.ws.security.saml.SAMLUtil;
 import org.apache.ws.security.util.Base64;
 import org.apache.ws.security.util.WSSecurityUtil;
+import org.apache.xml.security.algorithms.JCEMapper;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.w3c.dom.Text;
 
-import javax.crypto.BadPaddingException;
-import javax.crypto.Cipher;
-import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.SecretKey;
+import javax.crypto.*;
 import javax.security.auth.callback.Callback;
 import javax.security.auth.callback.CallbackHandler;
 import javax.security.auth.callback.UnsupportedCallbackException;
 import javax.xml.namespace.QName;
 
 import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
 import java.security.cert.X509Certificate;
 import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Vector;
 
 public class EncryptedKeyProcessor implements Processor {
@@ -382,10 +383,8 @@ public class EncryptedKeyProcessor implements Processor {
             decryptedBytes = cipher.doFinal(encryptedEphemeralKey);
         } catch (IllegalStateException e2) {
             throw new WSSecurityException(WSSecurityException.FAILED_CHECK, null, null, e2);
-        } catch (IllegalBlockSizeException e2) {
-            throw new WSSecurityException(WSSecurityException.FAILED_CHECK, null, null, e2);
-        } catch (BadPaddingException e2) {
-            throw new WSSecurityException(WSSecurityException.FAILED_CHECK, null, null, e2);
+        } catch (Exception e2) {
+            decryptedBytes = getRandomKey(getDataRefURIs(xencCipherValue), xencEncryptedKey.getOwnerDocument(), docInfo);
         }
 
         if (tlog.isDebugEnabled()) {
@@ -510,6 +509,70 @@ public class EncryptedKeyProcessor implements Processor {
 
     public byte[] getEncryptedEphemeralKey() {
         return encryptedEphemeralKey;
+    }
+
+    /**
+     * Find the list of all URIs that this encrypted Key references
+     */
+    private List<String> getDataRefURIs(Element xencEncryptedKey) {
+        // Lookup the references that are encrypted with this key
+        Element refList =
+                WSSecurityUtil.getDirectChildElement(
+                        xencEncryptedKey, "ReferenceList", WSConstants.ENC_NS
+                );
+        List<String> dataRefURIs = new LinkedList<String>();
+        if (refList != null) {
+            for (Node node = refList.getFirstChild(); node != null; node = node.getNextSibling()) {
+                if (Node.ELEMENT_NODE == node.getNodeType()
+                        && WSConstants.ENC_NS.equals(node.getNamespaceURI())
+                        && "DataReference".equals(node.getLocalName())) {
+                    String dataRefURI = ((Element) node).getAttributeNS(null, "URI");
+                    if (dataRefURI.charAt(0) == '#') {
+                        dataRefURI = dataRefURI.substring(1);
+                    }
+                    dataRefURIs.add(dataRefURI);
+                }
+            }
+        }
+        return dataRefURIs;
+    }
+
+    /**
+     * Generates a random secret key using the algorithm specified in the
+     * first DataReference URI
+     *
+     * @param dataRefURIs
+     * @param doc
+     * @param wsDocInfo
+     * @return
+     * @throws WSSecurityException
+     */
+    private static byte[] getRandomKey(List<String> dataRefURIs, Document doc, WSDocInfo wsDocInfo) throws WSSecurityException {
+        try {
+            String alg = "AES";
+            int size = 16;
+            if (!dataRefURIs.isEmpty()) {
+                String uri = dataRefURIs.iterator().next();
+                Element ee = ReferenceListProcessor.findEncryptedDataElement(doc, uri);
+                String algorithmURI = X509Util.getEncAlgo(ee);
+                alg = JCEMapper.getJCEKeyAlgorithmFromURI(algorithmURI);
+                size = WSSecurityUtil.getKeyLength(algorithmURI);
+            }
+            KeyGenerator kgen = KeyGenerator.getInstance(alg);
+            kgen.init(size * 8);
+            SecretKey k = kgen.generateKey();
+            return k.getEncoded();
+        } catch (Throwable ex) {
+            // Fallback to just using AES to avoid attacks on EncryptedData algorithms
+            try {
+                KeyGenerator kgen = KeyGenerator.getInstance("AES");
+                kgen.init(128);
+                SecretKey k = kgen.generateKey();
+                return k.getEncoded();
+            } catch (NoSuchAlgorithmException e) {
+                throw new WSSecurityException(WSSecurityException.FAILED_CHECK, null, null, e);
+            }
+        }
     }
   
 }
