@@ -102,7 +102,7 @@ public class KrbTicketDecoder {
 		}
 		// EncTicketPart provides access to the decrypted attributes of the
 		// service ticket.
-		byte[] temp = ticket.encPart.reset(ticketBytes, true);
+		byte[] temp = ticket.encPart.reset(ticketBytes);
 		EncTicketPart encPart = new EncTicketPart(temp);
 		return encPart.key;
 	}
