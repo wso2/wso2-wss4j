@@ -28,7 +28,7 @@
     <groupId>org.apache.ws.security</groupId>
     <artifactId>wss4j-parent</artifactId>
     <packaging>pom</packaging>
-    <version>1.5.11-wso2v10</version>
+    <version>1.5.11-wso2v10-SNAPSHOT</version>
     <description>
         Apache WSS4J Parent.
     </description>
@@ -37,7 +37,7 @@
         <url>https://github.com/wso2/wso2-wss4j.git</url>
         <developerConnection>scm:git:https://github.com/wso2/wso2-wss4j.git</developerConnection>
         <connection>scm:git:https://github.com/wso2/wso2-wss4j.git</connection>
-        <tag>wss4j-parent-1.5.11-wso2v10</tag>
+        <tag>HEAD</tag>
     </scm>
 
     <repositories>
@@ -84,7 +84,7 @@
         <opensaml.version>2.6.1</opensaml.version>
         <opensaml1.version>1.1</opensaml1.version>
         <slf4j.jdk14.version>1.5.2</slf4j.jdk14.version>
-        <wss4j.version>1.5.11-wso2v10</wss4j.version>
+        <wss4j.version>1.5.11-wso2v10-SNAPSHOT</wss4j.version>
         <wss4j.orbit.version>1.5.11.wso2v9</wss4j.orbit.version>
         <exp.pkg.version.wss4j>1.5.11-wso2v9</exp.pkg.version.wss4j>
         <imp.pkg.version.wss4j>[1.5.11-wso2v9,2)</imp.pkg.version.wss4j>
