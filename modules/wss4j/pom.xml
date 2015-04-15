@@ -20,14 +20,14 @@
     <parent>
         <groupId>org.apache.ws.security</groupId>
         <artifactId>wss4j-parent</artifactId>
-        <version>1.5.11-wso2v10-SNAPSHOT</version>
+        <version>1.5.11-wso2v11-SNAPSHOT</version>
         <relativePath>../../pom.xml</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <artifactId>wss4j</artifactId>
     <packaging>bundle</packaging>
     <name>WSS4J</name>
-    <version>1.5.11-wso2v10-SNAPSHOT</version>
+    <version>1.5.11-wso2v11-SNAPSHOT</version>
     <description>
         Apache WSS4J is an implementation of the Web Services Security
         (WS-Security) being developed at OASIS Web Services Security TC.
@@ -203,14 +203,14 @@
                         <Implementation-Vendor>The Apache Software Foundation
                         </Implementation-Vendor>
                         <Implementation-Vendor-Id>org.apache</Implementation-Vendor-Id>
-                        <Implementation-Version>${project.version}</Implementation-Version>
+                        <Implementation-Version>${wss4j.wso2.version}</Implementation-Version>
                         <Specification-Title>Apache WSS4J</Specification-Title>
                         <Specification-Vendor>The Apache Software Foundation</Specification-Vendor>
-                        <Specification-Version>${project.version}</Specification-Version>
+                        <Specification-Version>${wss4j.wso2.version}</Specification-Version>
 
                         <Export-Package>
-                            org.apache.ws.security.*;version="${project.version}",
-                            org.apache.ws.axis.security.*;version="${project.version}",
+                            org.apache.ws.security.*;version="${wss4j.wso2.version}",
+                            org.apache.ws.axis.security.*;version="${wss4j.wso2.version}",
                         </Export-Package>
                         <Import-Package>
                             !org.apache.ws.security.*,
@@ -291,8 +291,8 @@
                     <artifactId>maven-compiler-plugin</artifactId>
                     <version>2.1</version>
                     <configuration>
-                        <source>1.5</source>
-                        <target>1.6</target>
+                        <source>1.7</source>
+                        <target>1.7</target>
                         <testExcludes>
                             <exclude>interop/**/*</exclude>
                         </testExcludes>
@@ -414,6 +414,36 @@
                     <groupId>org.bouncycastle</groupId>
                     <artifactId>bcprov-jdk15</artifactId>
                     <version>${bcprov.jdk15.version}</version>
+                    <scope>test</scope>
+                </dependency>
+            </dependencies>
+        </profile>
+	<profile>
+            <id>jdk17</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+                <jdk>1.7</jdk>
+            </activation>
+            <dependencies>
+                <dependency>
+                    <groupId>org.bouncycastle</groupId>
+                    <artifactId>bcprov-jdk15on</artifactId>
+                    <version>1.51</version>
+                    <scope>test</scope>
+                </dependency>
+            </dependencies>
+        </profile>
+	<profile>
+            <id>jdk18</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+                <jdk>1.8</jdk>
+            </activation>
+            <dependencies>
+                <dependency>
+                    <groupId>org.bouncycastle</groupId>
+                    <artifactId>bcprov-jdk15on</artifactId>
+                    <version>1.51</version>
                     <scope>test</scope>
                 </dependency>
             </dependencies>
