@@ -98,6 +98,9 @@ public class TestWSSecurityWSS199 extends TestCase implements CallbackHandler {
             LOG.debug(outputString);
         }
         try {
+            WSSConfig wssConfig = secEngine.getWssConfig();
+            wssConfig.setAllowNamespaceQualifiedPasswordTypes(false);
+            secEngine.setWssConfig(wssConfig);
             verify(doc);
             fail("Failure expected on a bad password type");
         } catch (WSSecurityException ex) {
