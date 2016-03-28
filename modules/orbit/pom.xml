@@ -32,20 +32,6 @@
     <description>org.wso2.carbon.wss4j</description>
     <url>http://wso2.org</url>
 
-    <repositories>
-        <repository>
-            <id>wso2-nexus</id>
-            <name>WSO2 internal Repository</name>
-            <url>http://maven.wso2.org/nexus/content/groups/wso2-public/</url>
-            <releases>
-                <enabled>true</enabled>
-                <updatePolicy>daily</updatePolicy>
-                <checksumPolicy>ignore</checksumPolicy>
-            </releases>
-        </repository>
-    </repositories>
-
-
     <dependencies>
         <dependency>
             <groupId>org.apache.ws.security</groupId>
@@ -73,13 +59,11 @@
         <dependency>
             <groupId>org.apache.santuario</groupId>
             <artifactId>xmlsec</artifactId>
-            <version>${xmlsec.version}</version>
             <optional>true</optional>
         </dependency>
         <dependency>
             <groupId>org.bouncycastle.wso2</groupId>
             <artifactId>bcprov-jdk15on</artifactId>
-            <version>${bcprov.jdk15on.version}</version>
             <optional>true</optional>
         </dependency>
     </dependencies>
@@ -111,7 +95,46 @@
                             org.bouncycastle.*; version="${imp.pkg.version.bcp}",
                             org.apache.axis.*;version=1.4.0;resolution:=optional,
                             javax.xml.soap; version="1.0.0";resolution:=optional,
-                            *;resolution:=optional
+                            javax.crypto,
+                            javax.crypto.spec,
+                            javax.security.auth,
+                            javax.security.auth.callback,
+                            javax.security.auth.kerberos,
+                            javax.security.auth.login,
+                            javax.security.auth.x500,
+                            javax.xml.namespace,
+                            javax.xml.parsers,
+                            javax.xml.rpc,
+                            javax.xml.rpc.handler,
+                            javax.xml.rpc.handler.soap,
+                            javax.xml.transform,
+                            javax.xml.transform.dom,
+                            javax.xml.transform.sax,
+                            javax.xml.transform.stream,
+                            javax.xml.xpath,
+                            org.apache.commons.logging,
+                            org.apache.xml.dtm,
+                            org.apache.xml.utils,
+                            org.apache.xpath,
+                            org.apache.xpath.compiler,
+                            org.apache.xpath.functions,
+                            org.apache.xpath.objects,
+                            org.ietf.jgss,
+                            org.joda.time,
+                            org.opensaml,
+                            org.opensaml.saml2.core,
+                            org.opensaml.xml,
+                            org.opensaml.xml.io,
+                            org.opensaml.xml.security.credential,
+                            org.opensaml.xml.security.x509,
+                            org.opensaml.xml.signature,
+                            org.opensaml.xml.util,
+                            org.opensaml.xml.validation,
+                            org.w3c.dom,
+                            org.xml.sax,
+                            sun.security.krb5,
+                            sun.security.krb5.internal,
+                            sun.security.util
                         </Import-Package>
                         <Embed-Transitive>true</Embed-Transitive>
                         <DynamicImport-Package>*</DynamicImport-Package>
