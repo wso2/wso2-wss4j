@@ -73,7 +73,6 @@
             <plugin>
                 <groupId>org.apache.felix</groupId>
                 <artifactId>maven-bundle-plugin</artifactId>
-                <version>1.4.0</version>
                 <extensions>true</extensions>
                 <configuration>
                     <instructions>
@@ -93,8 +92,8 @@
                             !org.apache.xml.security.*; version="${imp.pkg.version.xmlsec}",
                             !org.jcp.xml.dsig.internal.*; version="${imp.pkg.version.xmlsec}",
                             org.bouncycastle.*; version="${imp.pkg.version.bcp}",
-                            org.apache.axis.*;version=1.4.0;resolution:=optional,
-                            javax.xml.soap; version="1.0.0";resolution:=optional,
+                            org.apache.axis.*;version="${imp.pkg.version.axis2}";resolution:=optional,
+                            javax.xml.soap; version="${imp.pkg.version.xmlsoap}";resolution:=optional,
                             javax.crypto,
                             javax.crypto.spec,
                             javax.security.auth,
@@ -103,7 +102,7 @@
                             javax.security.auth.login,
                             javax.security.auth.x500,
                             javax.xml.namespace,
-                            javax.xml.parsers,
+                            javax.xml.parsers; version="${javax.xml.parsers.import.pkg.version}",
                             javax.xml.rpc,
                             javax.xml.rpc.handler,
                             javax.xml.rpc.handler.soap,
@@ -151,5 +150,4 @@
             </plugin>
         </plugins>
     </build>
-
 </project>
