@@ -159,6 +159,7 @@
             <plugin>
                 <groupId>org.jvnet.maven.incrementalbuild</groupId>
                 <artifactId>incremental-build-plugin</artifactId>
+                <version>1.3</version>
                 <executions>
                     <execution>
                         <goals>
@@ -170,6 +171,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-pmd-plugin</artifactId>
+                <version>2.5</version>
                 <configuration>
                     <linkXRef>false</linkXRef>
                     <failOnViolation>true</failOnViolation>
@@ -194,6 +196,7 @@
             <plugin>
                 <groupId>org.apache.felix</groupId>
                 <artifactId>maven-bundle-plugin</artifactId>
+                <version>1.4.3</version>
                 <extensions>true</extensions>
                 <configuration>
                     <instructions>
@@ -253,8 +256,8 @@
                 </configuration>
             </plugin>
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-remote-resources-plugin</artifactId>
+                <version>1.0</version>
                 <executions>
                     <execution>
                         <goals>
@@ -282,72 +285,84 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-deploy-plugin</artifactId>
             </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <configuration>
-                    <reportFormat>brief</reportFormat>
-                    <useFile>false</useFile>
-                    <argLine>-Djava.endorsed.dirs=${basedir}/endorsed</argLine>
-                    <forkMode>once</forkMode>
-                    <childDelegation>false</childDelegation>
-                    <testFailureIgnore>true</testFailureIgnore>
-                    <includes>
-                        <include>**/PackageTests.java</include>
-                    </includes>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <configuration>
-                    <source>1.7</source>
-                    <target>1.7</target>
-                    <testExcludes>
-                        <exclude>interop/**/*</exclude>
-                    </testExcludes>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-source-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>jar</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <attach>true</attach>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-javadoc-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>jar</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <attach>true</attach>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-assembly-plugin</artifactId>
-                <configuration>
-                    <descriptors>
-                        <descriptor>assembly/bin.xml</descriptor>
-                        <descriptor>assembly/src.xml</descriptor>
-                    </descriptors>
-                    <tarLongFileMode>gnu</tarLongFileMode>
-                </configuration>
-            </plugin>
         </plugins>
+
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-surefire-plugin</artifactId>
+                    <version>2.6</version>
+                    <configuration>
+                        <reportFormat>brief</reportFormat>
+                        <useFile>false</useFile>
+                        <argLine>-Djava.endorsed.dirs=${basedir}/endorsed</argLine>
+                        <forkMode>once</forkMode>
+                        <childDelegation>false</childDelegation>
+                        <testFailureIgnore>true</testFailureIgnore>
+                        <includes>
+                            <include>**/PackageTests.java</include>
+                        </includes>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>2.1</version>
+                    <configuration>
+                        <source>1.7</source>
+                        <target>1.7</target>
+                        <testExcludes>
+                            <exclude>interop/**/*</exclude>
+                        </testExcludes>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-source-plugin</artifactId>
+                    <version>2.1.2</version>
+                    <executions>
+                        <execution>
+                            <goals>
+                                <goal>jar</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                    <configuration>
+                        <attach>true</attach>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-javadoc-plugin</artifactId>
+                    <version>2.7</version>
+                    <executions>
+                        <execution>
+                            <goals>
+                                <goal>jar</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                    <configuration>
+                        <attach>true</attach>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-assembly-plugin</artifactId>
+                    <version>2.1</version>
+                    <configuration>
+                        <descriptors>
+                            <descriptor>assembly/bin.xml</descriptor>
+                            <descriptor>assembly/src.xml</descriptor>
+                        </descriptors>
+                        <tarLongFileMode>gnu</tarLongFileMode>
+                    </configuration>
+                </plugin>
+
+            </plugins>
+        </pluginManagement>
+
         <defaultGoal>install</defaultGoal>
     </build>
 
@@ -514,6 +529,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-project-info-reports-plugin</artifactId>
+                <version>2.1</version>
                 <reportSets>
                     <reportSet>
                         <reports>
@@ -540,6 +556,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jxr-plugin</artifactId>
+                <version>2.1</version>
             </plugin>
         </plugins>
     </reporting>
