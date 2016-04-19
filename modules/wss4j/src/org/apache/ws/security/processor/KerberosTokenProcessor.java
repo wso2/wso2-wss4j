@@ -1,6 +1,7 @@
 package org.apache.ws.security.processor;
 
 import java.io.IOException;
+import java.security.Key;
 import java.security.Principal;
 import java.security.PrivilegedAction;
 import java.security.cert.X509Certificate;
@@ -11,6 +12,7 @@ import java.util.TreeSet;
 import java.util.Vector;
 
 import javax.crypto.SecretKey;
+import javax.crypto.spec.SecretKeySpec;
 import javax.security.auth.Subject;
 import javax.security.auth.callback.CallbackHandler;
 import javax.security.auth.callback.UnsupportedCallbackException;
@@ -51,6 +53,10 @@ import org.ietf.jgss.GSSContext;
 import org.ietf.jgss.GSSCredential;
 import org.ietf.jgss.GSSException;
 import org.ietf.jgss.GSSManager;
+
+import com.sun.security.jgss.ExtendedGSSContext;
+import com.sun.security.jgss.InquireType;
+
 import org.w3c.dom.Element;
 
 public class KerberosTokenProcessor implements Processor {
@@ -59,6 +65,7 @@ public class KerberosTokenProcessor implements Processor {
 	private String tokenId;;
 	private Subject subject;
 	private KerberosTokenPrincipal lastPrincipalFound;
+	private SecretKey key;
 
 	/**
 	 * 
@@ -175,7 +182,13 @@ public class KerberosTokenProcessor implements Processor {
 			authenticate(handler);
 			KerberosSecurity ks = createSecurityToken(elem);
 			GSSContext context = acceptSecurityContext(ks);
-			secretKey = getSessionKey(ks.getToken());
+			
+			if (key != null) {
+				// the key is populated from acceptSecurityContext call.
+				secretKey = (SecretKey) key;
+			} else {
+				secretKey = getSessionKey(ks.getToken());
+			}
 
 			if (log.isDebugEnabled()) {
 				log.debug((new StringBuilder())
@@ -294,7 +307,14 @@ public class KerberosTokenProcessor implements Processor {
 							authenticate(cb);
 							KerberosSecurity ks = createSecurityToken(token);
 							GSSContext context = acceptSecurityContext(ks);
-							secretKey = getSessionKey(ks.getToken());
+							
+							if (key != null) {
+								// the key is populated from acceptSecurityContext call.
+								secretKey = (SecretKey) key;
+							} else {
+								secretKey = getSessionKey(ks.getToken());
+							}
+							
 							if (log.isDebugEnabled()) {
 								log.debug("security context accepted with "
 										+ context.getSrcName().toString()
@@ -473,9 +493,19 @@ public class KerberosTokenProcessor implements Processor {
 					gssContext = gssManager.createContext((GSSCredential) null);
 					byte[] token = ks.getToken();
 					gssContext.acceptSecContext(token, 0, token.length);
+					
+					if (gssContext instanceof ExtendedGSSContext) {
+						ExtendedGSSContext exgssContext = (ExtendedGSSContext) gssContext;
+						// return the mechanism-specific attribute associated with type
+						Key encKey = (Key) exgssContext.inquireSecContext(InquireType.KRB5_GET_SESSION_KEY);
+						// the algorithm name does not matter here
+						SecretKeySpec keySpec = new SecretKeySpec(encKey.getEncoded(), "DES");
+						key = (SecretKey) keySpec;
+					}
+					
 					return gssContext;
 				} catch (GSSException e) {
-					e.printStackTrace();
+					log.error("Error occurred while accepting securing context", e);
 					return null;
 				}
 			}
