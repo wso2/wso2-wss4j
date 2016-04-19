@@ -1,10 +1,12 @@
 package org.apache.ws.security.message;
 
+import java.security.Key;
 import java.security.PrivilegedAction;
 import java.util.Iterator;
 import java.util.Set;
 import java.util.Vector;
 import javax.crypto.SecretKey;
+import javax.crypto.spec.SecretKeySpec;
 import javax.security.auth.Subject;
 import javax.security.auth.kerberos.KerberosTicket;
 import javax.security.auth.login.LoginContext;
@@ -37,6 +39,9 @@ import org.ietf.jgss.GSSName;
 import org.ietf.jgss.Oid;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+
+import com.sun.security.jgss.ExtendedGSSContext;
+import com.sun.security.jgss.InquireType;
 
 public class WSSecKerberosToken extends WSSecSignature {
 
@@ -128,9 +133,21 @@ public class WSSecKerberosToken extends WSSecSignature {
 					byte[] token = new byte[0];
 					context.requestMutualAuth(false);
 					context.requestCredDeleg(false);
-					return context.initSecContext(token, 0, token.length);
+					byte[] srvTckt = context.initSecContext(token, 0, token.length);
+					
+					if (context instanceof ExtendedGSSContext) {
+						ExtendedGSSContext exgssContext = (ExtendedGSSContext) context;
+						// return the mechanism-specific attribute associated with type
+						Key encKey = (Key) exgssContext.inquireSecContext(InquireType.KRB5_GET_SESSION_KEY);
+						// algorithm name here does not really matter.
+						SecretKeySpec keySpec = new SecretKeySpec(encKey.getEncoded(), "DES");
+						sessionKey = (SecretKey) keySpec;
+					}
+					
+					return srvTckt;
+					
 				} catch (GSSException e) {
-					e.printStackTrace();
+					log.error("Error occurred while accepting securing context", e);
 					return null;
 				}
 			}
@@ -191,7 +208,11 @@ public class WSSecKerberosToken extends WSSecSignature {
 			try {
 				KerberosTicket tgt = getTicketGrantingTicket();
 				tokenData = getServiceTicketData(servicePrincipalName);
-				sessionKey = getSessionKey(tgt);
+				if (sessionKey == null) {
+					// only if the session key is not retrieved during the
+					// getServiceTicketData call.
+					sessionKey = getSessionKey(tgt);
+				}
 				krbSession = new KrbSession(SecurityUtil.getSHA1(tokenData), sessionKey);
 				krbSession.setClientPrincipalName(user);
 				krbSession.setServerPrincipalName(servicePrincipalName);
