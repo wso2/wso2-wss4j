@@ -101,11 +101,7 @@
                             javax.security.auth.kerberos,
                             javax.security.auth.login,
                             javax.security.auth.x500,
-                            javax.xml.namespace,
                             javax.xml.parsers; version="${javax.xml.parsers.import.pkg.version}",
-                            javax.xml.rpc,
-                            javax.xml.rpc.handler,
-                            javax.xml.rpc.handler.soap,
                             javax.xml.transform,
                             javax.xml.transform.dom,
                             javax.xml.transform.sax,
@@ -131,9 +127,10 @@
                             org.opensaml.xml.validation,
                             org.w3c.dom,
                             org.xml.sax,
-                            sun.security.krb5,
-                            sun.security.krb5.internal,
-                            sun.security.util
+                            javax.xml.namespace;resolution:=optional,
+                            javax.xml.rpc.*;resolution:=optional,
+                            sun.security.krb5.*;resolution:=optional,
+                            sun.security.util;resolution:=optional
                         </Import-Package>
                         <Embed-Transitive>true</Embed-Transitive>
                         <DynamicImport-Package>*</DynamicImport-Package>
