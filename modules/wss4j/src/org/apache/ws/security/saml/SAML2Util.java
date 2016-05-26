@@ -416,6 +416,7 @@ public class SAML2Util {
      */
     public static void validateSignature(Assertion assertion, Crypto crypto)
             throws WSSecurityException {
+        String alias = null;
         // Get the <ds:X509Data/> elements
         List x509Data = assertion.getSignature().getKeyInfo().getX509Datas();
         if (x509Data != null && x509Data.size() > 0) {
@@ -433,8 +434,9 @@ public class SAML2Util {
                     CertificateFactory cf = CertificateFactory.getInstance("X.509");
                     java.security.cert.X509Certificate x509Certificate = (X509Certificate) cf.generateCertificate(
                             new ByteArrayInputStream(org.opensaml.xml.util.Base64.decode(cert.getValue())));
+                    alias = crypto.getAliasForX509CertThumb(calculateThumbPrint(x509Certificate));
                     // if this certificate is available in the key store represented by SigCrypto
-                    if (crypto.getAliasForX509CertThumb(calculateThumbPrint(x509Certificate)) != null) {
+                    if (alias != null) {
                         class X509CredentialImpl implements X509Credential {
                             private PublicKey publicKey = null;
 
@@ -488,7 +490,7 @@ public class SAML2Util {
                         }
                         // validate the signature
                         SignatureValidator signatureValidator = new SignatureValidator(
-                                new X509CredentialImpl(x509Certificate));
+                                new X509CredentialImpl(crypto.getCertificates(alias)[0]));
                         signatureValidator.validate(assertion.getSignature());
                     }
                     else{
