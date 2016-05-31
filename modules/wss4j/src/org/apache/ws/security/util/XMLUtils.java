@@ -21,11 +21,16 @@ package org.apache.ws.security.util;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.xerces.util.SecurityManager;
+import org.apache.xerces.impl.Constants;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.xml.sax.InputSource;
 
+import javax.xml.XMLConstants;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.Source;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
@@ -41,6 +46,7 @@ public class XMLUtils {
     
     private static final Log log = LogFactory.getLog(XMLUtils.class.getName());
     private static final boolean doDebug = log.isDebugEnabled();
+    private static final int ENTITY_EXPANSION_LIMIT = 0;
     
     public static String PrettyDocumentToString(Document doc) {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -102,5 +108,36 @@ public class XMLUtils {
      */
     public static InputSource getInputSourceFromURI(String uri) {
         return new InputSource(uri);
+    }
+
+    /**
+     * Create DocumentBuilderFactory with the XXE and XEE prevention measurements.
+     *
+     * @return DocumentBuilderFactory instance
+     */
+    public static DocumentBuilderFactory getSecuredDocumentBuilder() {
+
+        DocumentBuilderFactory dbf = XMLUtils.getSecuredDocumentBuilder();
+        dbf.setNamespaceAware(true);
+        dbf.setXIncludeAware(false);
+        dbf.setExpandEntityReferences(false);
+        try {
+            dbf.setFeature(Constants.SAX_FEATURE_PREFIX + Constants.EXTERNAL_GENERAL_ENTITIES_FEATURE, false);
+            dbf.setFeature(Constants.SAX_FEATURE_PREFIX + Constants.EXTERNAL_PARAMETER_ENTITIES_FEATURE, false);
+            dbf.setFeature(Constants.XERCES_FEATURE_PREFIX + Constants.LOAD_EXTERNAL_DTD_FEATURE, false);
+            dbf.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
+
+        } catch (ParserConfigurationException e) {
+            log.error("Failed to load XML Processor Feature " + Constants.EXTERNAL_GENERAL_ENTITIES_FEATURE + " or " +
+                    Constants.EXTERNAL_PARAMETER_ENTITIES_FEATURE + " or " + Constants.LOAD_EXTERNAL_DTD_FEATURE +
+                    " or secure-processing.");
+        }
+
+        SecurityManager securityManager = new SecurityManager();
+        securityManager.setEntityExpansionLimit(ENTITY_EXPANSION_LIMIT);
+        dbf.setAttribute(Constants.XERCES_PROPERTY_PREFIX + Constants.SECURITY_MANAGER_PROPERTY, securityManager);
+
+        return dbf;
+
     }
 }

@@ -28,6 +28,7 @@ import org.apache.ws.security.message.token.Timestamp;
 import org.apache.ws.security.processor.EncryptedKeyProcessor;
 import org.apache.ws.security.util.Base64;
 import org.apache.ws.security.util.WSSecurityUtil;
+import org.apache.ws.security.util.XMLUtils;
 import org.apache.xml.security.exceptions.XMLSecurityException;
 import org.apache.xml.security.keys.KeyInfo;
 import org.apache.xml.security.keys.content.X509Data;
@@ -297,7 +298,7 @@ public class SAMLUtil {
         }
 
         try {
-            DocumentBuilderFactory dbFactory =  DocumentBuilderFactory.newInstance();
+            DocumentBuilderFactory dbFactory = XMLUtils.getSecuredDocumentBuilder();
             Document document =  dbFactory.newDocumentBuilder().newDocument();
             Element element = document.createElement("SAMLTimestamp");
 

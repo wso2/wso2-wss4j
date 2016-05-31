@@ -47,6 +47,7 @@ import org.apache.ws.security.components.crypto.Crypto;
 import org.apache.ws.security.message.token.Timestamp;
 import org.apache.ws.security.processor.EncryptedKeyProcessor;
 import org.apache.ws.security.util.Base64;
+import org.apache.ws.security.util.XMLUtils;
 import org.apache.xml.security.exceptions.XMLSecurityException;
 import org.apache.xml.security.keys.KeyInfo;
 import org.apache.xml.security.keys.content.x509.XMLX509Certificate;
@@ -115,7 +116,7 @@ public class SAML2Util {
             doBootstrap();
 
             String keyInfoElementString = elem.toString();
-            DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilderFactory documentBuilderFactory = XMLUtils.getSecuredDocumentBuilder();
             documentBuilderFactory.setNamespaceAware(true);
             DocumentBuilder docBuilder = documentBuilderFactory.newDocumentBuilder();
             Document document = docBuilder.parse(new ByteArrayInputStream(keyInfoElementString.trim().getBytes()));
@@ -366,7 +367,7 @@ public class SAML2Util {
         }
 
         try {
-            DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilderFactory dbFactory = XMLUtils.getSecuredDocumentBuilder();
             Document document = dbFactory.newDocumentBuilder().newDocument();
             Element element = document.createElement("SAMLTimestamp");
 
