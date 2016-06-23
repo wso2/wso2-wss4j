@@ -117,7 +117,6 @@ public class SAML2Util {
 
             String keyInfoElementString = elem.toString();
             DocumentBuilderFactory documentBuilderFactory = XMLUtils.getSecuredDocumentBuilder();
-            documentBuilderFactory.setNamespaceAware(true);
             DocumentBuilder docBuilder = documentBuilderFactory.newDocumentBuilder();
             Document document = docBuilder.parse(new ByteArrayInputStream(keyInfoElementString.trim().getBytes()));
             Element element = document.getDocumentElement();

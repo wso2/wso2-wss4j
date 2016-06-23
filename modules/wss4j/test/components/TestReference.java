@@ -132,7 +132,6 @@ public class TestReference extends TestCase {
                 ).getBytes()
             );
         final javax.xml.parsers.DocumentBuilderFactory factory = XMLUtils.getSecuredDocumentBuilder();
-        factory.setNamespaceAware(true);
         final javax.xml.parsers.DocumentBuilder builder = factory.newDocumentBuilder();
         return builder.parse(in);
     }

@@ -553,7 +553,6 @@ public class WSS4JHandler extends WSHandler implements Handler {
         try {
             Source content = message.getSOAPPart().getContent();
             DocumentBuilderFactory dbf = org.apache.ws.security.util.XMLUtils.getSecuredDocumentBuilder();
-            dbf.setNamespaceAware(true);
             DocumentBuilder builder = dbf.newDocumentBuilder();
             return builder.parse(org.apache.ws.security.util.XMLUtils.sourceToInputSource(content));
         } catch (Exception ex) {

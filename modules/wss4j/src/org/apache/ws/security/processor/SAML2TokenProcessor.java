@@ -102,7 +102,6 @@ public class SAML2TokenProcessor implements Processor {
             // Unmarshall and build the assertion from the DOM element.
             String keyInfoElementString = elem.toString();
             DocumentBuilderFactory documentBuilderFactory = XMLUtils.getSecuredDocumentBuilder();
-            documentBuilderFactory.setNamespaceAware(true);
             DocumentBuilder docBuilder = documentBuilderFactory.newDocumentBuilder();
             Document document = docBuilder.parse(new ByteArrayInputStream(keyInfoElementString.trim().getBytes()));
             Element element = document.getDocumentElement();
