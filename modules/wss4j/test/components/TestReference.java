@@ -24,7 +24,6 @@ import junit.framework.TestSuite;
 
 import org.apache.ws.security.WSSecurityException;
 import org.apache.ws.security.message.token.Reference;
-import org.apache.ws.security.util.XMLUtils;
 
 /**
  * unit test for the Reference type
@@ -131,7 +130,9 @@ public class TestReference extends TestCase {
                     "TheURI", uri
                 ).getBytes()
             );
-        final javax.xml.parsers.DocumentBuilderFactory factory = XMLUtils.getSecuredDocumentBuilder();
+        final javax.xml.parsers.DocumentBuilderFactory factory =
+            javax.xml.parsers.DocumentBuilderFactory.newInstance();
+        factory.setNamespaceAware(true);
         final javax.xml.parsers.DocumentBuilder builder = factory.newDocumentBuilder();
         return builder.parse(in);
     }
