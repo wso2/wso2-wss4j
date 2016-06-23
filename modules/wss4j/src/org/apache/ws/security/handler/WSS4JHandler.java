@@ -552,8 +552,7 @@ public class WSS4JHandler extends WSHandler implements Handler {
     public static Document messageToDocument(SOAPMessage message) {
         try {
             Source content = message.getSOAPPart().getContent();
-            DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-            dbf.setNamespaceAware(true);
+            DocumentBuilderFactory dbf = org.apache.ws.security.util.XMLUtils.getSecuredDocumentBuilder();
             DocumentBuilder builder = dbf.newDocumentBuilder();
             return builder.parse(org.apache.ws.security.util.XMLUtils.sourceToInputSource(content));
         } catch (Exception ex) {

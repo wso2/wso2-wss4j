@@ -26,6 +26,7 @@ import org.apache.ws.security.WSSecurityEngineResult;
 import org.apache.ws.security.WSSecurityException;
 import org.apache.ws.security.components.crypto.Crypto;
 import org.apache.ws.security.saml.SAML2Util;
+import org.apache.ws.security.util.XMLUtils;
 import org.opensaml.Configuration;
 import org.opensaml.DefaultBootstrap;
 import org.opensaml.saml2.core.Assertion;
@@ -100,8 +101,7 @@ public class SAML2TokenProcessor implements Processor {
 
             // Unmarshall and build the assertion from the DOM element.
             String keyInfoElementString = elem.toString();
-            DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
-            documentBuilderFactory.setNamespaceAware(true);
+            DocumentBuilderFactory documentBuilderFactory = XMLUtils.getSecuredDocumentBuilder();
             DocumentBuilder docBuilder = documentBuilderFactory.newDocumentBuilder();
             Document document = docBuilder.parse(new ByteArrayInputStream(keyInfoElementString.trim().getBytes()));
             Element element = document.getDocumentElement();
