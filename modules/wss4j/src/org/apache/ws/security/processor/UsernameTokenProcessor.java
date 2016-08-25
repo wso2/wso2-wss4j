@@ -166,6 +166,7 @@ public class UsernameTokenProcessor implements Processor {
             callbacks[0] = pwCb;
             try {
                 cb.handle(callbacks);
+                user = pwCb.getIdentifier();
             } catch (IOException e) {
                 if (log.isDebugEnabled()) {
                     log.debug(e);
