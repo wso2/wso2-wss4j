@@ -117,7 +117,7 @@ public class XMLUtils {
      */
     public static DocumentBuilderFactory getSecuredDocumentBuilder() {
 
-        DocumentBuilderFactory dbf = XMLUtils.getSecuredDocumentBuilder();
+        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
         dbf.setNamespaceAware(true);
         dbf.setXIncludeAware(false);
         dbf.setExpandEntityReferences(false);
