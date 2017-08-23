@@ -20,13 +20,13 @@
     <parent>
         <groupId>org.apache.ws.security</groupId>
         <artifactId>wss4j-parent</artifactId>
-        <version>1.5.11-wso2v17</version>
+        <version>1.5.11-wso2v18-SNAPSHOT</version>
         <relativePath>../../pom.xml</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.apache.ws.security.wso2</groupId>
     <artifactId>wss4j</artifactId>
-    <version>1.5.11.wso2v17</version>
+    <version>1.5.11.wso2v18-SNAPSHOT</version>
     <packaging>bundle</packaging>
     <name>wss4j.wso2</name>
     <description>org.wso2.carbon.wss4j</description>
