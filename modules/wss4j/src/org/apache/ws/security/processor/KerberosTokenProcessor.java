@@ -107,7 +107,6 @@ public class KerberosTokenProcessor implements Processor {
 		byte signatureValue[][];
 		KerberosTokenPrincipal lastPrincipalFound;
 
-		WSDocInfoStore.store(wsDocInfo);
 		returnCert = new X509Certificate[1];
 		returnElements = new HashSet();
 		protectedElements = new TreeSet();
@@ -115,8 +114,6 @@ public class KerberosTokenProcessor implements Processor {
 		lastPrincipalFound = null;
 
 		tokenId = elem.getAttributeNS(WSConstants.WSU_NS, "Id");
-
-		boolean remove = WSDocInfoStore.store(wsDocInfo);
 
 		for (int j = 0; j < returnResults.size(); j++) {
 			WSSecurityEngineResult wser = (WSSecurityEngineResult) returnResults
@@ -139,7 +136,8 @@ public class KerberosTokenProcessor implements Processor {
 				break;
 			}
 		}
-
+		
+		boolean remove = WSDocInfoStore.store(wsDocInfo);
 		try {
 			if (lastPrincipalFound == null) {
 				lastPrincipalFound = validateToken(elem, crypto, returnCert,
