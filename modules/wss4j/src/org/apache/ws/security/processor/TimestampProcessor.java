@@ -41,6 +41,12 @@ public class TimestampProcessor implements Processor {
 
     private WSSConfig wssConfig = null;
     private String tsId;
+
+    private int ttlValue = 0;
+
+    public void setTtlValue(int ttlValue) {
+        this.ttlValue = ttlValue;
+    }
     
     public void handleToken(
         Element elem, 
@@ -92,6 +98,20 @@ public class TimestampProcessor implements Processor {
                     "invalidTimestamp",
                     new Object[] {"The security semantics of the message have expired"}
                 );
+            } else {
+                // Reject messages with time gap larger than the ttl value.
+                if (ttlValue > 0) {
+                    Calendar created = timestamp.getCreated();
+                    created.add(Calendar.SECOND, ttlValue);
+                    if (created.before(exp)) {
+                        throw new WSSecurityException(
+                                WSSecurityException.MESSAGE_EXPIRED,
+                                "invalidTTL",
+                                new Object[]{"TTL validation for incoming messages enabled. Invalid TTL " +
+                                        "detected between created and expired timestamps"}
+                        );
+                    }
+                }
             }
         }
     }
