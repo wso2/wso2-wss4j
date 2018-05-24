@@ -25,6 +25,7 @@ import org.apache.ws.security.components.crypto.Crypto;
 import org.apache.ws.security.conversation.ConversationConstants;
 import org.apache.ws.security.message.token.UsernameToken;
 import org.apache.ws.security.processor.Processor;
+import org.apache.ws.security.processor.TimestampProcessor;
 import org.apache.ws.security.util.WSSecurityUtil;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -231,6 +232,40 @@ public class WSSecurityEngine {
                                         Crypto decCrypto)
             throws WSSecurityException {
 
+        // reusing method with TTL with invalid TTL
+        return processSecurityHeader(doc, actor, cb, sigCrypto, decCrypto, -1);
+    }
+
+    /**
+     * Process the security header given the soap envelope as W3C document.
+     * <p/>
+     * This is the main entry point to verify or decrypt a SOAP envelope.
+     * First check if a <code>wsse:Security</code> is available with the
+     * defined actor.
+     *
+     * @param doc       the SOAP envelope as {@link Document}
+     * @param actor     the engine works on behalf of this <code>actor</code>. Refer
+     *                  to the SOAP specification about <code>actor</code> or <code>role
+     *                  </code>
+     * @param cb        a callback hander to the caller to resolve passwords during
+     *                  encryption and {@link UsernameToken} handling
+     * @param sigCrypto the object that implements the access to the keystore and the
+     *                  handling of certificates for Signature
+     * @param decCrypto the object that implements the access to the keystore and the
+     *                  handling of certificates for Decryption
+     * @param ttlValue  this value used to validate the ttl value of incoming messages
+     * @return a result vector
+     * @throws WSSecurityException
+     * @see WSSecurityEngine#processSecurityHeader(
+     *Element securityHeader, CallbackHandler cb, Crypto sigCrypto, Crypto decCrypto)
+     */
+    public Vector processSecurityHeader(Document doc,
+                                        String actor,
+                                        CallbackHandler cb,
+                                        Crypto sigCrypto,
+                                        Crypto decCrypto, int ttlValue)
+            throws WSSecurityException {
+
         doDebug = log.isDebugEnabled();
         if (doDebug) {
             log.debug("enter processSecurityHeader()");
@@ -246,7 +281,11 @@ public class WSSecurityEngine {
             if (doDebug) {
                 log.debug("Processing WS-Security header for '" + actor + "' actor.");
             }
-            wsResult = processSecurityHeader(elem, cb, sigCrypto, decCrypto);
+            if (ttlValue != -1) {
+                wsResult = processSecurityHeaderWithTTL(elem, cb, sigCrypto, decCrypto, ttlValue);
+            } else {
+                wsResult = processSecurityHeader(elem, cb, sigCrypto, decCrypto);
+            }
         }
         return wsResult;
     }
@@ -349,6 +388,75 @@ public class WSSecurityEngine {
             tlog.debug(
                 "processHeader: total " + (t2 - t0) + ", prepare " + (t1 - t0) 
                 + ", handle " + (t2 - t1)
+            );
+        }
+        return returnResults;
+    }
+
+    protected Vector processSecurityHeaderWithTTL(Element securityHeader, CallbackHandler cb, Crypto sigCrypto,
+                                                  Crypto decCrypto, int ttlValue)
+            throws WSSecurityException {
+
+        long t0 = 0, t1 = 0, t2 = 0;
+        if (tlog.isDebugEnabled()) {
+            t0 = System.currentTimeMillis();
+        }
+        /*
+         * Gather some info about the document to process and store
+         * it for retrieval. Store the implementation of signature crypto
+         * (no need for encryption --- yet)
+         */
+        WSDocInfo wsDocInfo = new WSDocInfo(securityHeader.getOwnerDocument());
+        wsDocInfo.setCrypto(sigCrypto);
+
+        NodeList list = securityHeader.getChildNodes();
+        int len = list.getLength();
+        Node elem;
+        if (tlog.isDebugEnabled()) {
+            t1 = System.currentTimeMillis();
+        }
+        Vector returnResults = new Vector();
+
+        for (int i = 0; i < len; i++) {
+            elem = list.item(i);
+            if (elem.getNodeType() != Node.ELEMENT_NODE) {
+                continue;
+            }
+            QName el = new QName(elem.getNamespaceURI(), elem.getLocalName());
+            final WSSConfig cfg = getWssConfig();
+            Processor p = cfg.getProcessor(el);
+            if (p instanceof TimestampProcessor) {
+                TimestampProcessor timestampProcessor = (TimestampProcessor) p;
+                timestampProcessor.setTtlValue(ttlValue);
+            }
+
+            /*
+             * Call the processor for this token. After the processor returns,
+             * store it for later retrieval. The token processor may store some
+             * information about the processed token
+             */
+            if (p != null) {
+                p.handleToken((Element) elem, sigCrypto, decCrypto, cb, wsDocInfo, returnResults,
+                        cfg);
+                wsDocInfo.setProcessor(p);
+            } else {
+                /*
+                 * Add check for a BinarySecurityToken, add info to WSDocInfo. If BST is
+                 * found before a Signature token this would speed up (at least a little
+                 * bit) the processing of STR Transform.
+                 */
+                if (doDebug) {
+                    log.debug(
+                            "Unknown Element: " + elem.getLocalName() + " " + elem.getNamespaceURI()
+                    );
+                }
+            }
+        }
+        if (tlog.isDebugEnabled()) {
+            t2 = System.currentTimeMillis();
+            tlog.debug(
+                    "processHeader: total " + (t2 - t0) + ", prepare " + (t1 - t0)
+                            + ", handle " + (t2 - t1)
             );
         }
         return returnResults;
