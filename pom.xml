@@ -174,7 +174,7 @@
         <jacoco.maven.plugin.version>0.8.0</jacoco.maven.plugin.version>
         <opensaml.version>2.6.1</opensaml.version>
         <opensaml1.version>1.1</opensaml1.version>
-        <slf4j.jdk14.version>1.5.2</slf4j.jdk14.version>
+        <slf4j.jdk14.version>1.7.26</slf4j.jdk14.version>
         <wss4j.version>1.5.11-wso2v18-SNAPSHOT</wss4j.version>
         <wss4j.orbit.version>1.5.11.wso2v16</wss4j.orbit.version>
         <exp.pkg.version.wss4j>1.5.11.wso2v16</exp.pkg.version.wss4j>
