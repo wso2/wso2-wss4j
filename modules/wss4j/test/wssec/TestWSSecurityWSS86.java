@@ -202,18 +202,22 @@ public class TestWSSecurityWSS86 extends TestCase implements CallbackHandler {
         //
         byte[] certBytes = 
             org.apache.ws.security.util.Base64.decode(
-                "MIICfDCCAeUCBEnHoGMwDQYJKoZIhvcNAQEEBQAwgYQxCzAJBgNVBAYTAkRFMQ8wDQYDVQQIEwZC"
-                + "YXllcm4xDzANBgNVBAcTBk11bmljaDEPMA0GA1UEChMGQXBhY2hlMQ4wDAYDVQQLEwVXU1M0SjEP"
-                + "MA0GA1UEAxMGV2VybmVyMSEwHwYJKoZIhvcNAQkBFhJXZXJuZXJAZXhhbXBsZS5jb20wHhcNMDkw"
-                + "MzIzMTQ0NDUxWhcNMTkwMzIxMTQ0NDUxWjCBhDELMAkGA1UEBhMCREUxDzANBgNVBAgTBkJheWVy"
-                + "bjEPMA0GA1UEBxMGTXVuaWNoMQ8wDQYDVQQKEwZBcGFjaGUxDjAMBgNVBAsTBVdTUzRKMQ8wDQYD"
-                + "VQQDEwZXZXJuZXIxITAfBgkqhkiG9w0BCQEWEldlcm5lckBleGFtcGxlLmNvbTCBnzANBgkqhkiG"
-                + "9w0BAQEFAAOBjQAwgYkCgYEA3uRplw7q8y/sIR541uCrlbIMzJHXCRU3nQreGNr6dM49/LxHYffQ"
-                + "Ex99chQh+wR6fwArFlziDRNnqslOy8zKMfGbaBaR41ZZrxvkSsIwzOhD6yAPgKVQL2vTmJAbdZ35"
-                + "GwcOW8oe7l+NV9qmv7yrr5OhqDhFh36WhgjVLiwmP/cCAwEAATANBgkqhkiG9w0BAQQFAAOBgQBP"
-                + "PnR2BYn7DKn/SkU8XTgf9g2NoYcMyvQOB+Uo25/QzDdMk6HKmHl0+7mh7RAtXcBz2YqC3WbQW5U3"
-                + "KmOH6fVxB8hw6xalBjs2YpnBx4gaHAws35KlAfkGVVe5wqnrI7ER7RBYO/7Gr7uCUq11QrGyEG8/"
-                + "yIXktaFLxgD2R4hpfA=="
+                "MIIC3TCCAkagAwIBAgIJAOaXZIcXC/spMA0GCSqGSIb3DQEBCwUAMIGEMQswCQYD\n" +
+                        "VQQGEwJERTEPMA0GA1UECAwGQmF5ZXJuMQ8wDQYDVQQHDAZNdW5pY2gxDzANBgNV\n" +
+                        "BAoMBkFwYWNoZTEOMAwGA1UECwwFV1NTNEoxDzANBgNVBAMMBldlcm5lcjEhMB8G\n" +
+                        "CSqGSIb3DQEJARYSV2VybmVyQGV4YW1wbGUuY29tMCAXDTE5MDQwNTEwMjA0MFoY\n" +
+                        "DzIwNzUwNTAxMTAyMDQwWjCBhDELMAkGA1UEBhMCREUxDzANBgNVBAgMBkJheWVy\n" +
+                        "bjEPMA0GA1UEBwwGTXVuaWNoMQ8wDQYDVQQKDAZBcGFjaGUxDjAMBgNVBAsMBVdT\n" +
+                        "UzRKMQ8wDQYDVQQDDAZXZXJuZXIxITAfBgkqhkiG9w0BCQEWEldlcm5lckBleGFt\n" +
+                        "cGxlLmNvbTCBnzANBgkqhkiG9w0BAQEFAAOBjQAwgYkCgYEA3uRplw7q8y/sIR54\n" +
+                        "1uCrlbIMzJHXCRU3nQreGNr6dM49/LxHYffQEx99chQh+wR6fwArFlziDRNnqslO\n" +
+                        "y8zKMfGbaBaR41ZZrxvkSsIwzOhD6yAPgKVQL2vTmJAbdZ35GwcOW8oe7l+NV9qm\n" +
+                        "v7yrr5OhqDhFh36WhgjVLiwmP/cCAwEAAaNTMFEwHQYDVR0OBBYEFHc37Gj+PGYN\n" +
+                        "NB4km9/jVjZLh0CCMB8GA1UdIwQYMBaAFHc37Gj+PGYNNB4km9/jVjZLh0CCMA8G\n" +
+                        "A1UdEwEB/wQFMAMBAf8wDQYJKoZIhvcNAQELBQADgYEAKtsnYcLEFlAbKmnZDdHl\n" +
+                        "uIHkVF2irwvUThpEt/AvS7wvpz4UbIdIbt7gnWv4KWdWLnmokTPQJmmPCv8Cjuh/\n" +
+                        "DD/IRhV0K/g/77iK/4MXpQr6cxETSv+2/oSkbr0JtGRTwcUM3eoilff0DW7+ULuT\n" +
+                        "WBmJmy0z6eeaXImNs6RH0fg="
             );
         CertificateFactory factory = 
             CertificateFactory.getInstance("X.509", "BC");
