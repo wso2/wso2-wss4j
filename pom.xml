@@ -188,7 +188,7 @@
         <javax.xml.parsers.import.pkg.version>[0.0.0, 1.0.0)</javax.xml.parsers.import.pkg.version>
         <project.scm.id>my-scm-server</project.scm.id>
 
-        <bundle.plugin.version>1.4.0</bundle.plugin.version>
+        <bundle.plugin.version>4.2.0</bundle.plugin.version>
         <surefire.plugin.version>2.22.1</surefire.plugin.version>
         <compiler.plugin.version>2.1</compiler.plugin.version>
         <source.plugin.version>2.1.2</source.plugin.version>
