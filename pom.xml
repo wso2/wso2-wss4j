@@ -191,7 +191,7 @@
         <bundle.plugin.version>1.4.0</bundle.plugin.version>
         <surefire.plugin.version>2.22.1</surefire.plugin.version>
         <compiler.plugin.version>2.1</compiler.plugin.version>
-        <source.plugin.version>2.1.2</source.plugin.version>
+        <source.plugin.version>3.0.1</source.plugin.version>
         <javadoc.plugin.version>2.7</javadoc.plugin.version>
         <assembly.plugin.version>2.1</assembly.plugin.version>
         <pmd.plugin.version>2.5</pmd.plugin.version>
