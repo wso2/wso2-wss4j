@@ -171,7 +171,7 @@
         <xerces.version>2.12.0</xerces.version>
         <axis.version>1.4</axis.version>
         <junit.version>3.8.1</junit.version>
-        <jacoco.maven.plugin.version>0.8.0</jacoco.maven.plugin.version>
+        <jacoco.maven.plugin.version>0.8.3</jacoco.maven.plugin.version>
         <opensaml.version>2.6.1</opensaml.version>
         <opensaml1.version>1.1</opensaml1.version>
         <slf4j.jdk14.version>1.7.26</slf4j.jdk14.version>
