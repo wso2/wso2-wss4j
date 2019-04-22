@@ -193,6 +193,7 @@
         <compiler.plugin.version>2.1</compiler.plugin.version>
         <source.plugin.version>2.1.2</source.plugin.version>
         <javadoc.plugin.version>2.7</javadoc.plugin.version>
+        <maven-dependency-plugin.version>2.0</maven-dependency-plugin.version>
         <assembly.plugin.version>2.1</assembly.plugin.version>
         <pmd.plugin.version>2.5</pmd.plugin.version>
         <jxr.plugin.version>3.0.0</jxr.plugin.version>
