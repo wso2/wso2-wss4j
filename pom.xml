@@ -171,14 +171,13 @@
         <xerces.version>2.12.0</xerces.version>
         <axis.version>1.4</axis.version>
         <junit.version>4.12</junit.version>
-        <jacoco.maven.plugin.version>0.8.0</jacoco.maven.plugin.version>
+        <jacoco.maven.plugin.version>0.8.4</jacoco.maven.plugin.version>
         <opensaml.version>2.6.1</opensaml.version>
         <opensaml1.version>1.1</opensaml1.version>
         <slf4j.jdk14.version>1.7.26</slf4j.jdk14.version>
         <wss4j.version>1.5.11-wso2v18-SNAPSHOT</wss4j.version>
-        <wss4j.orbit.version>1.5.11.wso2v16</wss4j.orbit.version>
-        <exp.pkg.version.wss4j>1.5.11.wso2v16</exp.pkg.version.wss4j>
-        <imp.pkg.version.wss4j>[1.5.11.wso2v11, 2.0.0)</imp.pkg.version.wss4j>
+        <exp.pkg.version.wss4j>${wss4j.version}</exp.pkg.version.wss4j>
+        <imp.pkg.version.wss4j>[${wss4j.version}, 2.0.0)</imp.pkg.version.wss4j>
         <exp.pkg.version.xmlsec>1.4.2-patched</exp.pkg.version.xmlsec>
         <imp.pkg.version.xmlsec>[1.4.2, 2.0.0)</imp.pkg.version.xmlsec>
         <imp.pkg.version.bcp>[1.49.0.wso2v2, 1.50.0)</imp.pkg.version.bcp>
@@ -190,10 +189,11 @@
 
         <bundle.plugin.version>1.4.0</bundle.plugin.version>
         <surefire.plugin.version>2.22.1</surefire.plugin.version>
-        <compiler.plugin.version>2.1</compiler.plugin.version>
-        <source.plugin.version>2.1.2</source.plugin.version>
+        <compiler.plugin.version>3.8.1</compiler.plugin.version>
+        <source.plugin.version>3.1.0</source.plugin.version>
         <javadoc.plugin.version>2.7</javadoc.plugin.version>
-        <assembly.plugin.version>2.1</assembly.plugin.version>
+        <maven-dependency-plugin.version>2.0</maven-dependency-plugin.version>
+        <assembly.plugin.version>3.1.1</assembly.plugin.version>
         <pmd.plugin.version>2.5</pmd.plugin.version>
         <jxr.plugin.version>3.0.0</jxr.plugin.version>
         <incremental-build.plugin.version>1.3</incremental-build.plugin.version>
