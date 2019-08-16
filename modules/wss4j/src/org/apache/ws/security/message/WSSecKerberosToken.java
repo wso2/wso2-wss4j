@@ -45,7 +45,7 @@ import com.sun.security.jgss.InquireType;
 
 public class WSSecKerberosToken extends WSSecSignature {
 
-	private static Log log = LogFactory.getLog(WSSecKerberosToken.class);
+	private static final Log log = LogFactory.getLog(WSSecKerberosToken.class);
 	public static final String KERBEROS_SERVICE_PRINCIPLE_UNKNOWN = "servicePrincipalUnknown";
 	protected String tokenUri;
 	protected Subject subject;

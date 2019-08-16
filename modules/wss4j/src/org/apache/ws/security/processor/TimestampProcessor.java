@@ -37,7 +37,7 @@ import java.util.Calendar;
 import java.util.Vector;
 
 public class TimestampProcessor implements Processor {
-    private static Log log = LogFactory.getLog(TimestampProcessor.class.getName());
+    private static final Log log = LogFactory.getLog(TimestampProcessor.class.getName());
 
     private WSSConfig wssConfig = null;
     private String tsId;

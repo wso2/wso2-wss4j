@@ -63,7 +63,7 @@ import java.util.TreeSet;
  * Utility methods for SAML stuff
  */
 public class SAMLUtil {
-    private static Log log = LogFactory.getLog(SAMLUtil.class.getName());
+    private static final Log log = LogFactory.getLog(SAMLUtil.class.getName());
 
     
     

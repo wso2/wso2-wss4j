@@ -60,8 +60,8 @@ import java.util.Vector;
  * @author Werner Dittmann (Werner.Dittmann@siemens.com).
  */
 public class WSEncryptBody extends WSBaseMessage {
-    private static Log log = LogFactory.getLog(WSEncryptBody.class.getName());
-    private static Log tlog = LogFactory.getLog("org.apache.ws.security.TIME");
+    private static final Log log = LogFactory.getLog(WSEncryptBody.class.getName());
+    private static final Log tlog = LogFactory.getLog("org.apache.ws.security.TIME");
 
     protected String symEncAlgo = WSConstants.AES_128;
     protected String keyEncAlgo = WSConstants.KEYTRANSPORT_RSA15;

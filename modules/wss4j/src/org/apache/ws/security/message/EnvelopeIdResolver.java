@@ -41,7 +41,7 @@ import org.w3c.dom.Element;
  * @author Davanum Srinivas (dims@yahoo.com).
  */
 public class EnvelopeIdResolver extends ResourceResolverSpi {
-    private static Log log =
+    private static final Log log =
             LogFactory.getLog(EnvelopeIdResolver.class.getName());
 
     private static EnvelopeIdResolver resolver = null;

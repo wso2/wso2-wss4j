@@ -34,7 +34,7 @@ import org.w3c.dom.Element;
  */
 public class WSSAddSAMLToken extends WSBaseMessage {
 
-    private static Log log = LogFactory.getLog(WSSAddSAMLToken.class.getName());
+    private static final Log log = LogFactory.getLog(WSSAddSAMLToken.class.getName());
 
     /**
      * Constructor.

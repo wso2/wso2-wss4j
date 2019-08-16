@@ -80,8 +80,8 @@ import java.util.Set;
 import java.util.Vector;
 
 public class SignatureProcessor implements Processor {
-    private static Log log = LogFactory.getLog(SignatureProcessor.class.getName());
-    private static Log tlog = LogFactory.getLog("org.apache.ws.security.TIME");
+    private static final Log log = LogFactory.getLog(SignatureProcessor.class.getName());
+    private static final Log tlog = LogFactory.getLog("org.apache.ws.security.TIME");
     
     private String signatureId;
     

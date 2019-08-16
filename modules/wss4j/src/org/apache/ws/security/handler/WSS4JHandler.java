@@ -63,7 +63,7 @@ import java.util.Vector;
 public class WSS4JHandler extends WSHandler implements Handler {
     private HandlerInfo handlerInfo;
     
-    private static Log log = LogFactory.getLog(WSS4JHandler.class.getName());
+    private static final Log log = LogFactory.getLog(WSS4JHandler.class.getName());
 
     private static boolean doDebug = log.isDebugEnabled();
 

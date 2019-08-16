@@ -34,7 +34,7 @@ import org.w3c.dom.Element;
  */
 public class WSSecSAMLToken extends WSSecBase {
 
-    private static Log log = LogFactory.getLog(WSSecSAMLToken.class.getName());
+    private static final Log log = LogFactory.getLog(WSSecSAMLToken.class.getName());
     
     private Document document = null;
     

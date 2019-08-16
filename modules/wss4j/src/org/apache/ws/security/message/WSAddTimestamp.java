@@ -34,7 +34,7 @@ import org.w3c.dom.Element;
  */
 
 public class WSAddTimestamp extends WSBaseMessage {
-    private static Log log = LogFactory.getLog(WSAddTimestamp.class.getName());
+    private static final Log log = LogFactory.getLog(WSAddTimestamp.class.getName());
 
     private Timestamp ts = null;
 

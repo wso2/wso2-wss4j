@@ -61,7 +61,7 @@ import org.w3c.dom.Element;
 
 public class KerberosTokenProcessor implements Processor {
 
-	private static Log log = LogFactory.getLog(KerberosTokenProcessor.class);
+	private static final Log log = LogFactory.getLog(KerberosTokenProcessor.class);
 	private String tokenId;;
 	private Subject subject;
 	private KerberosTokenPrincipal lastPrincipalFound;

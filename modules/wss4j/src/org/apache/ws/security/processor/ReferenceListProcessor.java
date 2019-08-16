@@ -53,7 +53,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
 public class ReferenceListProcessor implements Processor {
-    private static Log log = 
+    private static final Log log =
         LogFactory.getLog(ReferenceListProcessor.class.getName());
 
     private boolean debug = false;

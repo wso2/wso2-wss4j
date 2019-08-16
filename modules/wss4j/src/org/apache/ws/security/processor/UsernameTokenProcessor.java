@@ -41,7 +41,7 @@ import java.security.Principal;
 import java.util.Vector;
 
 public class UsernameTokenProcessor implements Processor {
-    private static Log log = LogFactory.getLog(UsernameTokenProcessor.class.getName());
+    private static final Log log = LogFactory.getLog(UsernameTokenProcessor.class.getName());
 
     private String utId;
     private UsernameToken ut;

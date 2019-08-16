@@ -68,9 +68,9 @@ import java.util.Vector;
  */
 public class WSSignEnvelope extends WSBaseMessage {
 
-    private static Log log = LogFactory.getLog(WSSignEnvelope.class.getName());
+    private static final Log log = LogFactory.getLog(WSSignEnvelope.class.getName());
 
-    private static Log tlog = LogFactory.getLog("org.apache.ws.security.TIME");
+    private static final Log tlog = LogFactory.getLog("org.apache.ws.security.TIME");
 
     protected boolean useSingleCert = true;
 

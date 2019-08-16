@@ -65,7 +65,7 @@ import java.util.Vector;
 
 public class WSSecSignatureSAML extends WSSecSignature {
 
-    private static Log log = LogFactory.getLog(WSSecSignatureSAML.class.getName());
+    private static final Log log = LogFactory.getLog(WSSecSignatureSAML.class.getName());
     private boolean senderVouches = false;
     private SecurityTokenReference secRefSaml = null;
     private Element samlToken = null;

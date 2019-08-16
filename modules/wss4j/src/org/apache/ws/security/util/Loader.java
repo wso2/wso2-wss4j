@@ -34,7 +34,7 @@ import java.security.PrivilegedAction;
  * @author Davanum Srinivas (dims@yahoo.com).
  */
 public class Loader {
-    private static Log log = LogFactory.getLog(Loader.class.getName());
+    private static final Log log = LogFactory.getLog(Loader.class.getName());
 
     /**
      * This method will search for <code>resource</code> in different

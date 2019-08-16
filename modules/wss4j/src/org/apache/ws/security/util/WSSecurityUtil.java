@@ -59,7 +59,7 @@ import java.util.Vector;
  * @author Davanum Srinivas (dims@yahoo.com).
  */
 public class WSSecurityUtil {
-    private static Log log = LogFactory.getLog(WSSecurityUtil.class);
+    private static final Log log = LogFactory.getLog(WSSecurityUtil.class);
 
     /**
      * A cached pseudo-random number generator

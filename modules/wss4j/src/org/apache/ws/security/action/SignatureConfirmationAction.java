@@ -36,7 +36,7 @@ import org.w3c.dom.Document;
 import java.util.Vector;
 
 public class SignatureConfirmationAction implements Action {
-    protected static Log log = LogFactory.getLog(WSHandler.class.getName());
+    protected static final Log log = LogFactory.getLog(WSHandler.class.getName());
 
     public void execute(WSHandler handler, int actionToDo, Document doc, RequestData reqData)
             throws WSSecurityException {

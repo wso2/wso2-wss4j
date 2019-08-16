@@ -58,7 +58,7 @@ import javax.security.auth.x500.X500Principal;
  * To change this template use File | Settings | File Templates.
  */
 public abstract class CryptoBase implements Crypto {
-    private static Log log = LogFactory.getLog(CryptoBase.class);
+    private static final Log log = LogFactory.getLog(CryptoBase.class);
     private static final Constructor BC_509CLASS_CONS;
     
 

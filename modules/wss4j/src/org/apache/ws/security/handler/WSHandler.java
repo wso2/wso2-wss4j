@@ -64,7 +64,7 @@ import java.util.Vector;
  */
 public abstract class WSHandler {
     public static String DONE = "done";
-    private static Log log = LogFactory.getLog(WSHandler.class.getName());
+    private static final Log log = LogFactory.getLog(WSHandler.class.getName());
     protected static final WSSecurityEngine secEngine = WSSecurityEngine.getInstance();
     protected static Hashtable cryptos = new Hashtable(5);
 

@@ -39,7 +39,7 @@ import org.w3c.dom.Text;
  * Utility class exposing the dereferencing logic of the {@link STRTransform} implementation.
  */
 public class STRTransformUtil {
-    private static Log log = LogFactory.getLog(STRTransformUtil.class.getName());
+    private static final Log log = LogFactory.getLog(STRTransformUtil.class.getName());
 
     /**
      * Retrieves the element representing the referenced content of a STR.

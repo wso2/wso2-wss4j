@@ -59,10 +59,10 @@ import java.util.Vector;
 
 public class WSSignSAMLEnvelope extends WSSignEnvelope {
 
-    private static Log log = LogFactory.getLog(WSSignSAMLEnvelope.class
+    private static final Log log = LogFactory.getLog(WSSignSAMLEnvelope.class
             .getName());
 
-    private static Log tlog = LogFactory.getLog("org.apache.ws.security.TIME");
+    private static final Log tlog = LogFactory.getLog("org.apache.ws.security.TIME");
 
     /**
      * Constructor.

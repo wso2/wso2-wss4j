@@ -60,8 +60,8 @@ import java.util.List;
 import java.util.Vector;
 
 public class EncryptedKeyProcessor implements Processor {
-    private static Log log = LogFactory.getLog(EncryptedKeyProcessor.class.getName());
-    private static Log tlog =
+    private static final Log log = LogFactory.getLog(EncryptedKeyProcessor.class.getName());
+    private static final Log tlog =
             LogFactory.getLog("org.apache.ws.security.TIME");
     private byte[] encryptedEphemeralKey;
     
