@@ -81,7 +81,7 @@ import org.w3c.dom.Node;
  */
 public class WSSecSignature extends WSSecBase {
 
-    private static Log log = LogFactory.getLog(WSSecSignature.class.getName());
+    private static final Log log = LogFactory.getLog(WSSecSignature.class.getName());
 
     protected boolean useSingleCert = true;
 

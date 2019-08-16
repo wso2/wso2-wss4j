@@ -33,7 +33,7 @@ import org.w3c.dom.Element;
  */
 
 public class WSAddSignatureConfirmation extends WSBaseMessage {
-    private static Log log = LogFactory.getLog(WSAddSignatureConfirmation.class
+    private static final Log log = LogFactory.getLog(WSAddSignatureConfirmation.class
             .getName());
 
     private SignatureConfirmation sc = null;

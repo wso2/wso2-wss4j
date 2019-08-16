@@ -46,7 +46,7 @@ import java.util.ArrayList;
  * @author Sam Ruby (rubys@us.ibm.com)
  */
 public class NSStack {
-    protected static Log log =
+    protected static final Log log =
             LogFactory.getLog(NSStack.class.getName());
 
     private Mapping[] stack;

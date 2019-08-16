@@ -52,7 +52,7 @@ import java.util.Vector;
  */
 public class SAML2TokenProcessor implements Processor {
 
-    private static Log log = LogFactory.getLog(SAML2TokenProcessor.class.getName());
+    private static final Log log = LogFactory.getLog(SAML2TokenProcessor.class.getName());
 
     private String id;
     private Element samlTokenElement;

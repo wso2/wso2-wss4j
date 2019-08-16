@@ -62,7 +62,7 @@ import java.util.Vector;
  */
 public class WSSecDKSign extends WSSecDerivedKeyBase {
 
-    private static Log log = LogFactory.getLog(WSSecDKSign.class.getName());
+    private static final Log log = LogFactory.getLog(WSSecDKSign.class.getName());
 
     protected String sigAlgo = XMLSignature.ALGO_ID_MAC_HMAC_SHA1;
 

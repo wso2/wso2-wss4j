@@ -35,7 +35,7 @@ import org.w3c.dom.Element;
  */
 
 public class WSSecTimestamp extends WSSecBase {
-    private static Log log = LogFactory.getLog(WSSecTimestamp.class.getName());
+    private static final Log log = LogFactory.getLog(WSSecTimestamp.class.getName());
 
     private Timestamp ts = null;
 

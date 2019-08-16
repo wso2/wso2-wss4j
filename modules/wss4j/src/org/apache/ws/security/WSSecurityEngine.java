@@ -46,8 +46,8 @@ import java.util.Vector;
  */
 public class WSSecurityEngine {
     public static final String VALUE_TYPE = "ValueType";
-    private static Log log = LogFactory.getLog(WSSecurityEngine.class.getName());
-    private static Log tlog =
+    private static final Log log = LogFactory.getLog(WSSecurityEngine.class.getName());
+    private static final Log tlog =
             LogFactory.getLog("org.apache.ws.security.TIME");
 
     private static WSSecurityEngine engine = null;

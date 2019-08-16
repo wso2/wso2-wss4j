@@ -41,7 +41,7 @@ import java.util.List;
  * then override what you need to.
  */
 public abstract class WSDoAllHandler extends WSHandler implements Handler {
-    private static Log log =
+    private static final Log log =
             LogFactory.getLog(WSDoAllHandler.class.getName());
 
     protected boolean makeLockable = false;

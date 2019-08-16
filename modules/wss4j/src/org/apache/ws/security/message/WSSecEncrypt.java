@@ -57,7 +57,7 @@ import java.util.Vector;
  * @author Werner Dittmann (Werner.Dittmann@apache.org).
  */
 public class WSSecEncrypt extends WSSecEncryptedKey {
-    private static Log log = LogFactory.getLog(WSSecEncrypt.class.getName());
+    private static final Log log = LogFactory.getLog(WSSecEncrypt.class.getName());
 
     protected String symEncAlgo = WSConstants.AES_128;
 

@@ -51,7 +51,7 @@ import java.security.cert.X509Certificate;
  * @author Davanum Srinivas (dims@yahoo.com).
  */
 public class SecurityTokenReference {
-	private static Log log = LogFactory.getLog(SecurityTokenReference.class.getName());
+	private static final Log log = LogFactory.getLog(SecurityTokenReference.class.getName());
 	public static final String SECURITY_TOKEN_REFERENCE = "SecurityTokenReference";
 	public static final String KEY_NAME = "KeyName";
 	public static final String SKI_URI = WSConstants.X509TOKEN_NS + "#X509SubjectKeyIdentifier";

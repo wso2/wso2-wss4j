@@ -14,7 +14,7 @@ public class KrbSessionCache {
 
 
 	private static KrbSessionCache instance = new KrbSessionCache();
-	private static Log log = LogFactory.getLog(KrbSessionCache.class.getName());
+	private static final Log log = LogFactory.getLog(KrbSessionCache.class.getName());
 
 	private KrbSessionCache() {
 	}

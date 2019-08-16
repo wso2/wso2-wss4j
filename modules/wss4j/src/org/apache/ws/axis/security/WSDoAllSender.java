@@ -43,8 +43,8 @@ import java.util.Vector;
  */
 public class WSDoAllSender extends WSDoAllHandler {
 
-    protected static Log log = LogFactory.getLog(WSDoAllSender.class.getName());
-    private static Log tlog =
+    protected static final Log log = LogFactory.getLog(WSDoAllSender.class.getName());
+    private static final Log tlog =
         LogFactory.getLog("org.apache.ws.security.TIME");
     
     /**

@@ -35,7 +35,7 @@ import org.w3c.dom.Element;
  */
 
 public class WSSAddUsernameToken extends WSBaseMessage {
-    private static Log log = LogFactory.getLog(WSSAddUsernameToken.class.getName());
+    private static final Log log = LogFactory.getLog(WSSAddUsernameToken.class.getName());
     private String passwordType = WSConstants.PASSWORD_DIGEST;
 
     private UsernameToken ut = null;

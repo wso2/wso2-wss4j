@@ -34,7 +34,7 @@ import javax.security.auth.callback.CallbackHandler;
 import java.util.Vector;
 
 public class SignatureConfirmationProcessor implements Processor {
-    private static Log log = LogFactory.getLog(SignatureConfirmationProcessor.class.getName());
+    private static final Log log = LogFactory.getLog(SignatureConfirmationProcessor.class.getName());
 
     private String scId;
     

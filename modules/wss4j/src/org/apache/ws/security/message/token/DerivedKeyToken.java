@@ -55,7 +55,7 @@ import org.w3c.dom.Text;
  */
 public class DerivedKeyToken {
 
-    private Log log = LogFactory.getLog(DerivedKeyToken.class.getName());
+    private static final Log log = LogFactory.getLog(DerivedKeyToken.class.getName());
 
     // These are the elements that are used to create the SecurityContextToken
     protected Element element = null;

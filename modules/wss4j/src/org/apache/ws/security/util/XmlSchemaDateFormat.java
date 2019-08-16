@@ -42,7 +42,7 @@ public class XmlSchemaDateFormat extends DateFormat {
     /**
      * Logger.
      */
-    private static Log log = LogFactory.getLog(XmlSchemaDateFormat.class);
+    private static final Log log = LogFactory.getLog(XmlSchemaDateFormat.class);
 
     /**
      * Message retriever.

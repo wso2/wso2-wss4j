@@ -50,7 +50,7 @@ public final class  Base64 {
     static final private byte [] base64Alphabet        = new byte[BASELENGTH];
     static final private char [] lookUpBase64Alphabet  = new char[LOOKUPLENGTH];
     
-    static org.apache.commons.logging.Log log = 
+    static final org.apache.commons.logging.Log log =
         org.apache.commons.logging.LogFactory.getLog(Base64.class.getName());
     
     static private final boolean fDebug          = log.isDebugEnabled();

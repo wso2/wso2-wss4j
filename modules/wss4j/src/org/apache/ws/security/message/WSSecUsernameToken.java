@@ -38,7 +38,7 @@ import org.w3c.dom.Element;
  */
 
 public class WSSecUsernameToken extends WSSecBase {
-    private static Log log = LogFactory.getLog(WSSecUsernameToken.class.getName());
+    private static final Log log = LogFactory.getLog(WSSecUsernameToken.class.getName());
 
     private String passwordType = WSConstants.PASSWORD_DIGEST;
     private UsernameToken ut = null;
