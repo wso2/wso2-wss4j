@@ -77,17 +77,17 @@
         <dependency>
             <groupId>org.opensaml</groupId>
             <artifactId>xmltooling</artifactId>
-            <version>1.4.6</version>
+            <version>${opensaml.xmltooling.version}</version>
         </dependency>
         <dependency>
             <groupId>org.opensaml</groupId>
             <artifactId>openws</artifactId>
-            <version>1.5.4</version>
+            <version>${openws.version}</version>
         </dependency>
         <dependency>
             <groupId>org.owasp.esapi</groupId>
             <artifactId>esapi</artifactId>
-            <version>2.1.0.1</version>
+            <version>${esapi.version}</version>
         </dependency>
     </dependencies>
 
@@ -165,5 +165,11 @@
             </plugin>
         </plugins>
     </build>
+
+    <properties>
+        <opensaml.xmltooling.version>1.4.6</opensaml.xmltooling.version>
+        <openws.version>1.5.4</openws.version>
+        <esapi.version>2.1.0.1</esapi.version>
+    </properties>
 
 </project>
