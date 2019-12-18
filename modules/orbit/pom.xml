@@ -66,6 +66,18 @@
             <artifactId>bcprov-jdk15on</artifactId>
             <optional>true</optional>
         </dependency>
+        <dependency>
+            <groupId>org.opensaml</groupId>
+            <artifactId>opensaml1</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.opensaml</groupId>
+            <artifactId>opensaml</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.owasp.esapi</groupId>
+            <artifactId>esapi</artifactId>
+        </dependency>
     </dependencies>
 
     <build>
@@ -118,20 +130,15 @@
                             org.apache.xpath.objects;resolution:=optional,
                             org.ietf.jgss,
                             org.joda.time,
-                            org.opensaml,
-                            org.opensaml.saml2.core,
-                            org.opensaml.xml,
-                            org.opensaml.xml.io,
-                            org.opensaml.xml.security.credential,
-                            org.opensaml.xml.security.x509,
-                            org.opensaml.xml.signature,
-                            org.opensaml.xml.util,
-                            org.opensaml.xml.validation,
                             org.w3c.dom,
                             org.xml.sax,
                             sun.security.krb5.*;resolution:=optional,
                             sun.security.util;resolution:=optional,
                         </Import-Package>
+                        <Embed-Dependency>
+                            opensaml;inline=false, opensaml1;inline=false,
+                            esapi;inline=false, bcprov-jdk15on;inline=false,
+                        </Embed-Dependency>
                         <Embed-Transitive>true</Embed-Transitive>
                         <DynamicImport-Package>*</DynamicImport-Package>
                     </instructions>
