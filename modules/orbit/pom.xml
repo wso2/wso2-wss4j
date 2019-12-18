@@ -75,19 +75,8 @@
             <artifactId>opensaml</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.opensaml</groupId>
-            <artifactId>xmltooling</artifactId>
-            <version>${opensaml.xmltooling.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.opensaml</groupId>
-            <artifactId>openws</artifactId>
-            <version>${openws.version}</version>
-        </dependency>
-        <dependency>
             <groupId>org.owasp.esapi</groupId>
             <artifactId>esapi</artifactId>
-            <version>${esapi.version}</version>
         </dependency>
     </dependencies>
 
@@ -147,8 +136,8 @@
                             sun.security.util;resolution:=optional,
                         </Import-Package>
                         <Embed-Dependency>
-                            opensaml;inline=false, opensaml1;inline=false, xmltooling;inline=false,
-                            openws;inline=false, esapi;inline=false, bcprov-jdk15on;inline=false,
+                            opensaml;inline=false, opensaml1;inline=false,
+                            esapi;inline=false, bcprov-jdk15on;inline=false,
                         </Embed-Dependency>
                         <Embed-Transitive>true</Embed-Transitive>
                         <DynamicImport-Package>*</DynamicImport-Package>
@@ -165,11 +154,5 @@
             </plugin>
         </plugins>
     </build>
-
-    <properties>
-        <opensaml.xmltooling.version>1.4.6</opensaml.xmltooling.version>
-        <openws.version>1.5.4</openws.version>
-        <esapi.version>2.1.0.1</esapi.version>
-    </properties>
 
 </project>
