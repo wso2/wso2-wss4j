@@ -154,6 +154,11 @@
                 <artifactId>esapi</artifactId>
                 <version>${esapi.version}</version>
             </dependency>
+            <dependency>
+                <groupId>org.opensaml</groupId>
+                <artifactId>xmltooling</artifactId>
+                <version>${xmltooling.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -177,6 +182,7 @@
         <junit.version>4.12</junit.version>
         <jacoco.maven.plugin.version>0.8.4</jacoco.maven.plugin.version>
         <opensaml.version>2.6.1</opensaml.version>
+        <xmltooling.version>1.4.1</xmltooling.version>
         <opensaml1.version>1.1</opensaml1.version>
         <esapi.version>2.1.0.1</esapi.version>
         <slf4j.jdk14.version>1.7.26</slf4j.jdk14.version>

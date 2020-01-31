@@ -75,6 +75,10 @@
             <artifactId>opensaml</artifactId>
         </dependency>
         <dependency>
+            <groupId>org.opensaml</groupId>
+            <artifactId>xmltooling</artifactId>
+        </dependency>
+        <dependency>
             <groupId>org.owasp.esapi</groupId>
             <artifactId>esapi</artifactId>
         </dependency>
@@ -138,6 +142,7 @@
                         <Embed-Dependency>
                             opensaml;inline=false, opensaml1;inline=false,
                             esapi;inline=false, bcprov-jdk15on;inline=false,
+                            xmltooling;inline=false,
                         </Embed-Dependency>
                         <Embed-Transitive>true</Embed-Transitive>
                         <DynamicImport-Package>*</DynamicImport-Package>
