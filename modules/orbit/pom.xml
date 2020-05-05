@@ -81,16 +81,13 @@
                         <Export-Package>
                             org.apache.ws.security.*; version=${exp.pkg.version.wss4j},
                             org.apache.ws.axis.security.*; version=${exp.pkg.version.wss4j},
-                            javax.xml.crypto.*; version=${exp.pkg.version.xmlsec},
-                            org.apache.xml.security.*; version=${exp.pkg.version.xmlsec},
-                            org.jcp.xml.dsig.internal.*; version=${exp.pkg.version.xmlsec}
                         </Export-Package>
                         <Import-Package>
                             !org.apache.ws.security.*; version="${imp.pkg.version.wss4j}",
                             !org.apache.ws.axis.security.*; version="${imp.pkg.version.wss4j}",
-                            !javax.xml.crypto.*; version="${imp.pkg.version.xmlsec}",
-                            !org.apache.xml.security.*; version="${imp.pkg.version.xmlsec}",
-                            !org.jcp.xml.dsig.internal.*; version="${imp.pkg.version.xmlsec}",
+                            javax.xml.crypto.*; version="${imp.pkg.version.xmlsec}",
+                            org.apache.xml.security.*; version="${imp.pkg.version.xmlsec}",
+                            org.jcp.xml.dsig.internal.*; version="${imp.pkg.version.xmlsec}",
                             org.bouncycastle.*; version="${imp.pkg.version.bcp}",
                             org.apache.axis.*;version="${imp.pkg.version.axis2}";resolution:=optional,
                             javax.xml.soap; version="${imp.pkg.version.xmlsoap}";resolution:=optional,
