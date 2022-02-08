@@ -43,11 +43,12 @@ import org.apache.ws.security.message.WSSecEncrypt;
 import org.apache.ws.security.message.WSSecHeader;
 import org.apache.ws.security.message.token.SecurityTokenReference;
 
+import org.opensaml.saml.saml1.core.Assertion;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
-import org.opensaml.SAMLAssertion;
+
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -136,8 +137,8 @@ public class TestWSSecuritySAMLKeyIdentifier extends TestCase implements Callbac
         Crypto hokCrypto = CryptoFactory.getInstance("crypto.properties");
         saml.setUserCrypto(hokCrypto);
         saml.setUsername("16c73ab6-b892-458f-abf5-2f875f74882e");
-        SAMLAssertion assertion = saml.newAssertion();
-        Node assertionNode = assertion.toDOM(doc);
+        Assertion assertion = saml.newAssertion();
+        Node assertionNode = assertion.getDOM();
         
         WSSecHeader secHeader = new WSSecHeader();
         secHeader.insertSecurityHeader(doc);
@@ -149,7 +150,7 @@ public class TestWSSecuritySAMLKeyIdentifier extends TestCase implements Callbac
         builder.setSymmetricEncAlgorithm(WSConstants.TRIPLE_DES);
         builder.setKeyIdentifierType(WSConstants.CUSTOM_KEY_IDENTIFIER);
         builder.setCustomEKTokenValueType(SecurityTokenReference.SAML_ID_URI);
-        builder.setCustomEKTokenId(assertion.getId());
+        builder.setCustomEKTokenId(assertion.getID());
         
         builder.prepare(doc, hokCrypto);
         Vector parts = new Vector();
@@ -169,8 +170,8 @@ public class TestWSSecuritySAMLKeyIdentifier extends TestCase implements Callbac
         Vector results = verify(doc, hokCrypto);
         WSSecurityEngineResult actionResult =
             WSSecurityUtil.fetchActionResult(results, WSConstants.ST_UNSIGNED);
-        SAMLAssertion receivedAssertion = 
-            (SAMLAssertion) actionResult.get(WSSecurityEngineResult.TAG_SAML_ASSERTION);
+        Assertion receivedAssertion =
+            (Assertion) actionResult.get(WSSecurityEngineResult.TAG_SAML_ASSERTION);
         assertTrue(receivedAssertion != null);
     }
     

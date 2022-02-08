@@ -27,6 +27,7 @@ import org.apache.ws.security.WSDocInfo;
 import org.apache.ws.security.util.URI;
 import org.apache.ws.security.util.WSSecurityUtil;
 import org.apache.xml.security.signature.XMLSignatureInput;
+import org.apache.xml.security.utils.resolver.ResourceResolverContext;
 import org.apache.xml.security.utils.resolver.ResourceResolverException;
 import org.apache.xml.security.utils.resolver.ResourceResolverSpi;
 import org.w3c.dom.Attr;
@@ -65,7 +66,7 @@ public class EnvelopeIdResolver extends ResourceResolverSpi {
 
     private EnvelopeIdResolver() {
     }
-    
+
     /**
      * @param docInfo The WSDocInfo object to be used for resolving elements
      */
@@ -124,7 +125,7 @@ public class EnvelopeIdResolver extends ResourceResolverSpi {
             if (selectedElem == null) {
                 throw new ResourceResolverException("generic.EmptyMessage",
                         new Object[]{"Body element not found"},
-                        uri,
+                        uri.toString(),
                         BaseURI);
             }
             String cId = selectedElem.getAttributeNS(WSConstants.WSU_NS, "Id");
@@ -145,7 +146,7 @@ public class EnvelopeIdResolver extends ResourceResolverSpi {
                 if (cId == null) {
                     throw new ResourceResolverException("generic.EmptyMessage",
                             new Object[]{"Id not found"},
-                            uri,
+                            uri.toString(),
                             BaseURI);
                 }
             }
@@ -180,5 +181,15 @@ public class EnvelopeIdResolver extends ResourceResolverSpi {
         }
         String uriNodeValue = uri.getNodeValue();
         return uriNodeValue.startsWith("#");
+    }
+
+    @Override
+    public XMLSignatureInput engineResolveURI(ResourceResolverContext resourceResolverContext)  {
+        return null;
+    }
+
+    @Override
+    public boolean engineCanResolveURI(ResourceResolverContext resourceResolverContext) {
+        return false;
     }
 }

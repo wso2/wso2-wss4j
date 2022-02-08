@@ -20,7 +20,8 @@
 package org.apache.ws.security.saml;
 
 import org.apache.ws.security.components.crypto.Crypto;
-import org.opensaml.SAMLAssertion;
+
+import org.opensaml.saml.saml1.core.Assertion;
 import org.w3c.dom.Document;
 
 /**
@@ -39,7 +40,7 @@ public interface SAMLIssuer {
      *
      * @return SAMLAssertion
      */
-    public SAMLAssertion newAssertion();
+    public Assertion newAssertion();
 
     /**
      * @param userCrypto The userCrypto to set.

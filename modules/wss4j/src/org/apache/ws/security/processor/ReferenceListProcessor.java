@@ -42,8 +42,6 @@ import org.apache.ws.security.message.token.Reference;
 import org.apache.ws.security.message.token.SecurityTokenReference;
 import org.apache.ws.security.saml.SAML2KeyInfo;
 import org.apache.ws.security.saml.SAML2Util;
-import org.apache.ws.security.saml.SAMLKeyInfo;
-import org.apache.ws.security.saml.SAMLUtil;
 import org.apache.ws.security.util.WSSecurityUtil;
 import org.apache.xml.security.encryption.XMLCipher;
 import org.apache.xml.security.encryption.XMLEncryptionException;
@@ -333,12 +331,14 @@ public class ReferenceListProcessor implements Processor {
                 DerivedKeyTokenProcessor dkp = (DerivedKeyTokenProcessor) p;
                 decryptedData = dkp.getKeyBytes(WSSecurityUtil.getKeyLength(algorithm));
             } else if (p instanceof SAMLTokenProcessor) {
-                SAMLTokenProcessor samlp = (SAMLTokenProcessor) p;
-                SAMLKeyInfo keyInfo = 
-                    SAMLUtil.getSAMLKeyInfo(samlp.getSamlTokenElement(), crypto, cb);
-                // TODO Handle malformed SAML tokens where they don't have the 
-                // secret in them
-                decryptedData = keyInfo.getSecret();
+//                SAMLTokenProcessor samlp = (SAMLTokenProcessor) p;
+//                SAMLKeyInfo keyInfo =
+//                    SAMLUtil.getSAMLKeyInfo(samlp.getSamlTokenElement(), crypto, cb);
+//                // TODO Handle malformed SAML tokens where they don't have the
+//                // secret in them
+//                decryptedData = keyInfo.getSecret();
+                throw new WSSecurityException(
+                        WSSecurityException.FAILED_CHECK, "SAML 1.x is not supported");
             }else if (p instanceof KerberosTokenProcessor) {
             	KerberosTokenProcessor krbp = (KerberosTokenProcessor) p;
 				WSParameterCallback param = new WSParameterCallback(WSParameterCallback.KDC_DES_AES_FACTOR);
@@ -392,18 +392,20 @@ public class ReferenceListProcessor implements Processor {
             }
         } else if (secRef.containsKeyIdentifier()) {
             if (WSConstants.WSS_SAML_KI_VALUE_TYPE.equals(secRef.getKeyIdentifierValueType())) { 
-                Element token = 
-                    secRef.getKeyIdentifierTokenElement(secRefToken.getOwnerDocument(), wsDocInfo, cb);
-                
-                if (crypto == null) {
-                    throw new WSSecurityException(
-                        WSSecurityException.FAILURE, "noSigCryptoFile"
-                    );
-                }
-                SAMLKeyInfo keyInfo = SAMLUtil.getSAMLKeyInfo(token, crypto, cb);
-                // TODO Handle malformed SAML tokens where they don't have the 
-                // secret in them
-                decryptedData = keyInfo.getSecret();
+//                Element token =
+//                    secRef.getKeyIdentifierTokenElement(secRefToken.getOwnerDocument(), wsDocInfo, cb);
+//
+//                if (crypto == null) {
+//                    throw new WSSecurityException(
+//                        WSSecurityException.FAILURE, "noSigCryptoFile"
+//                    );
+//                }
+//                SAMLKeyInfo keyInfo = SAMLUtil.getSAMLKeyInfo(token, crypto, cb);
+//                // TODO Handle malformed SAML tokens where they don't have the
+//                // secret in them
+//                decryptedData = keyInfo.getSecret();
+                throw new WSSecurityException(
+                        WSSecurityException.FAILED_CHECK, "SAML 1.x is not supported");
 			} else if (WSConstants.WSS_SAML2_KI_VALUE_TYPE.equals(secRef
 					.getKeyIdentifierValueType())) {
 				Element token = secRef.getKeyIdentifierTokenElement(

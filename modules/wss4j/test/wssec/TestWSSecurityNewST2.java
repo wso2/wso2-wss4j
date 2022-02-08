@@ -46,9 +46,9 @@ import org.apache.ws.security.handler.RequestData;
 import org.apache.ws.security.handler.WSHandler;
 import org.apache.ws.security.handler.WSHandlerConstants;
 import org.apache.ws.security.message.WSSecHeader;
+import org.opensaml.saml.saml1.core.Assertion;
 import org.w3c.dom.Document;
 
-import org.opensaml.SAMLAssertion;
 
 import javax.security.auth.callback.Callback;
 import javax.security.auth.callback.CallbackHandler;
@@ -130,7 +130,7 @@ public class TestWSSecurityNewST2 extends TestCase implements CallbackHandler {
         SOAPEnvelope unsignedEnvelope = message.getSOAPEnvelope();
         SAMLIssuer saml = SAMLIssuerFactory.getInstance("saml.properties");
 
-        SAMLAssertion assertion = saml.newAssertion();
+        Assertion assertion = saml.newAssertion();
 
         String issuerKeyName = saml.getIssuerKeyName();
         String issuerKeyPW = saml.getIssuerKeyPassword();
@@ -159,8 +159,8 @@ public class TestWSSecurityNewST2 extends TestCase implements CallbackHandler {
         Vector results = verify(signedDoc);
         WSSecurityEngineResult actionResult =
             WSSecurityUtil.fetchActionResult(results, WSConstants.ST_UNSIGNED);
-        SAMLAssertion receivedAssertion = 
-            (SAMLAssertion) actionResult.get(WSSecurityEngineResult.TAG_SAML_ASSERTION);
+        Assertion receivedAssertion =
+            (Assertion) actionResult.get(WSSecurityEngineResult.TAG_SAML_ASSERTION);
         assertTrue(receivedAssertion != null);
     }
     
@@ -173,7 +173,7 @@ public class TestWSSecurityNewST2 extends TestCase implements CallbackHandler {
         SOAPEnvelope unsignedEnvelope = message.getSOAPEnvelope();
         SAMLIssuer saml = SAMLIssuerFactory.getInstance("saml.properties");
 
-        SAMLAssertion assertion = saml.newAssertion();
+        Assertion assertion = saml.newAssertion();
 
         String issuerKeyName = saml.getIssuerKeyName();
         String issuerKeyPW = saml.getIssuerKeyPassword();
@@ -202,8 +202,8 @@ public class TestWSSecurityNewST2 extends TestCase implements CallbackHandler {
         Vector results = verify(signedDoc);
         WSSecurityEngineResult actionResult =
             WSSecurityUtil.fetchActionResult(results, WSConstants.ST_UNSIGNED);
-        SAMLAssertion receivedAssertion = 
-            (SAMLAssertion) actionResult.get(WSSecurityEngineResult.TAG_SAML_ASSERTION);
+        Assertion receivedAssertion =
+            (Assertion) actionResult.get(WSSecurityEngineResult.TAG_SAML_ASSERTION);
         assertTrue(receivedAssertion != null);
     }
     
@@ -218,7 +218,7 @@ public class TestWSSecurityNewST2 extends TestCase implements CallbackHandler {
         SOAPEnvelope unsignedEnvelope = message.getSOAPEnvelope();
         SAMLIssuer saml = SAMLIssuerFactory.getInstance("saml3.properties");
 
-        SAMLAssertion assertion = saml.newAssertion();
+        Assertion assertion = saml.newAssertion();
 
         String issuerKeyName = saml.getIssuerKeyName();
         String issuerKeyPW = saml.getIssuerKeyPassword();
@@ -246,8 +246,8 @@ public class TestWSSecurityNewST2 extends TestCase implements CallbackHandler {
         Vector results = verify(signedDoc);
         WSSecurityEngineResult actionResult =
             WSSecurityUtil.fetchActionResult(results, WSConstants.ST_UNSIGNED);
-        SAMLAssertion receivedAssertion = 
-            (SAMLAssertion) actionResult.get(WSSecurityEngineResult.TAG_SAML_ASSERTION);
+        Assertion receivedAssertion =
+            (Assertion) actionResult.get(WSSecurityEngineResult.TAG_SAML_ASSERTION);
         assertTrue(receivedAssertion != null);
     }
     
@@ -262,7 +262,7 @@ public class TestWSSecurityNewST2 extends TestCase implements CallbackHandler {
         SOAPEnvelope unsignedEnvelope = message.getSOAPEnvelope();
         SAMLIssuer saml = SAMLIssuerFactory.getInstance("saml.properties");
 
-        SAMLAssertion assertion = saml.newAssertion();
+        Assertion assertion = saml.newAssertion();
 
         String issuerKeyName = saml.getIssuerKeyName();
         String issuerKeyPW = saml.getIssuerKeyPassword();

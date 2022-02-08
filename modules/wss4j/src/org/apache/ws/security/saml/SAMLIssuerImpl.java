@@ -31,12 +31,14 @@ import org.apache.xml.security.keys.content.X509Data;
 import org.apache.xml.security.keys.content.keyvalues.DSAKeyValue;
 import org.apache.xml.security.keys.content.keyvalues.RSAKeyValue;
 import org.apache.xml.security.signature.XMLSignature;
-import org.opensaml.SAMLAssertion;
-import org.opensaml.SAMLAuthenticationStatement;
-import org.opensaml.SAMLException;
-import org.opensaml.SAMLNameIdentifier;
-import org.opensaml.SAMLStatement;
-import org.opensaml.SAMLSubject;
+
+import org.joda.time.DateTime;
+import org.opensaml.core.xml.XMLObject;
+import org.opensaml.saml.common.AbstractSAMLObject;
+import org.opensaml.saml.common.SAMLException;
+import org.opensaml.saml.saml1.core.*;
+
+import org.opensaml.saml.saml1.core.impl.SubjectImpl;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -56,8 +58,10 @@ import java.util.Properties;
 public class SAMLIssuerImpl implements SAMLIssuer {
 
     private static final Log log = LogFactory.getLog(SAMLIssuerImpl.class.getName());
+//    public static final String CONF_SENDER_VOUCHES = "urn:oasis:names:tc:SAML:1.0:cm:sender-vouches";
+//    public static final String CONF_HOLDER_KEY = "urn:oasis:names:tc:SAML:1.0:cm:holder-of-key";
 
-    private SAMLAssertion sa = null;
+    private Assertion sa = null;
 
     private Document instanceDoc = null;
 
@@ -116,10 +120,10 @@ public class SAMLIssuerImpl implements SAMLIssuer {
 
         if ("senderVouches"
                 .equals(properties.getProperty("org.apache.ws.security.saml.confirmationMethod"))) {
-            confirmationMethods[0] = SAMLSubject.CONF_SENDER_VOUCHES;
+            confirmationMethods[0] = "urn:oasis:names:tc:SAML:1.0:cm:sender-vouches";
         } else if (
                 "keyHolder".equals(properties.getProperty("org.apache.ws.security.saml.confirmationMethod"))) {
-            confirmationMethods[0] = SAMLSubject.CONF_HOLDER_KEY;
+            confirmationMethods[0] = "urn:oasis:names:tc:SAML:1.0:cm:holder-of-key";
             senderVouches = false;
         } else {
             // throw something here - this is a mandatory property
@@ -127,15 +131,15 @@ public class SAMLIssuerImpl implements SAMLIssuer {
     }
 
     /**
-     * Creates a new <code>SAMLAssertion</code>.
+     * Creates a new <code>Assertion</code>.
      * <p/>
      * <p/>
-     * A complete <code>SAMLAssertion</code> is constructed.
+     * A complete <code>Assertion</code> is constructed.
      *
-     * @return SAMLAssertion
+     * @return Assertion
      */
-    public SAMLAssertion newAssertion() { // throws Exception {
-        log.debug("Begin add SAMLAssertion token...");
+    public Assertion newAssertion() { // throws Exception {
+        log.debug("Begin add Assertion token...");
 
         /*
          * if (senderVouches == false && userCrypto == null) { throw
@@ -148,110 +152,117 @@ public class SAMLIssuerImpl implements SAMLIssuer {
                 properties.getProperty("org.apache.ws.security.saml.subjectNameId.name");
         String qualifier =
                 properties.getProperty("org.apache.ws.security.saml.subjectNameId.qualifier");
-        try {
-            SAMLNameIdentifier nameId =
-                    new SAMLNameIdentifier(name, qualifier, "");
-            String subjectIP = null;
-            String authMethod = null;
-            if ("password"
-                    .equals(properties.getProperty("org.apache.ws.security.saml.authenticationMethod"))) {
-                authMethod =
-                        SAMLAuthenticationStatement.AuthenticationMethod_Password;
-            }
-            Date authInstant = new Date();
-            Collection bindings = null;
+        NameIdentifier nameId = SAMLUtil.newSamlObject(NameIdentifier.class);
+        nameId.setValue(name);
+        nameId.setNameQualifier(qualifier);
+//                    new AbstractSAMLObject(name, qualifier, "");
+        String subjectIP = null;
+        String authMethod = null;
+        if ("password"
+                .equals(properties.getProperty("org.apache.ws.security.saml.authenticationMethod"))) {
+            authMethod =
+                    AuthenticationStatement.PASSWORD_AUTHN_METHOD;
+        }
+        DateTime authInstant = new DateTime();
+        Collection bindings = null;
 
-            SAMLSubject subject =
-                    new SAMLSubject(nameId,
-                            Arrays.asList(confirmationMethods),
-                            null,
-                            null);
-            SAMLStatement[] statements =
-                    {
-                        new SAMLAuthenticationStatement(subject,
-                                authMethod,
-                                authInstant,
-                                subjectIP,
-                                null,
-                                bindings)};
-            sa =
-                    new SAMLAssertion(issuer,
-                            null,
-                            null,
-                            null,
-                            null,
-                            Arrays.asList(statements));
+        Subject subject = SAMLUtil.newSamlObject(Subject.class);
+        subject.setNameIdentifier(nameId);
+//                    new Subject(nameId,
+//                            Arrays.asList(confirmationMethods),
+//                            null,
+//                            null);
 
-            if (!senderVouches) {
-                KeyInfo ki = new KeyInfo(instanceDoc);
-                try {
-                    X509Certificate[] certs =
-                            userCrypto.getCertificates(username);
-                    if (sendKeyValue) {
-                        PublicKey key = certs[0].getPublicKey();
-                        String pubKeyAlgo = key.getAlgorithm();
-                        
-                        if ("DSA".equalsIgnoreCase(pubKeyAlgo)) {
-                            DSAKeyValue dsaKeyValue = new DSAKeyValue(instanceDoc, key);
-                            ki.add(dsaKeyValue);
-                        } else if ("RSA".equalsIgnoreCase(pubKeyAlgo)) {
-                            RSAKeyValue rsaKeyValue = new RSAKeyValue(instanceDoc, key);
-                            ki.add(rsaKeyValue);
-                        }
-                    } else {
-                        X509Data certElem = new X509Data(instanceDoc);
-                        certElem.addCertificate(certs[0]);
-                        ki.add(certElem);
+//            new AuthenticationStatement(subject,
+//                    authMethod,
+//                    authInstant,
+//                    subjectIP,
+//                    null,
+//                    bindings)}
+
+        AuthenticationStatement authenticationStatement = SAMLUtil.newSamlObject(AuthenticationStatement.class);
+        authenticationStatement.setAuthenticationMethod(authMethod);
+        authenticationStatement.setAuthenticationInstant(authInstant);
+
+
+        sa = SAMLUtil.newSamlObject(Assertion.class);
+        sa.setIssuer(issuer);
+
+//            Statement[] statements =
+//                    {
+//                        ;
+//            sa =
+//                    new Assertion(issuer,
+//                            null,
+//                            null,
+//                            null,
+//                            null,
+//                            Arrays.asList(statements));
+
+        if (!senderVouches) {
+            KeyInfo ki = new KeyInfo(instanceDoc);
+            try {
+                X509Certificate[] certs =
+                        userCrypto.getCertificates(username);
+                if (sendKeyValue) {
+                    PublicKey key = certs[0].getPublicKey();
+                    String pubKeyAlgo = key.getAlgorithm();
+
+                    if ("DSA".equalsIgnoreCase(pubKeyAlgo)) {
+                        DSAKeyValue dsaKeyValue = new DSAKeyValue(instanceDoc, key);
+                        ki.add(dsaKeyValue);
+                    } else if ("RSA".equalsIgnoreCase(pubKeyAlgo)) {
+                        RSAKeyValue rsaKeyValue = new RSAKeyValue(instanceDoc, key);
+                        ki.add(rsaKeyValue);
                     }
-                } catch (WSSecurityException ex) {
-                    if (log.isDebugEnabled()) {
-                        log.debug(ex.getMessage(), ex);
-                    }
-                    return null;
-                } catch (XMLSecurityException ex) {
-                    if (log.isDebugEnabled()) {
-                        log.debug(ex.getMessage(), ex);
-                    }
-                    return null;
+                } else {
+                    X509Data certElem = new X509Data(instanceDoc);
+                    certElem.addCertificate(certs[0]);
+                    ki.add(certElem);
                 }
-                Element keyInfoElement = ki.getElement();
-                keyInfoElement.setAttributeNS(WSConstants.XMLNS_NS, "xmlns:"
-                        + WSConstants.SIG_PREFIX, WSConstants.SIG_NS);
-
-                subject.setKeyInfo(ki);
-                // prepare to sign the SAML token
-                try {
-                    X509Certificate[] issuerCerts =
-                            issuerCrypto.getCertificates(issuerKeyName);
-
-                    String sigAlgo = XMLSignature.ALGO_ID_SIGNATURE_RSA;
-                    String pubKeyAlgo =
-                            issuerCerts[0].getPublicKey().getAlgorithm();
-                    log.debug("automatic sig algo detection: " + pubKeyAlgo);
-                    if (pubKeyAlgo.equalsIgnoreCase("DSA")) {
-                        sigAlgo = XMLSignature.ALGO_ID_SIGNATURE_DSA;
-                    }
-                    java.security.Key issuerPK =
-                            issuerCrypto.getPrivateKey(issuerKeyName,
-                                    issuerKeyPassword);
-                    sa.sign(sigAlgo, issuerPK, Arrays.asList(issuerCerts));
-                } catch (WSSecurityException ex) {
-                    if (log.isDebugEnabled()) {
-                        log.debug(ex.getMessage(), ex);
-                    }
-                    return null;
-                } catch (Exception ex) {
-                    if (log.isDebugEnabled()) {
-                        log.debug(ex.getMessage(), ex);
-                    }
-                    return null;
+            } catch (WSSecurityException ex) {
+                if (log.isDebugEnabled()) {
+                    log.debug(ex.getMessage(), ex);
                 }
+                return null;
+            } catch (XMLSecurityException ex) {
+                if (log.isDebugEnabled()) {
+                    log.debug(ex.getMessage(), ex);
+                }
+                return null;
             }
-        } catch (SAMLException ex) {
-            if (log.isDebugEnabled()) {
-                log.debug(ex.getMessage(), ex);
+            Element keyInfoElement = ki.getElement();
+            keyInfoElement.setAttributeNS(WSConstants.XMLNS_NS, "xmlns:"
+                    + WSConstants.SIG_PREFIX, WSConstants.SIG_NS);
+
+//                subject.setKeyInfo(ki);
+            // prepare to sign the SAML token
+            try {
+                X509Certificate[] issuerCerts =
+                        issuerCrypto.getCertificates(issuerKeyName);
+
+                String sigAlgo = XMLSignature.ALGO_ID_SIGNATURE_RSA;
+                String pubKeyAlgo =
+                        issuerCerts[0].getPublicKey().getAlgorithm();
+                log.debug("automatic sig algo detection: " + pubKeyAlgo);
+                if (pubKeyAlgo.equalsIgnoreCase("DSA")) {
+                    sigAlgo = XMLSignature.ALGO_ID_SIGNATURE_DSA;
+                }
+                java.security.Key issuerPK =
+                        issuerCrypto.getPrivateKey(issuerKeyName,
+                                issuerKeyPassword);
+//                    sa.sign(sigAlgo, issuerPK, Arrays.asList(issuerCerts));
+            } catch (WSSecurityException ex) {
+                if (log.isDebugEnabled()) {
+                    log.debug(ex.getMessage(), ex);
+                }
+                return null;
+            } catch (Exception ex) {
+                if (log.isDebugEnabled()) {
+                    log.debug(ex.getMessage(), ex);
+                }
+                return null;
             }
-            throw new RuntimeException(ex.toString(), ex);
         }
         return sa;
     }

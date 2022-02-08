@@ -51,37 +51,37 @@ import org.apache.ws.security.util.XMLUtils;
 import org.apache.xml.security.exceptions.XMLSecurityException;
 import org.apache.xml.security.keys.KeyInfo;
 import org.apache.xml.security.keys.content.x509.XMLX509Certificate;
-import org.opensaml.Configuration;
-import org.opensaml.DefaultBootstrap;
-import org.opensaml.saml2.core.Assertion;
-import org.opensaml.saml2.core.Attribute;
-import org.opensaml.saml2.core.AttributeStatement;
-import org.opensaml.saml2.core.AuthnStatement;
-import org.opensaml.saml2.core.Conditions;
-import org.opensaml.saml2.core.KeyInfoConfirmationDataType;
-import org.opensaml.saml2.core.Subject;
-import org.opensaml.saml2.core.SubjectConfirmation;
-import org.opensaml.saml2.core.SubjectConfirmationData;
-import org.opensaml.xml.ConfigurationException;
-import org.opensaml.xml.XMLObject;
-import org.opensaml.xml.io.Marshaller;
-import org.opensaml.xml.io.MarshallerFactory;
-import org.opensaml.xml.io.MarshallingException;
-import org.opensaml.xml.io.Unmarshaller;
-import org.opensaml.xml.io.UnmarshallerFactory;
-import org.opensaml.xml.io.UnmarshallingException;
-import org.opensaml.xml.security.credential.Credential;
-import org.opensaml.xml.security.credential.CredentialContextSet;
-import org.opensaml.xml.security.credential.UsageType;
-import org.opensaml.xml.security.x509.X509Credential;
-import org.opensaml.xml.signature.SignatureValidator;
-import org.opensaml.xml.signature.X509Data;
-import org.opensaml.xml.validation.ValidationException;
+import org.opensaml.core.config.InitializationException;
+import org.opensaml.core.xml.config.XMLObjectProviderRegistrySupport;
+import org.opensaml.saml.saml2.core.Assertion;
+import org.opensaml.saml.saml2.core.Attribute;
+import org.opensaml.saml.saml2.core.AttributeStatement;
+import org.opensaml.saml.saml2.core.Conditions;
+import org.opensaml.saml.saml2.core.Subject;
+import org.opensaml.saml.saml2.core.SubjectConfirmation;
+import org.opensaml.saml.saml2.core.SubjectConfirmationData;
+import org.opensaml.saml.saml2.core.AuthnStatement;
+import org.opensaml.saml.saml2.core.KeyInfoConfirmationDataType;
+import org.opensaml.core.xml.XMLObject;
+import org.opensaml.core.xml.io.Marshaller;
+import org.opensaml.core.xml.io.MarshallerFactory;
+import org.opensaml.core.xml.io.MarshallingException;
+import org.opensaml.core.xml.io.Unmarshaller;
+import org.opensaml.core.xml.io.UnmarshallerFactory;
+import org.opensaml.core.xml.io.UnmarshallingException;
+import org.opensaml.security.credential.Credential;
+import org.opensaml.security.credential.CredentialContextSet;
+import org.opensaml.security.credential.UsageType;
+import org.opensaml.security.x509.X509Credential;
+import org.opensaml.xmlsec.signature.support.SignatureException;
+import org.opensaml.xmlsec.signature.support.SignatureValidator;
+import org.opensaml.xmlsec.signature.X509Data;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.w3c.dom.Text;
+import org.wso2.carbon.identity.saml.common.util.SAMLInitializer;
 import org.xml.sax.SAXException;
 
 public class SAML2Util {
@@ -100,8 +100,8 @@ public class SAML2Util {
     public static void doBootstrap() throws WSSecurityException {
         if(!bootstrapped){
             try {
-                DefaultBootstrap.bootstrap();
-            } catch (ConfigurationException e) {
+                SAMLInitializer.doBootstrap();
+            } catch (InitializationException e) {
                 throw new WSSecurityException("errorBootstrapping", e);
             }
             bootstrapped = true;
@@ -126,7 +126,7 @@ public class SAML2Util {
 				throw new WSSecurityException("invalidSAMLSecurity");
 			}
 
-            UnmarshallerFactory unmarshallerFactory = Configuration
+            UnmarshallerFactory unmarshallerFactory = XMLObjectProviderRegistrySupport
                     .getUnmarshallerFactory();
             Unmarshaller unmarshaller = unmarshallerFactory
                     .getUnmarshaller(element);
@@ -178,7 +178,7 @@ public class SAML2Util {
                 }
 
                 // extract the subject confirmation element from the subject
-                SubjectConfirmation subjectConf = (SubjectConfirmation) samlSubject.getSubjectConfirmations().get(0);
+                SubjectConfirmation subjectConf = samlSubject.getSubjectConfirmations().get(0);
                 if (subjectConf == null) {
                     throw new WSSecurityException(WSSecurityException.FAILURE,
                             "invalidSAML2Token", new Object[]{"for Signature (no Subject Confirmation)"});
@@ -204,7 +204,7 @@ public class SAML2Util {
                     String jaxpProperty = System.getProperty("javax.xml.parsers.DocumentBuilderFactory");
                     System.setProperty("javax.xml.parsers.DocumentBuilderFactory", "org.apache.xerces.jaxp.DocumentBuilderFactoryImpl");
 
-                    MarshallerFactory marshallerFactory = org.opensaml.xml.Configuration.getMarshallerFactory();
+                    MarshallerFactory marshallerFactory = XMLObjectProviderRegistrySupport.getMarshallerFactory();
                     Marshaller marshaller = marshallerFactory.getMarshaller(KIElem);
                     keyInfoElement = marshaller.marshall(KIElem);
 
@@ -221,9 +221,9 @@ public class SAML2Util {
                 }
 
                 AttributeStatement attrStmt = assertion.getAttributeStatements().size() != 0 ?
-                        (AttributeStatement) assertion.getAttributeStatements().get(0) : null;
+                        assertion.getAttributeStatements().get(0) : null;
                 AuthnStatement authnStmt = assertion.getAuthnStatements().size() != 0 ?
-                        (AuthnStatement) assertion.getAuthnStatements().get(0) : null;
+                        assertion.getAuthnStatements().get(0) : null;
                         
                 boolean usePublicKey = false;
 
@@ -338,7 +338,7 @@ public class SAML2Util {
        public static Timestamp getTimestampForSAMLAssertion(Assertion assertion) throws WSSecurityException {
 
         Subject subject = assertion.getSubject();
-        SubjectConfirmationData scData = ((SubjectConfirmation) subject.getSubjectConfirmations().get(0)).getSubjectConfirmationData();
+        SubjectConfirmationData scData = (subject.getSubjectConfirmations().get(0)).getSubjectConfirmationData();
 
         String notBefore = null;
         String notOnOrAfter = null;
@@ -426,14 +426,14 @@ public class SAML2Util {
             List x509Certs = x509Cred.getX509Certificates();
             if (x509Certs != null && x509Certs.size() > 0) {
                 // Pick the first <ds:X509Certificate/> element
-                org.opensaml.xml.signature.X509Certificate cert = (org.opensaml.xml.signature.X509Certificate)
+                org.opensaml.xmlsec.signature.X509Certificate cert = (org.opensaml.xmlsec.signature.X509Certificate)
                         x509Certs.get(0);
                 try {
                     // Instantiate a java.security.cert.X509Certificate object out of the
                     // base64 decoded byte[] of the certificate
                     CertificateFactory cf = CertificateFactory.getInstance("X.509");
                     java.security.cert.X509Certificate x509Certificate = (X509Certificate) cf.generateCertificate(
-                            new ByteArrayInputStream(org.opensaml.xml.util.Base64.decode(cert.getValue())));
+                            new ByteArrayInputStream(org.apache.commons.codec.binary.Base64.decodeBase64(cert.getValue())));
                     alias = crypto.getAliasForX509CertThumb(calculateThumbPrint(x509Certificate));
                     // if this certificate is available in the key store represented by SigCrypto
                     if (alias != null) {
@@ -480,7 +480,7 @@ public class SAML2Util {
                                 return null;
                             }
 
-                            public CredentialContextSet getCredentalContextSet() {
+                            public CredentialContextSet getCredentialContextSet() {
                                 return null;
                             }
 
@@ -489,9 +489,7 @@ public class SAML2Util {
                             }
                         }
                         // validate the signature
-                        SignatureValidator signatureValidator = new SignatureValidator(
-                                new X509CredentialImpl(crypto.getCertificates(alias)[0]));
-                        signatureValidator.validate(assertion.getSignature());
+                        SignatureValidator.validate(assertion.getSignature(), new X509CredentialImpl(crypto.getCertificates(alias)[0]));
                     }
                     else{
                         throw new WSSecurityException(WSSecurityException.FAILURE, "SAMLTokenUntrustedSignatureKey");
@@ -499,7 +497,7 @@ public class SAML2Util {
 
                 } catch (java.security.cert.CertificateException e) {
                     throw new WSSecurityException("SAMLTokenErrorGeneratingX509CertInstance", e);
-                } catch (ValidationException e) {
+                } catch (SignatureException e) {
                     throw new WSSecurityException(WSSecurityException.FAILED_SIGNATURE,
                                                   "SAMLTokenInvalidSignature");
                 }

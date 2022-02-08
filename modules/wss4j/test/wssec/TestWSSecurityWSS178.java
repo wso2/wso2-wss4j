@@ -39,7 +39,7 @@ import org.apache.ws.security.message.WSSecHeader;
 import org.apache.ws.security.saml.SAMLIssuer;
 import org.apache.ws.security.saml.SAMLIssuerFactory;
 import org.apache.ws.security.saml.WSSecSignatureSAML;
-import org.opensaml.SAMLAssertion;
+import org.opensaml.saml.saml1.core.Assertion;
 import org.w3c.dom.Document;
 
 import javax.security.auth.callback.Callback;
@@ -132,7 +132,7 @@ public class TestWSSecurityWSS178 extends TestCase implements CallbackHandler {
         secHeader.insertSecurityHeader(doc);
         
         SAMLIssuer saml = SAMLIssuerFactory.getInstance("saml.properties");
-        SAMLAssertion assertion = saml.newAssertion();
+        Assertion assertion = saml.newAssertion();
         String issuerKeyName = saml.getIssuerKeyName();
         String issuerKeyPW = saml.getIssuerKeyPassword();
         Crypto issuerCrypto = saml.getIssuerCrypto();
@@ -179,7 +179,7 @@ public class TestWSSecurityWSS178 extends TestCase implements CallbackHandler {
         secHeader.insertSecurityHeader(doc);
         
         SAMLIssuer saml = SAMLIssuerFactory.getInstance("saml.properties");
-        SAMLAssertion assertion = saml.newAssertion();
+        Assertion assertion = saml.newAssertion();
         String issuerKeyName = saml.getIssuerKeyName();
         String issuerKeyPW = saml.getIssuerKeyPassword();
         Crypto issuerCrypto = saml.getIssuerCrypto();
@@ -219,7 +219,7 @@ public class TestWSSecurityWSS178 extends TestCase implements CallbackHandler {
      * Verifies the soap envelope
      * <p/>
      * 
-     * @param envelope 
+     * @param doc
      * @throws Exception Thrown when there is a problem in verification
      */
     private java.util.List verify(Document doc) throws Exception {

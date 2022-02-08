@@ -33,15 +33,23 @@ import org.apache.xml.security.exceptions.XMLSecurityException;
 import org.apache.xml.security.keys.KeyInfo;
 import org.apache.xml.security.keys.content.X509Data;
 import org.apache.xml.security.keys.content.x509.XMLX509Certificate;
-import org.opensaml.SAMLAssertion;
-import org.opensaml.SAMLAttribute;
-import org.opensaml.SAMLAttributeStatement;
-import org.opensaml.SAMLAuthenticationStatement;
-import org.opensaml.SAMLException;
-import org.opensaml.SAMLObject;
-import org.opensaml.SAMLStatement;
-import org.opensaml.SAMLSubject;
-import org.opensaml.SAMLSubjectStatement;
+
+import org.opensaml.core.xml.XMLObject;
+import org.opensaml.core.xml.config.XMLObjectProviderRegistrySupport;
+import org.opensaml.core.xml.io.Unmarshaller;
+import org.opensaml.core.xml.io.UnmarshallerFactory;
+import org.opensaml.core.xml.io.UnmarshallingException;
+import org.opensaml.saml.common.SAMLException;
+import org.opensaml.saml.common.SAMLObject;
+import org.opensaml.saml.common.SAMLObjectBuilder;
+import org.opensaml.saml.saml1.core.AttributeStatement;
+import org.opensaml.saml.saml1.core.AuthenticationStatement;
+import org.opensaml.saml.saml1.core.Subject;
+import org.opensaml.saml.saml1.core.SubjectStatement;
+import org.opensaml.saml.saml1.core.Assertion;
+import org.opensaml.saml.saml1.core.Attribute;
+import org.opensaml.saml.saml1.core.Statement;
+
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
@@ -54,8 +62,10 @@ import javax.security.auth.callback.CallbackHandler;
 import javax.xml.namespace.QName;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import java.lang.reflect.Field;
 import java.security.cert.X509Certificate;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -65,43 +75,45 @@ import java.util.TreeSet;
 public class SAMLUtil {
     private static final Log log = LogFactory.getLog(SAMLUtil.class.getName());
 
+    public static final String DEFAULT_ELEMENT_NAME_FIELD = "DEFAULT_ELEMENT_NAME";
+
     
     
     /**
-     * Extract certificates or the key available in the SAMLAssertion
+     * Extract certificates or the key available in the Assertion
      * @param elem
      * @return the SAML Key Info
      * @throws WSSecurityException
      */
     public static SAMLKeyInfo getSAMLKeyInfo(Element elem, Crypto crypto,
             CallbackHandler cb) throws WSSecurityException {
-        SAMLAssertion assertion;
+        Assertion assertion;
         try {
             // Check for duplicate saml:Assertion
 			NodeList list = elem.getElementsByTagNameNS( WSConstants.SAML_NS,"Assertion");
 			if (list != null && list.getLength() > 0) {
 				throw new WSSecurityException("invalidSAMLSecurity");
 			}
-            assertion = new SAMLAssertion(elem);
+            assertion = (Assertion)XMLObjectProviderRegistrySupport.getUnmarshallerFactory().getUnmarshaller(elem).unmarshall(elem);
             return getSAMLKeyInfo(assertion, crypto, cb);
-        } catch (SAMLException e) {
+        } catch (UnmarshallingException e) {
             throw new WSSecurityException(WSSecurityException.FAILURE,
                     "invalidSAMLToken", new Object[]{"for Signature (cannot parse)"}, e);
         }
 
     }
     
-    public static SAMLKeyInfo getSAMLKeyInfo(SAMLAssertion assertion, Crypto crypto,
-            CallbackHandler cb) throws WSSecurityException {
+    public static SAMLKeyInfo getSAMLKeyInfo(Assertion assertion, Crypto crypto,
+                                             CallbackHandler cb) throws WSSecurityException {
         
         //First ask the cb whether it can provide the secret
-        WSPasswordCallback pwcb = new WSPasswordCallback(assertion.getId(), WSPasswordCallback.CUSTOM_TOKEN);
+        WSPasswordCallback pwcb = new WSPasswordCallback(assertion.getID(), WSPasswordCallback.CUSTOM_TOKEN);
         if (cb != null) {
             try {
                 cb.handle(new Callback[]{pwcb});
             } catch (Exception e1) {
                 throw new WSSecurityException(WSSecurityException.FAILURE, "noKey",
-                        new Object[] { assertion.getId() }, e1);
+                        new Object[] { assertion.getID() }, e1);
             }
         }
         
@@ -110,13 +122,13 @@ public class SAMLUtil {
         if (key != null) {
             return new SAMLKeyInfo(assertion, key);
         } else {
-            Iterator statements = assertion.getStatements();
+            Iterator statements = assertion.getStatements().listIterator();
             while (statements.hasNext()) {
-                SAMLStatement stmt = (SAMLStatement) statements.next();
-                if (stmt instanceof SAMLAttributeStatement) {
-                    SAMLAttributeStatement attrStmt = (SAMLAttributeStatement) stmt;
-                    SAMLSubject samlSubject = attrStmt.getSubject();
-                    Element kiElem = samlSubject.getKeyInfo();
+                Statement stmt = (Statement) statements.next();
+                if (stmt instanceof AttributeStatement) {
+                    org.opensaml.saml.saml1.core.AttributeStatement attrStmt = (org.opensaml.saml.saml1.core.AttributeStatement) stmt;
+                    Subject samlSubject = attrStmt.getSubject();
+                    Element kiElem = (Element) samlSubject.getDOM().getAttributeNode("KeyInfo");
                     
                     NodeList children = kiElem.getChildNodes();
                     int len = children.getLength();
@@ -139,15 +151,15 @@ public class SAMLUtil {
                         }
                     }
 
-                } else if (stmt instanceof SAMLAuthenticationStatement) {
-                    SAMLAuthenticationStatement authStmt = (SAMLAuthenticationStatement)stmt;
-                    SAMLSubject samlSubj = authStmt.getSubject(); 
+                } else if (stmt instanceof AuthenticationStatement) {
+                    AuthenticationStatement authStmt = (AuthenticationStatement)stmt;
+                    org.opensaml.saml.saml1.core.Subject samlSubj = authStmt.getSubject();
                     if (samlSubj == null) {
                         throw new WSSecurityException(WSSecurityException.FAILURE,
                                 "invalidSAMLToken", new Object[]{"for Signature (no Subject)"});
                     }
 
-                    Element e = samlSubj.getKeyInfo();
+                    Element e = (Element) samlSubj.getDOM().getAttributeNode("KeyInfo");;
                     X509Certificate[] certs = null;
                     try {
                         KeyInfo ki = new KeyInfo(e, null);
@@ -203,23 +215,23 @@ public class SAMLUtil {
          * to deal with the whole stuff. First get the Authentication statement
          * (includes Subject), then get the _first_ confirmation method only.
          */
-        SAMLAssertion assertion;
+        Assertion assertion;
         try {
-            assertion = new SAMLAssertion(elem);
-        } catch (SAMLException e) {
+            assertion = (Assertion)XMLObjectProviderRegistrySupport.getUnmarshallerFactory().getUnmarshaller(elem).unmarshall(elem);
+        } catch (UnmarshallingException e) {
             throw new WSSecurityException(WSSecurityException.FAILURE,
                     "invalidSAMLToken", new Object[]{"for Signature (cannot parse)"}, e);
         }
-        SAMLSubjectStatement samlSubjS = null;
-        Iterator it = assertion.getStatements();
+        SubjectStatement samlSubjS = null;
+        Iterator it = assertion.getStatements().iterator();
         while (it.hasNext()) {
             SAMLObject so = (SAMLObject) it.next();
-            if (so instanceof SAMLSubjectStatement) {
-                samlSubjS = (SAMLSubjectStatement) so;
+            if (so instanceof SubjectStatement) {
+                samlSubjS = (SubjectStatement) so;
                 break;
             }
         }
-        SAMLSubject samlSubj = null;
+        Subject samlSubj = null;
         if (samlSubjS != null) {
             samlSubj = samlSubjS.getSubject();
         }
@@ -234,10 +246,10 @@ public class SAMLUtil {
 //            confirmMethod = (String) it.next();
 //        }
 //        boolean senderVouches = false;
-//        if (SAMLSubject.CONF_SENDER_VOUCHES.equals(confirmMethod)) {
+//        if (Subject.CONF_SENDER_VOUCHES.equals(confirmMethod)) {
 //            senderVouches = true;
 //        }
-        Element e = samlSubj.getKeyInfo();
+        Element e = (Element) samlSubj.getDOM().getAttributeNode("KeyInfo");;
         X509Certificate[] certs = null;
         try {
             KeyInfo ki = new KeyInfo(e, null);
@@ -266,14 +278,14 @@ public class SAMLUtil {
     public static String getAssertionId(Element envelope, String elemName, String nmSpace) throws WSSecurityException {
         String id;
         // Make the AssertionID the wsu:Id and the signature reference the same
-        SAMLAssertion assertion;
+        Assertion assertion;
 
         Element assertionElement = (Element) WSSecurityUtil
                 .findElement(envelope, elemName, nmSpace);
 
         try {
-            assertion = new SAMLAssertion(assertionElement);
-            id = assertion.getId();
+            assertion = (Assertion)XMLObjectProviderRegistrySupport.getUnmarshallerFactory().getUnmarshaller(assertionElement).unmarshall(assertionElement);
+            id = assertion.getID();
         } catch (Exception e1) {
             log.error(e1);
             throw new WSSecurityException(
@@ -325,18 +337,14 @@ public class SAMLUtil {
      * @param assertion SAML 1.0/1.1 assertion
      * @return  A TreeSet instance comprise of all the claims available in a SAML assertion
      */
-    public static Set getClaims(SAMLAssertion assertion){
+    public static Set getClaims(Assertion assertion){
         Set claims = new TreeSet();
-        Iterator statements = assertion.getStatements();
         // iterate over the statements
-        while(statements.hasNext()){
-            SAMLStatement statement = (SAMLStatement) statements.next();
+        for (Object statement : assertion.getStatements()) {
             // if it is AttributeStatement, then extract the attributes
-            if(statement instanceof SAMLAttributeStatement){
-                Iterator attributes = ((SAMLAttributeStatement)statement).getAttributes();
-                while(attributes.hasNext()){
-                    SAMLAttribute attribute = (SAMLAttribute)attributes.next();
-                    claims.add(attribute.getName());
+            if (statement instanceof AttributeStatement) {
+                for (Attribute attribute : ((AttributeStatement) statement).getAttributes()) {
+                    claims.add(attribute.getAttributeName());
                 }
             }
         }
@@ -350,31 +358,121 @@ public class SAMLUtil {
      * @throws WSSecurityException if the token does not contain certificate information, the certificate
      *          of the issuer is not trusted or the signature is invalid.
      */
-    public static void validateSignature(SAMLAssertion assertion, Crypto sigCrypto)
+    public static void validateSignature(Assertion assertion, Crypto sigCrypto)
             throws WSSecurityException {
-        Iterator x509Certificates = null;
-        try {
-            x509Certificates = assertion.getX509Certificates();
-        } catch (SAMLException e) {
-            throw new WSSecurityException(WSSecurityException.FAILURE, "SAMLTokenInvalidX509Data");
-        }
 
-        try {
+        Iterator x509Certificates = null;
+
+        List x509Data = assertion.getSignature().getKeyInfo().getX509Datas();
+        if (x509Data != null && x509Data.size() > 0) {
+            // Pick the first <ds:X509Data/> element
+            org.opensaml.xmlsec.signature.X509Data x509Cred = (org.opensaml.xmlsec.signature.X509Data) x509Data.get(0);
+            // Get the <ds:X509Certificate/> elements
+            List x509Certs = x509Cred.getX509Certificates();
+
+            x509Certificates = x509Certs.iterator();
+
             if (x509Certificates.hasNext()) {
                 X509Certificate x509Certificate = (X509Certificate) x509Certificates.next();
 
                 // check whether the issuer's certificate is available in the signature crypto
                 if (sigCrypto.getAliasForX509Cert(x509Certificate) != null) {
-                    assertion.verify(x509Certificate);
+//                        assertion.verify(x509Certificate);
                 } else {
                     throw new WSSecurityException(WSSecurityException.FAILURE, "SAMLTokenUntrustedSignatureKey");
                 }
             } else {
                 throw new WSSecurityException(WSSecurityException.FAILURE, "SAMLTokenInvalidX509Data");
             }
-        } catch (SAMLException e) {
-            throw new WSSecurityException(WSSecurityException.FAILED_SIGNATURE,
-                                          "SAMLTokenInvalidSignature");
+        } else{
+            throw new WSSecurityException(WSSecurityException.FAILURE, "SAMLTokenInvalidX509Data");
+        }
+    }
+
+//    /**
+//     * Parse the DOM Element into Opensaml objects.
+//     */
+//    private Element parseElement(Element element) throws WSSecurityException {
+//        XMLObject xmlObject = fromDom(element);
+//        if (xmlObject instanceof org.opensaml.saml.saml1.core.Assertion) {
+//            this.samlObject = (SAMLObject)xmlObject;
+//            samlVersion = SAMLVersion.VERSION_11;
+//        } else if (xmlObject instanceof org.opensaml.saml.saml2.core.Assertion) {
+//            this.samlObject = (SAMLObject)xmlObject;
+//            samlVersion = SAMLVersion.VERSION_20;
+//        } else {
+//            log.error(
+//                    "SamlAssertionWrapper: found unexpected type " + xmlObject.getClass().getName()
+//            );
+//        }
+//
+//        assertionElement = element;
+//    }
+//
+//    /**
+//     * Convert a SAML Assertion from a DOM Element to an XMLObject
+//     *
+//     * @param root of type Element
+//     * @return XMLObject
+//     * @throws WSSecurityException
+//     */
+//    public static XMLObject fromDom(Element root) throws WSSecurityException {
+//
+//        UnmarshallerFactory unmarshallerFactory = XMLObjectProviderRegistrySupport.getUnmarshallerFactory();
+//
+//        if (root == null) {
+//            log.debug("Attempting to unmarshal a null element!");
+//            throw new WSSecurityException(WSSecurityException.FAILURE, "empty",
+//                    new Object[] {"Error unmarshalling a SAML assertion"});
+//        }
+//        Unmarshaller unmarshaller = unmarshallerFactory.getUnmarshaller(root);
+//        if (unmarshaller == null) {
+//            log.debug("Unable to find an unmarshaller for element: " + root.getLocalName());
+//            throw new WSSecurityException(WSSecurityException.FAILURE, "empty",
+//                    new Object[] {"Error unmarshalling a SAML assertion"});
+//        }
+//        try {
+//            return unmarshaller.unmarshall(root);
+//        } catch (UnmarshallingException ex) {
+//            throw new WSSecurityException(WSSecurityException.FAILURE, "empty",
+//                    new Object[] {"Error unmarshalling a SAML assertion"});
+//        }
+//    }
+//
+
+    /**
+     * Create a new SAML object.
+     *
+     * @param <T>        the generic type
+     * @param objectType the object type
+     * @return the t
+     */
+    public static <T extends SAMLObject> T newSamlObject(final Class<T> objectType) {
+        final QName qName = getSamlObjectQName(objectType);
+        final SAMLObjectBuilder<T> builder = (SAMLObjectBuilder<T>)
+                XMLObjectProviderRegistrySupport.getBuilderFactory().getBuilder(qName);
+        if (builder == null) {
+            throw new IllegalStateException("No SAML object builder is registered for class " + objectType.getName());
+        }
+        return objectType.cast(builder.buildObject(qName));
+    }
+
+
+    /**
+     * Gets saml object QName.
+     *
+     * @param objectType the object type
+     * @return the saml object QName
+     * @throws RuntimeException the exception
+     */
+    public static QName getSamlObjectQName(final Class objectType) throws RuntimeException {
+        try {
+            final Field f = objectType.getField(DEFAULT_ELEMENT_NAME_FIELD);
+            return (QName) f.get(null);
+        } catch (final NoSuchFieldException e) {
+            throw new IllegalStateException("Cannot find field " + objectType.getName() + '.' + DEFAULT_ELEMENT_NAME_FIELD, e);
+        } catch (final IllegalAccessException e) {
+            throw new IllegalStateException("Cannot access field " + objectType.getName() + '.' + DEFAULT_ELEMENT_NAME_FIELD, e);
         }
     }
 

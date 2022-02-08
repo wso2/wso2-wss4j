@@ -39,9 +39,8 @@ import org.apache.ws.security.WSSecurityEngine;
 import org.apache.ws.security.WSSecurityEngineResult;
 import org.apache.ws.security.message.WSSecHeader;
 import org.apache.ws.security.message.WSSecSAMLToken;
+import org.opensaml.saml.saml1.core.Assertion;
 import org.w3c.dom.Document;
-
-import org.opensaml.SAMLAssertion;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
@@ -118,7 +117,7 @@ public class TestWSSecurityNewST1 extends TestCase {
         SOAPEnvelope unsignedEnvelope = message.getSOAPEnvelope();
         SAMLIssuer saml = SAMLIssuerFactory.getInstance("saml.properties");
 
-        SAMLAssertion assertion = saml.newAssertion();
+        Assertion assertion = saml.newAssertion();
 
         WSSecSAMLToken wsSign = new WSSecSAMLToken();
 
@@ -140,8 +139,8 @@ public class TestWSSecurityNewST1 extends TestCase {
         Vector results = verify(unsignedDoc);
         WSSecurityEngineResult actionResult =
             WSSecurityUtil.fetchActionResult(results, WSConstants.ST_UNSIGNED);
-        SAMLAssertion receivedAssertion = 
-            (SAMLAssertion) actionResult.get(WSSecurityEngineResult.TAG_SAML_ASSERTION);
+        Assertion receivedAssertion =
+            (Assertion) actionResult.get(WSSecurityEngineResult.TAG_SAML_ASSERTION);
         assertTrue(receivedAssertion != null);
     }
 
@@ -149,7 +148,7 @@ public class TestWSSecurityNewST1 extends TestCase {
      * Verifies the soap envelope
      * <p/>
      * 
-     * @param envelope 
+     * @param doc
      * @throws Exception Thrown when there is a problem in verification
      */
     private Vector verify(Document doc) throws Exception {

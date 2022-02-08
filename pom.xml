@@ -94,19 +94,9 @@
                 <version>${xerces.version}</version>
             </dependency>
             <dependency>
-                <groupId>xml-apis</groupId>
-                <artifactId>xml-apis</artifactId>
-                <version>${xml.apis.version}</version>
-            </dependency>
-            <dependency>
                 <groupId>junit</groupId>
                 <artifactId>junit</artifactId>
                 <version>${junit.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.opensaml</groupId>
-                <artifactId>opensaml1</artifactId>
-                <version>${opensaml1.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.axis</groupId>
@@ -128,26 +118,26 @@
                 <artifactId>axis-saaj</artifactId>
                 <version>${axis.version}</version>
             </dependency>
-            <dependency>
-                <groupId>org.opensaml</groupId>
-                <artifactId>opensaml</artifactId>
-                <version>${opensaml.version}</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>org.bouncycastle</groupId>
-                        <artifactId>bcprov-ext-jdk15</artifactId>
-                    </exclusion>
-                </exclusions>
-            </dependency>
+
             <dependency>
                 <groupId>org.slf4j</groupId>
                 <artifactId>slf4j-jdk14</artifactId>
                 <version>${slf4j.jdk14.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.bouncycastle.wso2</groupId>
+                <groupId>org.bouncycastle</groupId>
                 <artifactId>bcprov-jdk15on</artifactId>
-                <version>${bcprov.jdk15on.version}</version>
+                <version>${bcprov.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.bouncycastle</groupId>
+                <artifactId>bcpkix-jdk15on</artifactId>
+                <version>${bcprov.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.carbon.identity.saml.common</groupId>
+                <artifactId>org.wso2.carbon.identity.saml.common.util</artifactId>
+                <version>${saml.common.util.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -159,11 +149,8 @@
 
     <properties>
         <wss4j.wso2.version>${wss4j.version}</wss4j.wso2.version>
-        <xmlsec.version>1.5.2</xmlsec.version>
-        <xml.apis.version>2.0.2</xml.apis.version>
-        <bcprov.jdk14.version>1.49</bcprov.jdk14.version>
-        <bcprov.jdk15.version>1.49</bcprov.jdk15.version>
-        <bcprov.jdk15on.version>1.49.0.wso2v2</bcprov.jdk15on.version>
+        <xmlsec.version>2.0.5</xmlsec.version>
+        <bcprov.version>1.64</bcprov.version>
         <commons.logging.version>1.1</commons.logging.version>
         <commons.discovery.version>0.5</commons.discovery.version>
         <commons.codec.version>1.3</commons.codec.version>
@@ -171,8 +158,9 @@
         <axis.version>1.4</axis.version>
         <junit.version>4.12</junit.version>
         <jacoco.maven.plugin.version>0.8.4</jacoco.maven.plugin.version>
-        <opensaml.version>2.6.1</opensaml.version>
-        <opensaml1.version>1.1</opensaml1.version>
+        <opensaml.version>3.3.1</opensaml.version>
+        <saml.common.util.version>1.0.3</saml.common.util.version>
+        <saml.common.util.version.range>[1.0.3,2.0.0)</saml.common.util.version.range>
         <slf4j.jdk14.version>1.7.26</slf4j.jdk14.version>
         <wss4j.version>1.5.11-wso2v22-SNAPSHOT</wss4j.version>
         <exp.pkg.version.wss4j>${wss4j.version}</exp.pkg.version.wss4j>
