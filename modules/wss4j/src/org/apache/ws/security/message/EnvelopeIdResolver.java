@@ -1,4 +1,4 @@
-/**
+ /**
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information
@@ -27,7 +27,7 @@ import org.apache.ws.security.WSDocInfo;
 import org.apache.ws.security.util.URI;
 import org.apache.ws.security.util.WSSecurityUtil;
 import org.apache.xml.security.signature.XMLSignatureInput;
-import org.apache.xml.security.utils.resolver.ResourceResolverContext;
+//import org.apache.xml.security.utils.resolver.ResourceResolverContext;
 import org.apache.xml.security.utils.resolver.ResourceResolverException;
 import org.apache.xml.security.utils.resolver.ResourceResolverSpi;
 import org.w3c.dom.Attr;
@@ -125,7 +125,7 @@ public class EnvelopeIdResolver extends ResourceResolverSpi {
             if (selectedElem == null) {
                 throw new ResourceResolverException("generic.EmptyMessage",
                         new Object[]{"Body element not found"},
-                        uri.toString(),
+                        uri,
                         BaseURI);
             }
             String cId = selectedElem.getAttributeNS(WSConstants.WSU_NS, "Id");
@@ -146,7 +146,7 @@ public class EnvelopeIdResolver extends ResourceResolverSpi {
                 if (cId == null) {
                     throw new ResourceResolverException("generic.EmptyMessage",
                             new Object[]{"Id not found"},
-                            uri.toString(),
+                            uri,
                             BaseURI);
                 }
             }
@@ -183,13 +183,13 @@ public class EnvelopeIdResolver extends ResourceResolverSpi {
         return uriNodeValue.startsWith("#");
     }
 
-    @Override
-    public XMLSignatureInput engineResolveURI(ResourceResolverContext resourceResolverContext)  {
-        return null;
-    }
-
-    @Override
-    public boolean engineCanResolveURI(ResourceResolverContext resourceResolverContext) {
-        return false;
-    }
+//    @Override
+//    public XMLSignatureInput engineResolveURI(ResourceResolverContext resourceResolverContext)  {
+//        return null;
+//    }
+//
+//    @Override
+//    public boolean engineCanResolveURI(ResourceResolverContext resourceResolverContext) {
+//        return false;
+//    }
 }

@@ -149,7 +149,7 @@
 
     <properties>
         <wss4j.wso2.version>${wss4j.version}</wss4j.wso2.version>
-        <xmlsec.version>2.0.5</xmlsec.version>
+        <xmlsec.version>1.5.2</xmlsec.version>
         <bcprov.version>1.64</bcprov.version>
         <commons.logging.version>1.1</commons.logging.version>
         <commons.discovery.version>0.5</commons.discovery.version>
