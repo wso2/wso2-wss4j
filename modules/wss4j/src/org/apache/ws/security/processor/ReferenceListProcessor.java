@@ -331,12 +331,6 @@ public class ReferenceListProcessor implements Processor {
                 DerivedKeyTokenProcessor dkp = (DerivedKeyTokenProcessor) p;
                 decryptedData = dkp.getKeyBytes(WSSecurityUtil.getKeyLength(algorithm));
             } else if (p instanceof SAMLTokenProcessor) {
-//                SAMLTokenProcessor samlp = (SAMLTokenProcessor) p;
-//                SAMLKeyInfo keyInfo =
-//                    SAMLUtil.getSAMLKeyInfo(samlp.getSamlTokenElement(), crypto, cb);
-//                // TODO Handle malformed SAML tokens where they don't have the
-//                // secret in them
-//                decryptedData = keyInfo.getSecret();
                 throw new WSSecurityException(
                         WSSecurityException.FAILED_CHECK, "SAML 1.x is not supported");
             }else if (p instanceof KerberosTokenProcessor) {
@@ -391,19 +385,7 @@ public class ReferenceListProcessor implements Processor {
                 }
             }
         } else if (secRef.containsKeyIdentifier()) {
-            if (WSConstants.WSS_SAML_KI_VALUE_TYPE.equals(secRef.getKeyIdentifierValueType())) { 
-//                Element token =
-//                    secRef.getKeyIdentifierTokenElement(secRefToken.getOwnerDocument(), wsDocInfo, cb);
-//
-//                if (crypto == null) {
-//                    throw new WSSecurityException(
-//                        WSSecurityException.FAILURE, "noSigCryptoFile"
-//                    );
-//                }
-//                SAMLKeyInfo keyInfo = SAMLUtil.getSAMLKeyInfo(token, crypto, cb);
-//                // TODO Handle malformed SAML tokens where they don't have the
-//                // secret in them
-//                decryptedData = keyInfo.getSecret();
+            if (WSConstants.WSS_SAML_KI_VALUE_TYPE.equals(secRef.getKeyIdentifierValueType())) {
                 throw new WSSecurityException(
                         WSSecurityException.FAILED_CHECK, "SAML 1.x is not supported");
 			} else if (WSConstants.WSS_SAML2_KI_VALUE_TYPE.equals(secRef

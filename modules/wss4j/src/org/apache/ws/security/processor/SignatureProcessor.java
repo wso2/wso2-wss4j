@@ -405,16 +405,6 @@ public class SignatureProcessor implements Processor {
                     
                     secretKey = dktProcessor.getKeyBytes(keyLength);
                 } else if (processor instanceof SAMLTokenProcessor) {
-//                    if (crypto == null) {
-//                        throw new WSSecurityException(
-//                            WSSecurityException.FAILURE, "noSigCryptoFile"
-//                        );
-//                    }
-//                    SAMLTokenProcessor samlp = (SAMLTokenProcessor) processor;
-//                    samlKi = SAMLUtil.getSAMLKeyInfo(samlp.getSamlTokenElement(), crypto, cb);
-//                    certs = samlKi.getCerts();
-//                    secretKey = samlKi.getSecret();
-//                    publicKey = samlKi.getPublicKey();
                     throw new WSSecurityException(
                             WSSecurityException.FAILED_CHECK, "SAML 1.x is not supported");
 				} else if (processor instanceof SAML2TokenProcessor) {
@@ -450,14 +440,7 @@ public class SignatureProcessor implements Processor {
                         );
                     }
                     secretKey = pwcb.getKey();
-                } else if (WSConstants.WSS_SAML_KI_VALUE_TYPE.equals(secRef.getKeyIdentifierValueType())) { 
-//                    Element token =
-//                        secRef.getKeyIdentifierTokenElement(elem.getOwnerDocument(), wsDocInfo, cb);
-//
-//                    samlKi = SAMLUtil.getSAMLKeyInfo(token, crypto, cb);
-//                    certs = samlKi.getCerts();
-//                    secretKey = samlKi.getSecret();
-//                    publicKey = samlKi.getPublicKey();
+                } else if (WSConstants.WSS_SAML_KI_VALUE_TYPE.equals(secRef.getKeyIdentifierValueType())) {
                     throw new WSSecurityException(
                             WSSecurityException.FAILED_CHECK, "SAML 1.x is not supported");
 				} else if (WSConstants.WSS_SAML2_KI_VALUE_TYPE.equals(secRef

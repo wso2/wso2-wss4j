@@ -172,12 +172,6 @@ public class DerivedKeyTokenProcessor implements Processor {
             } else if (processor instanceof SecurityContextTokenProcessor) {
                 this.secret = ((SecurityContextTokenProcessor) processor).getSecret();
             } else if (processor instanceof SAMLTokenProcessor) {
-//                SAMLTokenProcessor samlp = (SAMLTokenProcessor) processor;
-//                SAMLKeyInfo keyInfo =
-//                    SAMLUtil.getSAMLKeyInfo(samlp.getSamlTokenElement(), crypto, cb);
-//                // TODO Handle malformed SAML tokens where they don't have the
-//                // secret in them
-//                this.secret = keyInfo.getSecret();
                 throw new WSSecurityException(
                         WSSecurityException.FAILED_CHECK, "SAML 1.x is not supported");
             } else {
