@@ -566,18 +566,6 @@
             </exclusions>
         </dependency>
         <dependency>
-            <groupId>org.opensaml</groupId>
-            <artifactId>opensaml-xacml-impl</artifactId>
-            <version>${opensaml.version}</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.opensaml</groupId>
-            <artifactId>opensaml-xacml-saml-impl</artifactId>
-            <version>${opensaml.version}</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
             <groupId>org.wso2.carbon.identity.saml.common</groupId>
             <artifactId>org.wso2.carbon.identity.saml.common.util</artifactId>
         </dependency>

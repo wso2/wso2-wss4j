@@ -33,20 +33,14 @@ import org.apache.xml.security.keys.content.keyvalues.RSAKeyValue;
 import org.apache.xml.security.signature.XMLSignature;
 
 import org.joda.time.DateTime;
-import org.opensaml.core.xml.XMLObject;
-import org.opensaml.saml.common.AbstractSAMLObject;
-import org.opensaml.saml.common.SAMLException;
 import org.opensaml.saml.saml1.core.*;
 
-import org.opensaml.saml.saml1.core.impl.SubjectImpl;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import java.security.PublicKey;
 import java.security.cert.X509Certificate;
-import java.util.Arrays;
 import java.util.Collection;
-import java.util.Date;
 import java.util.Properties;
 
 /**
@@ -58,8 +52,8 @@ import java.util.Properties;
 public class SAMLIssuerImpl implements SAMLIssuer {
 
     private static final Log log = LogFactory.getLog(SAMLIssuerImpl.class.getName());
-//    public static final String CONF_SENDER_VOUCHES = "urn:oasis:names:tc:SAML:1.0:cm:sender-vouches";
-//    public static final String CONF_HOLDER_KEY = "urn:oasis:names:tc:SAML:1.0:cm:holder-of-key";
+    public static final String CONF_SENDER_VOUCHES = "urn:oasis:names:tc:SAML:1.0:cm:sender-vouches";
+    public static final String CONF_HOLDER_KEY = "urn:oasis:names:tc:SAML:1.0:cm:holder-of-key";
 
     private Assertion sa = null;
 
@@ -120,10 +114,10 @@ public class SAMLIssuerImpl implements SAMLIssuer {
 
         if ("senderVouches"
                 .equals(properties.getProperty("org.apache.ws.security.saml.confirmationMethod"))) {
-            confirmationMethods[0] = "urn:oasis:names:tc:SAML:1.0:cm:sender-vouches";
+            confirmationMethods[0] = CONF_SENDER_VOUCHES;
         } else if (
                 "keyHolder".equals(properties.getProperty("org.apache.ws.security.saml.confirmationMethod"))) {
-            confirmationMethods[0] = "urn:oasis:names:tc:SAML:1.0:cm:holder-of-key";
+            confirmationMethods[0] = CONF_HOLDER_KEY;
             senderVouches = false;
         } else {
             // throw something here - this is a mandatory property
@@ -155,7 +149,7 @@ public class SAMLIssuerImpl implements SAMLIssuer {
         NameIdentifier nameId = SAMLUtil.newSamlObject(NameIdentifier.class);
         nameId.setValue(name);
         nameId.setNameQualifier(qualifier);
-//                    new AbstractSAMLObject(name, qualifier, "");
+
         String subjectIP = null;
         String authMethod = null;
         if ("password"
@@ -164,21 +158,9 @@ public class SAMLIssuerImpl implements SAMLIssuer {
                     AuthenticationStatement.PASSWORD_AUTHN_METHOD;
         }
         DateTime authInstant = new DateTime();
-        Collection bindings = null;
 
         Subject subject = SAMLUtil.newSamlObject(Subject.class);
         subject.setNameIdentifier(nameId);
-//                    new Subject(nameId,
-//                            Arrays.asList(confirmationMethods),
-//                            null,
-//                            null);
-
-//            new AuthenticationStatement(subject,
-//                    authMethod,
-//                    authInstant,
-//                    subjectIP,
-//                    null,
-//                    bindings)}
 
         AuthenticationStatement authenticationStatement = SAMLUtil.newSamlObject(AuthenticationStatement.class);
         authenticationStatement.setAuthenticationMethod(authMethod);
@@ -187,17 +169,6 @@ public class SAMLIssuerImpl implements SAMLIssuer {
 
         sa = SAMLUtil.newSamlObject(Assertion.class);
         sa.setIssuer(issuer);
-
-//            Statement[] statements =
-//                    {
-//                        ;
-//            sa =
-//                    new Assertion(issuer,
-//                            null,
-//                            null,
-//                            null,
-//                            null,
-//                            Arrays.asList(statements));
 
         if (!senderVouches) {
             KeyInfo ki = new KeyInfo(instanceDoc);

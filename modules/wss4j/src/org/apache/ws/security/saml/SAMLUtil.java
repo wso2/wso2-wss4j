@@ -389,57 +389,6 @@ public class SAMLUtil {
         }
     }
 
-//    /**
-//     * Parse the DOM Element into Opensaml objects.
-//     */
-//    private Element parseElement(Element element) throws WSSecurityException {
-//        XMLObject xmlObject = fromDom(element);
-//        if (xmlObject instanceof org.opensaml.saml.saml1.core.Assertion) {
-//            this.samlObject = (SAMLObject)xmlObject;
-//            samlVersion = SAMLVersion.VERSION_11;
-//        } else if (xmlObject instanceof org.opensaml.saml.saml2.core.Assertion) {
-//            this.samlObject = (SAMLObject)xmlObject;
-//            samlVersion = SAMLVersion.VERSION_20;
-//        } else {
-//            log.error(
-//                    "SamlAssertionWrapper: found unexpected type " + xmlObject.getClass().getName()
-//            );
-//        }
-//
-//        assertionElement = element;
-//    }
-//
-//    /**
-//     * Convert a SAML Assertion from a DOM Element to an XMLObject
-//     *
-//     * @param root of type Element
-//     * @return XMLObject
-//     * @throws WSSecurityException
-//     */
-//    public static XMLObject fromDom(Element root) throws WSSecurityException {
-//
-//        UnmarshallerFactory unmarshallerFactory = XMLObjectProviderRegistrySupport.getUnmarshallerFactory();
-//
-//        if (root == null) {
-//            log.debug("Attempting to unmarshal a null element!");
-//            throw new WSSecurityException(WSSecurityException.FAILURE, "empty",
-//                    new Object[] {"Error unmarshalling a SAML assertion"});
-//        }
-//        Unmarshaller unmarshaller = unmarshallerFactory.getUnmarshaller(root);
-//        if (unmarshaller == null) {
-//            log.debug("Unable to find an unmarshaller for element: " + root.getLocalName());
-//            throw new WSSecurityException(WSSecurityException.FAILURE, "empty",
-//                    new Object[] {"Error unmarshalling a SAML assertion"});
-//        }
-//        try {
-//            return unmarshaller.unmarshall(root);
-//        } catch (UnmarshallingException ex) {
-//            throw new WSSecurityException(WSSecurityException.FAILURE, "empty",
-//                    new Object[] {"Error unmarshalling a SAML assertion"});
-//        }
-//    }
-//
-
     /**
      * Create a new SAML object.
      *

@@ -159,7 +159,7 @@
         <junit.version>4.12</junit.version>
         <jacoco.maven.plugin.version>0.8.4</jacoco.maven.plugin.version>
         <opensaml.version>3.3.1</opensaml.version>
-        <saml.common.util.version>1.0.3</saml.common.util.version>
+        <saml.common.util.version>1.0.10</saml.common.util.version>
         <saml.common.util.version.range>[1.0.3,2.0.0)</saml.common.util.version.range>
         <slf4j.jdk14.version>1.7.26</slf4j.jdk14.version>
         <wss4j.version>1.5.11-wso2v22-SNAPSHOT</wss4j.version>
