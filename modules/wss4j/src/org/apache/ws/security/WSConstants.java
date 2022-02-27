@@ -538,5 +538,4 @@ public class WSConstants {
      * Element type in <code>org.apache.ws.security.WSEncryptionPart</code>
      */
     public static final int PART_TYPE_ELEMENT = 3;
-
 }

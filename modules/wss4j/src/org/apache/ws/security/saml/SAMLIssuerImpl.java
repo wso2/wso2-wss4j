@@ -6,9 +6,9 @@
  * to you under the Apache License, Version 2.0 (the
  * "License"); you may not use this file except in compliance
  * with the License. You may obtain a copy of the License at
- *
+ * <p>
  * http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p>
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
@@ -33,14 +33,16 @@ import org.apache.xml.security.keys.content.keyvalues.RSAKeyValue;
 import org.apache.xml.security.signature.XMLSignature;
 
 import org.joda.time.DateTime;
-import org.opensaml.saml.saml1.core.*;
 
+import org.opensaml.saml.saml1.core.Assertion;
+import org.opensaml.saml.saml1.core.AuthenticationStatement;
+import org.opensaml.saml.saml1.core.NameIdentifier;
+import org.opensaml.saml.saml1.core.Subject;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import java.security.PublicKey;
 import java.security.cert.X509Certificate;
-import java.util.Collection;
 import java.util.Properties;
 
 /**
@@ -54,6 +56,9 @@ public class SAMLIssuerImpl implements SAMLIssuer {
     private static final Log log = LogFactory.getLog(SAMLIssuerImpl.class.getName());
     public static final String CONF_SENDER_VOUCHES = "urn:oasis:names:tc:SAML:1.0:cm:sender-vouches";
     public static final String CONF_HOLDER_KEY = "urn:oasis:names:tc:SAML:1.0:cm:holder-of-key";
+    public static final String DSA_ALGO = "DSA";
+    public static final String RSA_ALGO = "RSA";
+    public static final String PASSWORD_PROPERTY = "password";
 
     private Assertion sa = null;
 
@@ -70,19 +75,20 @@ public class SAMLIssuerImpl implements SAMLIssuer {
     private String[] confirmationMethods = new String[1];
     private Crypto userCrypto = null;
     private String username = null;
-    
+
     /**
-    * Flag indicating what format to put the subject's key material in when
-    * NOT using Sender Vouches as the confirmation method.  The default is
-    * to use ds:X509Data and include the entire certificate.  If this flag
-    * is set to true, a ds:KeyValue is used instead with just the key material.
-    */
+     * Flag indicating what format to put the subject's key material in when
+     * NOT using Sender Vouches as the confirmation method.  The default is
+     * to use ds:X509Data and include the entire certificate.  If this flag
+     * is set to true, a ds:KeyValue is used instead with just the key material.
+     */
     private boolean sendKeyValue = false;
 
     /**
      * Constructor.
      */
     public SAMLIssuerImpl() {
+
     }
 
     public SAMLIssuerImpl(Properties prop) {
@@ -105,9 +111,9 @@ public class SAMLIssuerImpl implements SAMLIssuer {
             issuerKeyPassword =
                     properties.getProperty("org.apache.ws.security.saml.issuer.key.password");
         }
-        
+
         String sendKeyValueProp =
-            properties.getProperty("org.apache.ws.security.saml.issuer.sendKeyValue");
+                properties.getProperty("org.apache.ws.security.saml.issuer.sendKeyValue");
         if (sendKeyValueProp != null) {
             sendKeyValue = Boolean.valueOf(sendKeyValueProp).booleanValue();
         }
@@ -152,7 +158,7 @@ public class SAMLIssuerImpl implements SAMLIssuer {
 
         String subjectIP = null;
         String authMethod = null;
-        if ("password"
+        if (PASSWORD_PROPERTY
                 .equals(properties.getProperty("org.apache.ws.security.saml.authenticationMethod"))) {
             authMethod =
                     AuthenticationStatement.PASSWORD_AUTHN_METHOD;
@@ -166,7 +172,6 @@ public class SAMLIssuerImpl implements SAMLIssuer {
         authenticationStatement.setAuthenticationMethod(authMethod);
         authenticationStatement.setAuthenticationInstant(authInstant);
 
-
         sa = SAMLUtil.newSamlObject(Assertion.class);
         sa.setIssuer(issuer);
 
@@ -179,10 +184,10 @@ public class SAMLIssuerImpl implements SAMLIssuer {
                     PublicKey key = certs[0].getPublicKey();
                     String pubKeyAlgo = key.getAlgorithm();
 
-                    if ("DSA".equalsIgnoreCase(pubKeyAlgo)) {
+                    if (DSA_ALGO.equalsIgnoreCase(pubKeyAlgo)) {
                         DSAKeyValue dsaKeyValue = new DSAKeyValue(instanceDoc, key);
                         ki.add(dsaKeyValue);
-                    } else if ("RSA".equalsIgnoreCase(pubKeyAlgo)) {
+                    } else if (RSA_ALGO.equalsIgnoreCase(pubKeyAlgo)) {
                         RSAKeyValue rsaKeyValue = new RSAKeyValue(instanceDoc, key);
                         ki.add(rsaKeyValue);
                     }
@@ -206,23 +211,25 @@ public class SAMLIssuerImpl implements SAMLIssuer {
             keyInfoElement.setAttributeNS(WSConstants.XMLNS_NS, "xmlns:"
                     + WSConstants.SIG_PREFIX, WSConstants.SIG_NS);
 
-//                subject.setKeyInfo(ki);
             // prepare to sign the SAML token
             try {
                 X509Certificate[] issuerCerts =
                         issuerCrypto.getCertificates(issuerKeyName);
 
                 String sigAlgo = XMLSignature.ALGO_ID_SIGNATURE_RSA;
-                String pubKeyAlgo =
-                        issuerCerts[0].getPublicKey().getAlgorithm();
-                log.debug("automatic sig algo detection: " + pubKeyAlgo);
-                if (pubKeyAlgo.equalsIgnoreCase("DSA")) {
+                String pubKeyAlgo = null;
+                if (issuerCerts.length > 0) {
+                    pubKeyAlgo = issuerCerts[0].getPublicKey().getAlgorithm();
+                }
+                if (log.isDebugEnabled()) {
+                    log.debug("automatic sig algo detection: " + pubKeyAlgo);
+                }
+                if (pubKeyAlgo.equalsIgnoreCase(DSA_ALGO)) {
                     sigAlgo = XMLSignature.ALGO_ID_SIGNATURE_DSA;
                 }
                 java.security.Key issuerPK =
                         issuerCrypto.getPrivateKey(issuerKeyName,
                                 issuerKeyPassword);
-//                    sa.sign(sigAlgo, issuerPK, Arrays.asList(issuerCerts));
             } catch (WSSecurityException ex) {
                 if (log.isDebugEnabled()) {
                     log.debug(ex.getMessage(), ex);
@@ -242,6 +249,7 @@ public class SAMLIssuerImpl implements SAMLIssuer {
      * @param userCrypto The userCrypto to set.
      */
     public void setUserCrypto(Crypto userCrypto) {
+
         this.userCrypto = userCrypto;
     }
 
@@ -249,6 +257,7 @@ public class SAMLIssuerImpl implements SAMLIssuer {
      * @param username The username to set.
      */
     public void setUsername(String username) {
+
         this.username = username;
     }
 
@@ -256,6 +265,7 @@ public class SAMLIssuerImpl implements SAMLIssuer {
      * @return Returns the issuerCrypto.
      */
     public Crypto getIssuerCrypto() {
+
         return issuerCrypto;
     }
 
@@ -263,6 +273,7 @@ public class SAMLIssuerImpl implements SAMLIssuer {
      * @return Returns the issuerKeyName.
      */
     public String getIssuerKeyName() {
+
         return issuerKeyName;
     }
 
@@ -270,6 +281,7 @@ public class SAMLIssuerImpl implements SAMLIssuer {
      * @return Returns the issuerKeyPassword.
      */
     public String getIssuerKeyPassword() {
+
         return issuerKeyPassword;
     }
 
@@ -277,6 +289,7 @@ public class SAMLIssuerImpl implements SAMLIssuer {
      * @return Returns the senderVouches.
      */
     public boolean isSenderVouches() {
+
         return senderVouches;
     }
 
@@ -284,6 +297,7 @@ public class SAMLIssuerImpl implements SAMLIssuer {
      * @param instanceDoc The instanceDoc to set.
      */
     public void setInstanceDoc(Document instanceDoc) {
+
         this.instanceDoc = instanceDoc;
     }
 }

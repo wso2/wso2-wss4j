@@ -240,15 +240,6 @@ public class SAMLUtil {
                     "invalidSAMLToken", new Object[]{"for Signature (no Subject)"});
         }
 
-//        String confirmMethod = null;
-//        it = samlSubj.getConfirmationMethods();
-//        if (it.hasNext()) {
-//            confirmMethod = (String) it.next();
-//        }
-//        boolean senderVouches = false;
-//        if (Subject.CONF_SENDER_VOUCHES.equals(confirmMethod)) {
-//            senderVouches = true;
-//        }
         Element e = (Element) samlSubj.getDOM().getAttributeNode("KeyInfo");;
         X509Certificate[] certs = null;
         try {

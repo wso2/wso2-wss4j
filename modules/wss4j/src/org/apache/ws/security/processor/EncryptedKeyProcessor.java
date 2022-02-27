@@ -224,11 +224,9 @@ public class EncryptedKeyProcessor implements Processor {
                 //
                 else if (secRef.containsKeyIdentifier()) {
                     X509Certificate[] certs = null;
-					if (WSConstants.WSS_SAML_KI_VALUE_TYPE.equals(secRef
-							.getKeyIdentifierValueType())) {
-                        throw new WSSecurityException(
-                                WSSecurityException.FAILED_CHECK, "SAML 1.x is not supported");
-					} else if (WSConstants.WSS_SAML2_KI_VALUE_TYPE
+                    if (WSConstants.WSS_SAML_KI_VALUE_TYPE.equals(secRef.getKeyIdentifierValueType())) {
+                        throw new WSSecurityException(WSSecurityException.FAILED_CHECK, "SAML 1.x is not supported");
+                    } else if (WSConstants.WSS_SAML2_KI_VALUE_TYPE
 							.equals(secRef.getKeyIdentifierValueType())) {
 						Element token = secRef.getKeyIdentifierTokenElement(
 								doc, docInfo, cb);
