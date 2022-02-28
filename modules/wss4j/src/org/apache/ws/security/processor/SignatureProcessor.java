@@ -46,7 +46,6 @@ import org.apache.ws.security.message.token.UsernameToken;
 import org.apache.ws.security.message.token.X509Security;
 import org.apache.ws.security.saml.SAML2KeyInfo;
 import org.apache.ws.security.saml.SAML2Util;
-import org.apache.ws.security.saml.SAMLKeyInfo;
 import org.apache.ws.security.transform.STRTransform;
 import org.apache.ws.security.transform.STRTransformUtil;
 import org.apache.ws.security.util.WSSecurityUtil;
@@ -60,8 +59,6 @@ import org.apache.xml.security.signature.XMLSignatureException;
 import org.apache.xml.security.signature.XMLSignatureInput;
 import org.apache.xml.security.transforms.Transform;
 import org.apache.xml.security.transforms.Transforms;
-
-import org.opensaml.saml.saml1.core.Assertion;
 
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -252,7 +249,6 @@ public class SignatureProcessor implements Processor {
         KeyInfo info = sig.getKeyInfo();
         UsernameToken ut = null;
         DerivedKeyToken dkt = null;
-        SAMLKeyInfo samlKi = null;
         SAML2KeyInfo saml2Ki = null;
         String customTokenId = null;
         java.security.PublicKey publicKey = null;
@@ -666,13 +662,7 @@ public class SignatureProcessor implements Processor {
                     }
                     principal.setBasetokenId(basetokenId);
                     return principal;
-                } else if (samlKi != null) {
-                    final Assertion assertion = samlKi.getAssertion();
-                    CustomTokenPrincipal principal = new CustomTokenPrincipal(assertion.getID());
-                    principal.setTokenObject(assertion);
-                    return principal;
-                    
-				} else if (saml2Ki != null) {
+                } else if (saml2Ki != null) {
 					org.opensaml.saml.saml2.core.Assertion assertion = saml2Ki.getAssertion();
 					CustomTokenPrincipal principal = new CustomTokenPrincipal(
 							assertion.getID());

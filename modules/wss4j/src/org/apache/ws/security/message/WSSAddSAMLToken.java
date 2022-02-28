@@ -86,7 +86,9 @@ public class WSSAddSAMLToken extends WSBaseMessage {
      * @deprecated replaced by {@link WSSecSAMLToken#build(Document, Assertion, WSSecHeader)}
      */
     public Document build(Document doc, Assertion assertion) {
-        log.debug("Begin add Assertion token...");
+        if (log.isDebugEnabled()){
+            log.debug("Begin add Assertion token...");
+        }
         Element element = assertion.getDOM();
         Element securityHeader = insertSecurityHeader(doc);
         WSSecurityUtil.prependChildElement(securityHeader, element);

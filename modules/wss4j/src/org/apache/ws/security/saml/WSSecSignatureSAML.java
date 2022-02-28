@@ -64,6 +64,8 @@ import java.util.Iterator;
 import java.util.Set;
 import java.util.Vector;
 
+import static org.apache.ws.security.WSConstants.CONF_SENDER_VOUCHES;
+
 public class WSSecSignatureSAML extends WSSecSignature {
 
     private static final Log log = LogFactory.getLog(WSSecSignatureSAML.class.getName());
@@ -220,7 +222,7 @@ public class WSSecSignatureSAML extends WSSecSignature {
         if (it.hasNext()) {
             confirmMethod = (String) it.next();
         }
-        if ("urn:oasis:names:tc:SAML:1.0:cm:sender-vouches".equals(confirmMethod)) {
+        if (CONF_SENDER_VOUCHES.equals(confirmMethod)) {
             senderVouches = true;
         }
         //

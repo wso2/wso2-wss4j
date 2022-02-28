@@ -333,7 +333,7 @@ public class ReferenceListProcessor implements Processor {
             } else if (p instanceof SAMLTokenProcessor) {
                 throw new WSSecurityException(
                         WSSecurityException.FAILED_CHECK, "SAML 1.x is not supported");
-            }else if (p instanceof KerberosTokenProcessor) {
+            } else if (p instanceof KerberosTokenProcessor) {
             	KerberosTokenProcessor krbp = (KerberosTokenProcessor) p;
 				WSParameterCallback param = new WSParameterCallback(WSParameterCallback.KDC_DES_AES_FACTOR);
 		        int factor = 0;

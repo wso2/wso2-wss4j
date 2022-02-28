@@ -58,6 +58,8 @@ import java.security.cert.X509Certificate;
 import java.util.Iterator;
 import java.util.Vector;
 
+import static org.apache.ws.security.WSConstants.CONF_SENDER_VOUCHES;
+
 public class WSSignSAMLEnvelope extends WSSignEnvelope {
 
     private static final Log log = LogFactory.getLog(WSSignSAMLEnvelope.class
@@ -153,7 +155,7 @@ public class WSSignSAMLEnvelope extends WSSignEnvelope {
             confirmMethod = (String) it.next();
         }
         boolean senderVouches = false;
-        if ("urn:oasis:names:tc:SAML:1.0:cm:sender-vouches".equals(confirmMethod)) {
+        if (CONF_SENDER_VOUCHES.equals(confirmMethod)) {
             senderVouches = true;
         }
         /*

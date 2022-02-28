@@ -45,6 +45,9 @@ import java.security.PublicKey;
 import java.security.cert.X509Certificate;
 import java.util.Properties;
 
+import static org.apache.ws.security.WSConstants.CONF_HOLDER_KEY;
+import static org.apache.ws.security.WSConstants.CONF_SENDER_VOUCHES;
+
 /**
  * Builds a WS SAML Assertion and inserts it into the SOAP Envelope. Refer to
  * the WS specification, SAML Token profile
@@ -54,8 +57,6 @@ import java.util.Properties;
 public class SAMLIssuerImpl implements SAMLIssuer {
 
     private static final Log log = LogFactory.getLog(SAMLIssuerImpl.class.getName());
-    public static final String CONF_SENDER_VOUCHES = "urn:oasis:names:tc:SAML:1.0:cm:sender-vouches";
-    public static final String CONF_HOLDER_KEY = "urn:oasis:names:tc:SAML:1.0:cm:holder-of-key";
     public static final String DSA_ALGO = "DSA";
     public static final String RSA_ALGO = "RSA";
     public static final String PASSWORD_PROPERTY = "password";
