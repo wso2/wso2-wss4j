@@ -31,8 +31,6 @@ import org.apache.ws.security.conversation.dkalgo.DerivationAlgorithm;
 import org.apache.ws.security.message.token.DerivedKeyToken;
 import org.apache.ws.security.message.token.Reference;
 import org.apache.ws.security.message.token.SecurityTokenReference;
-import org.apache.ws.security.saml.SAMLKeyInfo;
-import org.apache.ws.security.saml.SAMLUtil;
 import org.apache.ws.security.util.Base64;
 import org.w3c.dom.Element;
 
@@ -174,12 +172,8 @@ public class DerivedKeyTokenProcessor implements Processor {
             } else if (processor instanceof SecurityContextTokenProcessor) {
                 this.secret = ((SecurityContextTokenProcessor) processor).getSecret();
             } else if (processor instanceof SAMLTokenProcessor) {
-                SAMLTokenProcessor samlp = (SAMLTokenProcessor) processor;
-                SAMLKeyInfo keyInfo = 
-                    SAMLUtil.getSAMLKeyInfo(samlp.getSamlTokenElement(), crypto, cb);
-                // TODO Handle malformed SAML tokens where they don't have the 
-                // secret in them
-                this.secret = keyInfo.getSecret();
+                throw new WSSecurityException(
+                        WSSecurityException.FAILED_CHECK, "SAML 1.x is not supported");
             } else {
                 throw new WSSecurityException(
                     WSSecurityException.FAILED_CHECK, "unsupportedKeyId"

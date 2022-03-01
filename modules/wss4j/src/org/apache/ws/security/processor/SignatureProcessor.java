@@ -46,8 +46,6 @@ import org.apache.ws.security.message.token.UsernameToken;
 import org.apache.ws.security.message.token.X509Security;
 import org.apache.ws.security.saml.SAML2KeyInfo;
 import org.apache.ws.security.saml.SAML2Util;
-import org.apache.ws.security.saml.SAMLKeyInfo;
-import org.apache.ws.security.saml.SAMLUtil;
 import org.apache.ws.security.transform.STRTransform;
 import org.apache.ws.security.transform.STRTransformUtil;
 import org.apache.ws.security.util.WSSecurityUtil;
@@ -61,8 +59,7 @@ import org.apache.xml.security.signature.XMLSignatureException;
 import org.apache.xml.security.signature.XMLSignatureInput;
 import org.apache.xml.security.transforms.Transform;
 import org.apache.xml.security.transforms.Transforms;
-import org.opensaml.SAMLAssertion;
-import org.opensaml.saml2.core.Assertion;
+
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
@@ -252,7 +249,6 @@ public class SignatureProcessor implements Processor {
         KeyInfo info = sig.getKeyInfo();
         UsernameToken ut = null;
         DerivedKeyToken dkt = null;
-        SAMLKeyInfo samlKi = null;
         SAML2KeyInfo saml2Ki = null;
         String customTokenId = null;
         java.security.PublicKey publicKey = null;
@@ -327,9 +323,8 @@ public class SignatureProcessor implements Processor {
                             validateCertificateChain = true;
                         }
                     } else if (el.equals(WSSecurityEngine.SAML_TOKEN)) {
-                        samlKi = SAMLUtil.getSAMLKeyInfo(token, crypto, cb);
-                        certs = samlKi.getCerts();
-                        secretKey = samlKi.getSecret();
+                        throw new WSSecurityException(
+                                WSSecurityException.FAILED_CHECK, "SAML 1.x is not supported");
 					} else if (el.equals(WSSecurityEngine.SAML2_TOKEN)) {
 						saml2Ki = SAML2Util.getSAML2KeyInfo(token, crypto, cb);
 						certs = saml2Ki.getCerts();
@@ -406,16 +401,8 @@ public class SignatureProcessor implements Processor {
                     
                     secretKey = dktProcessor.getKeyBytes(keyLength);
                 } else if (processor instanceof SAMLTokenProcessor) {
-                    if (crypto == null) {
-                        throw new WSSecurityException(
-                            WSSecurityException.FAILURE, "noSigCryptoFile"
-                        );
-                    }
-                    SAMLTokenProcessor samlp = (SAMLTokenProcessor) processor;
-                    samlKi = SAMLUtil.getSAMLKeyInfo(samlp.getSamlTokenElement(), crypto, cb);
-                    certs = samlKi.getCerts();
-                    secretKey = samlKi.getSecret();
-                    publicKey = samlKi.getPublicKey();
+                    throw new WSSecurityException(
+                            WSSecurityException.FAILED_CHECK, "SAML 1.x is not supported");
 				} else if (processor instanceof SAML2TokenProcessor) {
 					if (crypto == null)
 						throw new WSSecurityException(0, "noSigCryptoFile");
@@ -449,14 +436,9 @@ public class SignatureProcessor implements Processor {
                         );
                     }
                     secretKey = pwcb.getKey();
-                } else if (WSConstants.WSS_SAML_KI_VALUE_TYPE.equals(secRef.getKeyIdentifierValueType())) { 
-                    Element token = 
-                        secRef.getKeyIdentifierTokenElement(elem.getOwnerDocument(), wsDocInfo, cb);
-
-                    samlKi = SAMLUtil.getSAMLKeyInfo(token, crypto, cb);
-                    certs = samlKi.getCerts();
-                    secretKey = samlKi.getSecret();
-                    publicKey = samlKi.getPublicKey();
+                } else if (WSConstants.WSS_SAML_KI_VALUE_TYPE.equals(secRef.getKeyIdentifierValueType())) {
+                    throw new WSSecurityException(
+                            WSSecurityException.FAILED_CHECK, "SAML 1.x is not supported");
 				} else if (WSConstants.WSS_SAML2_KI_VALUE_TYPE.equals(secRef
 						.getKeyIdentifierValueType())) {
 					Element token = secRef.getKeyIdentifierTokenElement(
@@ -680,14 +662,8 @@ public class SignatureProcessor implements Processor {
                     }
                     principal.setBasetokenId(basetokenId);
                     return principal;
-                } else if (samlKi != null) {
-                    final SAMLAssertion assertion = samlKi.getAssertion();
-                    CustomTokenPrincipal principal = new CustomTokenPrincipal(assertion.getId());
-                    principal.setTokenObject(assertion);
-                    return principal;
-                    
-				} else if (saml2Ki != null) {
-					Assertion assertion = saml2Ki.getAssertion();
+                } else if (saml2Ki != null) {
+					org.opensaml.saml.saml2.core.Assertion assertion = saml2Ki.getAssertion();
 					CustomTokenPrincipal principal = new CustomTokenPrincipal(
 							assertion.getID());
 					principal.setTokenObject(assertion);
@@ -749,10 +725,10 @@ public class SignatureProcessor implements Processor {
         String type = element.getAttribute("ValueType");
         if (X509Security.X509_V3_TYPE.equals(type)) {
             X509Security x509 = new X509Security(element);
-            return (BinarySecurity) x509;
+            return x509;
         } else if (PKIPathSecurity.getType().equals(type)) {
             PKIPathSecurity pkiPath = new PKIPathSecurity(element);
-            return (BinarySecurity) pkiPath;
+            return pkiPath;
         }
         throw new WSSecurityException(
             WSSecurityException.UNSUPPORTED_SECURITY_TOKEN,

@@ -24,7 +24,8 @@ import org.apache.ws.security.handler.RequestData;
 import org.apache.ws.security.handler.WSHandler;
 import org.apache.ws.security.message.WSSecSAMLToken;
 import org.apache.ws.security.saml.SAMLIssuer;
-import org.opensaml.SAMLAssertion;
+
+import org.opensaml.saml.saml1.core.Assertion;
 import org.w3c.dom.Document;
 
 public class SAMLTokenUnsignedAction extends SAMLTokenSignedAction {
@@ -36,7 +37,7 @@ public class SAMLTokenUnsignedAction extends SAMLTokenSignedAction {
 
         SAMLIssuer saml = loadSamlIssuer(handler, reqData);
         saml.setUsername(reqData.getUsername());
-        SAMLAssertion assertion = saml.newAssertion();
+        Assertion assertion = saml.newAssertion();
 
         // add the SAMLAssertion Token to the SOAP Envelope
         builder.build(doc, assertion, reqData.getSecHeader());

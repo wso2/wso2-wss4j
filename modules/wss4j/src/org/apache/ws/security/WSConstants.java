@@ -539,4 +539,7 @@ public class WSConstants {
      */
     public static final int PART_TYPE_ELEMENT = 3;
 
+    public static final String CONF_SENDER_VOUCHES = "urn:oasis:names:tc:SAML:1.0:cm:sender-vouches";
+
+    public static final String CONF_HOLDER_KEY = "urn:oasis:names:tc:SAML:1.0:cm:holder-of-key";
 }

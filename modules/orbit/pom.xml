@@ -62,7 +62,7 @@
             <optional>true</optional>
         </dependency>
         <dependency>
-            <groupId>org.bouncycastle.wso2</groupId>
+            <groupId>org.bouncycastle</groupId>
             <artifactId>bcprov-jdk15on</artifactId>
             <optional>true</optional>
         </dependency>
@@ -115,15 +115,7 @@
                             org.apache.xpath.objects;resolution:=optional,
                             org.ietf.jgss,
                             org.joda.time,
-                            org.opensaml,
-                            org.opensaml.saml2.core,
-                            org.opensaml.xml,
-                            org.opensaml.xml.io,
-                            org.opensaml.xml.security.credential,
-                            org.opensaml.xml.security.x509,
-                            org.opensaml.xml.signature,
-                            org.opensaml.xml.util,
-                            org.opensaml.xml.validation,
+                            org.opensaml.*,
                             org.w3c.dom,
                             org.xml.sax,
                             sun.security.krb5.*;resolution:=optional,

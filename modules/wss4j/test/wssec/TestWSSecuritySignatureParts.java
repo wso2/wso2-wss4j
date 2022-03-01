@@ -47,7 +47,7 @@ import org.apache.ws.security.saml.WSSecSignatureSAML;
 import org.apache.ws.security.util.WSSecurityUtil;
 import org.apache.xml.security.algorithms.MessageDigestAlgorithm;
 import org.apache.xml.security.signature.XMLSignature;
-import org.opensaml.SAMLAssertion;
+import org.opensaml.saml.saml1.core.Assertion;
 import org.w3c.dom.Document;
 
 import javax.security.auth.callback.Callback;
@@ -194,7 +194,7 @@ public class TestWSSecuritySignatureParts extends TestCase implements CallbackHa
         saml.setInstanceDoc(doc);
         saml.setUserCrypto(crypto);
         saml.setUsername("16c73ab6-b892-458f-abf5-2f875f74882e");
-        SAMLAssertion assertion = saml.newAssertion();
+        Assertion assertion = saml.newAssertion();
 
         WSSecSignatureSAML wsSign = new WSSecSignatureSAML();
         wsSign.setKeyIdentifierType(WSConstants.BST_DIRECT_REFERENCE);
@@ -227,8 +227,8 @@ public class TestWSSecuritySignatureParts extends TestCase implements CallbackHa
         Vector results = verify(signedDoc);
         WSSecurityEngineResult stUnsignedActionResult =
             WSSecurityUtil.fetchActionResult(results, WSConstants.ST_UNSIGNED);
-        SAMLAssertion receivedAssertion = 
-            (SAMLAssertion) stUnsignedActionResult.get(WSSecurityEngineResult.TAG_SAML_ASSERTION);
+        Assertion receivedAssertion =
+            (Assertion) stUnsignedActionResult.get(WSSecurityEngineResult.TAG_SAML_ASSERTION);
         assertTrue(receivedAssertion != null);
         
         WSSecurityEngineResult signActionResult = 

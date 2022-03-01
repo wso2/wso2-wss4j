@@ -49,11 +49,12 @@ import org.apache.xml.security.transforms.Transforms;
 import org.apache.xml.security.transforms.params.InclusiveNamespaces;
 import org.apache.xml.security.utils.Constants;
 import org.apache.xml.security.utils.XMLUtils;
-import org.opensaml.SAMLAssertion;
-import org.opensaml.SAMLException;
-import org.opensaml.SAMLObject;
-import org.opensaml.SAMLSubject;
-import org.opensaml.SAMLSubjectStatement;
+
+import org.opensaml.saml.common.SAMLObject;
+import org.opensaml.saml.saml1.core.Subject;
+import org.opensaml.saml.saml1.core.SubjectStatement;
+import org.opensaml.saml.saml1.core.Assertion;
+
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -62,6 +63,8 @@ import java.security.cert.X509Certificate;
 import java.util.Iterator;
 import java.util.Set;
 import java.util.Vector;
+
+import static org.apache.ws.security.WSConstants.CONF_SENDER_VOUCHES;
 
 public class WSSecSignatureSAML extends WSSecSignature {
 
@@ -107,7 +110,7 @@ public class WSSecSignatureSAML extends WSSecSignature {
      * @throws org.apache.ws.security.WSSecurityException
      */
     public Document build(
-        Document doc, Crypto uCrypto, SAMLAssertion assertion, 
+        Document doc, Crypto uCrypto, Assertion assertion,
         Crypto iCrypto, String iKeyName, String iKeyPW, WSSecHeader secHeader
     ) throws WSSecurityException {
 
@@ -176,7 +179,7 @@ public class WSSecSignatureSAML extends WSSecSignature {
      * @throws WSSecurityException
      */
     public void prepare(
-        Document doc, Crypto uCrypto, SAMLAssertion assertion, Crypto iCrypto, 
+        Document doc, Crypto uCrypto, Assertion assertion, Crypto iCrypto,
         String iKeyName, String iKeyPW, WSSecHeader secHeader
     ) throws WSSecurityException {
 
@@ -196,16 +199,16 @@ public class WSSecSignatureSAML extends WSSecSignature {
         // (includes Subject), then get the _first_ confirmation method only
         // thats if "senderVouches" is true.
         //
-        SAMLSubjectStatement samlSubjS = null;
-        Iterator it = assertion.getStatements();
+        SubjectStatement samlSubjS = null;
+        Iterator it = assertion.getStatements().iterator();
         while (it.hasNext()) {
             SAMLObject so = (SAMLObject) it.next();
-            if (so instanceof SAMLSubjectStatement) {
-                samlSubjS = (SAMLSubjectStatement) so;
+            if (so instanceof SubjectStatement) {
+                samlSubjS = (SubjectStatement) so;
                 break;
             }
         }
-        SAMLSubject samlSubj = null;
+        Subject samlSubj = null;
         if (samlSubjS != null) {
             samlSubj = samlSubjS.getSubject();
         }
@@ -215,11 +218,11 @@ public class WSSecSignatureSAML extends WSSecSignature {
         }
 
         String confirmMethod = null;
-        it = samlSubj.getConfirmationMethods();
+        it = samlSubj.getSubjectConfirmation().getConfirmationMethods().iterator();
         if (it.hasNext()) {
             confirmMethod = (String) it.next();
         }
-        if (SAMLSubject.CONF_SENDER_VOUCHES.equals(confirmMethod)) {
+        if (CONF_SENDER_VOUCHES.equals(confirmMethod)) {
             senderVouches = true;
         }
         //
@@ -249,7 +252,7 @@ public class WSSecSignatureSAML extends WSSecSignature {
                     new Object[] { "for SAML Signature (Key Holder)" }
                 );
             }
-            Element e = samlSubj.getKeyInfo();
+            Element e = (Element) samlSubj.getDOM().getAttributeNode("KeyInfo");
             try {
                 KeyInfo ki = new KeyInfo(e, null);
 
@@ -391,12 +394,12 @@ public class WSSecSignatureSAML extends WSSecSignature {
                     keyId.setAttributeNS(
                         null, "ValueType", WSConstants.WSS_SAML_KI_VALUE_TYPE
                     );
-                    keyId.appendChild(doc.createTextNode(assertion.getId()));
+                    keyId.appendChild(doc.createTextNode(assertion.getID()));
                     Element elem = secRefSaml.getElement();
                     elem.appendChild(keyId);
                 } else {
                     Reference ref = new Reference(doc);
-                    ref.setURI("#" + assertion.getId());
+                    ref.setURI("#" + assertion.getID());
                     ref.setValueType(WSConstants.WSS_SAML_KI_VALUE_TYPE);
                     secRefSaml.setReference(ref);
                 }
@@ -441,7 +444,7 @@ public class WSSecSignatureSAML extends WSSecSignature {
             switch (keyIdentifierType) {
             case WSConstants.BST_DIRECT_REFERENCE:
                 Reference ref = new Reference(doc);
-                ref.setURI("#" + assertion.getId());
+                ref.setURI("#" + assertion.getID());
                 ref.setValueType(WSConstants.WSS_SAML_KI_VALUE_TYPE);
                 secRef.setReference(ref);
                 break;
@@ -451,7 +454,7 @@ public class WSSecSignatureSAML extends WSSecSignature {
                 keyId.setAttributeNS(
                     null, "ValueType", WSConstants.WSS_SAML_KI_VALUE_TYPE
                 );
-                keyId.appendChild(doc.createTextNode(assertion.getId()));
+                keyId.appendChild(doc.createTextNode(assertion.getID()));
                 Element elem = secRef.getElement();
                 elem.appendChild(keyId);
                 break;
@@ -468,13 +471,7 @@ public class WSSecSignatureSAML extends WSSecSignature {
             WSConstants.XMLNS_NS, "xmlns:" + WSConstants.SIG_PREFIX, WSConstants.SIG_NS
         );
 
-        try {
-            samlToken = (Element) assertion.toDOM(doc);
-        } catch (SAMLException e2) {
-            throw new WSSecurityException(
-                WSSecurityException.FAILED_SIGNATURE, "noSAMLdoc", null, e2
-            );
-        }
+        samlToken = assertion.getDOM();
         wsDocInfo.setAssertion(samlToken);
     }
 

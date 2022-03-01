@@ -27,15 +27,16 @@ import org.apache.ws.security.WSSecurityException;
 import org.apache.ws.security.components.crypto.Crypto;
 import org.apache.ws.security.saml.SAML2Util;
 import org.apache.ws.security.util.XMLUtils;
-import org.opensaml.Configuration;
-import org.opensaml.DefaultBootstrap;
-import org.opensaml.saml2.core.Assertion;
-import org.opensaml.xml.ConfigurationException;
-import org.opensaml.xml.io.Unmarshaller;
-import org.opensaml.xml.io.UnmarshallerFactory;
-import org.opensaml.xml.io.UnmarshallingException;
+
+import org.opensaml.core.config.InitializationException;
+import org.opensaml.core.xml.config.XMLObjectProviderRegistrySupport;
+import org.opensaml.saml.saml2.core.Assertion;
+import org.opensaml.core.xml.io.Unmarshaller;
+import org.opensaml.core.xml.io.UnmarshallerFactory;
+import org.opensaml.core.xml.io.UnmarshallingException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.wso2.carbon.identity.saml.common.util.SAMLInitializer;
 import org.xml.sax.SAXException;
 
 import javax.security.auth.callback.CallbackHandler;
@@ -97,7 +98,7 @@ public class SAML2TokenProcessor implements Processor {
     public Assertion buildAssertion(Element elem) throws WSSecurityException {
         Assertion samlAssertion;
         try {
-            DefaultBootstrap.bootstrap();
+            SAMLInitializer.doBootstrap();
 
             // Unmarshall and build the assertion from the DOM element.
             String keyInfoElementString = elem.toString();
@@ -105,14 +106,14 @@ public class SAML2TokenProcessor implements Processor {
             DocumentBuilder docBuilder = documentBuilderFactory.newDocumentBuilder();
             Document document = docBuilder.parse(new ByteArrayInputStream(keyInfoElementString.trim().getBytes()));
             Element element = document.getDocumentElement();
-            UnmarshallerFactory unmarshallerFactory = Configuration
+            UnmarshallerFactory unmarshallerFactory = XMLObjectProviderRegistrySupport
                     .getUnmarshallerFactory();
             Unmarshaller unmarshaller = unmarshallerFactory
                     .getUnmarshaller(element);
             samlAssertion = (Assertion) unmarshaller
                     .unmarshall(element);
         }
-        catch (ConfigurationException e) {
+        catch (InitializationException e) {
             throw new WSSecurityException(
                     WSSecurityException.FAILURE, "Failure in bootstrapping", null, e);
         } catch (UnmarshallingException e) {

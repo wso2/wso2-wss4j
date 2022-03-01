@@ -16,7 +16,7 @@
 
 package org.apache.ws.security.saml;
 
-import org.opensaml.saml2.core.Assertion;
+import org.opensaml.saml.saml2.core.Assertion;
 
 import java.security.cert.X509Certificate;
 

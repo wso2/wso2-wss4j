@@ -33,8 +33,6 @@ import org.apache.ws.security.message.token.SecurityTokenReference;
 import org.apache.ws.security.message.token.X509Security;
 import org.apache.ws.security.saml.SAML2KeyInfo;
 import org.apache.ws.security.saml.SAML2Util;
-import org.apache.ws.security.saml.SAMLKeyInfo;
-import org.apache.ws.security.saml.SAMLUtil;
 import org.apache.ws.security.util.Base64;
 import org.apache.ws.security.util.WSSecurityUtil;
 import org.apache.xml.security.algorithms.JCEMapper;
@@ -224,20 +222,9 @@ public class EncryptedKeyProcessor implements Processor {
                 //
                 else if (secRef.containsKeyIdentifier()) {
                     X509Certificate[] certs = null;
-					if (WSConstants.WSS_SAML_KI_VALUE_TYPE.equals(secRef
-							.getKeyIdentifierValueType())) {
-						Element token = secRef.getKeyIdentifierTokenElement(
-								doc, docInfo, cb);
-
-						if (crypto == null) {
-							throw new WSSecurityException(
-									WSSecurityException.FAILURE,
-									"noSigCryptoFile");
-						}
-						SAMLKeyInfo samlKi = SAMLUtil.getSAMLKeyInfo(token,
-								crypto, cb);
-						certs = samlKi.getCerts();
-					} else if (WSConstants.WSS_SAML2_KI_VALUE_TYPE
+                    if (WSConstants.WSS_SAML_KI_VALUE_TYPE.equals(secRef.getKeyIdentifierValueType())) {
+                        throw new WSSecurityException(WSSecurityException.FAILED_CHECK, "SAML 1.x is not supported");
+                    } else if (WSConstants.WSS_SAML2_KI_VALUE_TYPE
 							.equals(secRef.getKeyIdentifierValueType())) {
 						Element token = secRef.getKeyIdentifierTokenElement(
 								doc, docInfo, cb);

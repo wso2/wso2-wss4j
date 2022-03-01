@@ -21,8 +21,9 @@ package org.apache.ws.security.message;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.ws.security.util.WSSecurityUtil;
-import org.opensaml.SAMLAssertion;
-import org.opensaml.SAMLException;
+
+import org.opensaml.saml.saml1.core.Assertion;
+
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -38,7 +39,7 @@ public class WSSecSAMLToken extends WSSecBase {
     
     private Document document = null;
     
-    private SAMLAssertion saml = null;
+    private Assertion saml = null;
 
     /**
      * Constructor.
@@ -58,7 +59,7 @@ public class WSSecSAMLToken extends WSSecBase {
      * @param doc
      *            The SOAP envelope as W3C document
      */
-    public void prepare(Document doc, SAMLAssertion assertion) {
+    public void prepare(Document doc, Assertion assertion) {
         document = doc;
         saml = assertion;
     }
@@ -75,13 +76,9 @@ public class WSSecSAMLToken extends WSSecBase {
      *            The security header that holds the Signature element.
      */
     public void prependToHeader(WSSecHeader secHeader) {
-        Element element = null;        
-        try {
-            element = (Element) saml.toDOM(document);
-        } catch (SAMLException ex) {
-            throw new RuntimeException(ex.toString(), ex);
-        }
-        
+
+        document.getDocumentElement();
+        Element element = saml.getDOM();
         WSSecurityUtil.prependChildElement(secHeader.getSecurityHeader(), element);
     }
     
@@ -97,7 +94,7 @@ public class WSSecSAMLToken extends WSSecBase {
         if (saml == null) {
             return null;
         }
-        return saml.getId();
+        return saml.getID();
     }
     
     /**
@@ -110,7 +107,7 @@ public class WSSecSAMLToken extends WSSecBase {
      * @param assertion TODO
      * @return Document with UsernameToken added
      */
-    public Document build(Document doc, SAMLAssertion assertion, WSSecHeader secHeader) {
+    public Document build(Document doc, Assertion assertion, WSSecHeader secHeader) {
         log.debug("Begin add SAMLAssertion token...");
         
         prepare(doc, assertion);

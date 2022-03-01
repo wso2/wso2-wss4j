@@ -44,9 +44,9 @@ import org.apache.ws.security.components.crypto.Crypto;
 import org.apache.ws.security.components.crypto.CryptoFactory;
 import org.apache.ws.security.message.WSSecHeader;
 
+import org.opensaml.saml.saml1.core.Assertion;
 import org.w3c.dom.Document;
 
-import org.opensaml.SAMLAssertion;
 
 import javax.security.auth.callback.Callback;
 import javax.security.auth.callback.CallbackHandler;
@@ -135,7 +135,7 @@ public class TestWSSecurityNewST3 extends TestCase implements CallbackHandler {
         saml.setInstanceDoc(doc);
         saml.setUserCrypto(crypto);
         saml.setUsername("16c73ab6-b892-458f-abf5-2f875f74882e");
-        SAMLAssertion assertion = saml.newAssertion();
+        Assertion assertion = saml.newAssertion();
 
         WSSecSignatureSAML wsSign = new WSSecSignatureSAML();
         wsSign.setDigestAlgo("http://www.w3.org/2001/04/xmlenc#sha256");
@@ -166,8 +166,8 @@ public class TestWSSecurityNewST3 extends TestCase implements CallbackHandler {
         Vector results = verify(signedDoc);
         WSSecurityEngineResult actionResult =
             WSSecurityUtil.fetchActionResult(results, WSConstants.ST_UNSIGNED);
-        SAMLAssertion receivedAssertion = 
-            (SAMLAssertion) actionResult.get(WSSecurityEngineResult.TAG_SAML_ASSERTION);
+        Assertion receivedAssertion =
+            (Assertion) actionResult.get(WSSecurityEngineResult.TAG_SAML_ASSERTION);
         assertTrue(receivedAssertion != null);
     }
     
@@ -186,7 +186,7 @@ public class TestWSSecurityNewST3 extends TestCase implements CallbackHandler {
         saml.setInstanceDoc(doc);
         saml.setUserCrypto(crypto);
         saml.setUsername("16c73ab6-b892-458f-abf5-2f875f74882e");
-        SAMLAssertion assertion = saml.newAssertion();
+        Assertion assertion = saml.newAssertion();
 
         WSSecSignatureSAML wsSign = new WSSecSignatureSAML();
         wsSign.setDigestAlgo("http://www.w3.org/2001/04/xmlenc#sha256");
@@ -217,8 +217,8 @@ public class TestWSSecurityNewST3 extends TestCase implements CallbackHandler {
         Vector results = verify(signedDoc);
         WSSecurityEngineResult actionResult =
             WSSecurityUtil.fetchActionResult(results, WSConstants.ST_UNSIGNED);
-        SAMLAssertion receivedAssertion = 
-            (SAMLAssertion) actionResult.get(WSSecurityEngineResult.TAG_SAML_ASSERTION);
+        Assertion receivedAssertion =
+            (Assertion) actionResult.get(WSSecurityEngineResult.TAG_SAML_ASSERTION);
         assertTrue(receivedAssertion != null);
     }
     
@@ -238,7 +238,7 @@ public class TestWSSecurityNewST3 extends TestCase implements CallbackHandler {
         saml.setInstanceDoc(doc);
         saml.setUserCrypto(crypto);
         saml.setUsername("16c73ab6-b892-458f-abf5-2f875f74882e");
-        SAMLAssertion assertion = saml.newAssertion();
+        Assertion assertion = saml.newAssertion();
 
         WSSecSignatureSAML wsSign = new WSSecSignatureSAML();
         wsSign.setKeyIdentifierType(WSConstants.X509_KEY_IDENTIFIER);
@@ -265,8 +265,8 @@ public class TestWSSecurityNewST3 extends TestCase implements CallbackHandler {
         Vector results = verify(signedDoc);
         WSSecurityEngineResult actionResult =
             WSSecurityUtil.fetchActionResult(results, WSConstants.ST_UNSIGNED);
-        SAMLAssertion receivedAssertion = 
-            (SAMLAssertion) actionResult.get(WSSecurityEngineResult.TAG_SAML_ASSERTION);
+        Assertion receivedAssertion =
+            (Assertion) actionResult.get(WSSecurityEngineResult.TAG_SAML_ASSERTION);
         assertTrue(receivedAssertion != null);
     }
 
@@ -274,7 +274,7 @@ public class TestWSSecurityNewST3 extends TestCase implements CallbackHandler {
     /**
      * Verifies the soap envelope
      * 
-     * @param envelope 
+     * @param doc
      * @throws Exception Thrown when there is a problem in verification
      */
     private Vector verify(Document doc) throws Exception {
