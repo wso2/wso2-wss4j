@@ -46,7 +46,8 @@ import javax.xml.parsers.ParserConfigurationException;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.Vector;
-
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * This class is used to prcess a SAML2.0 Token and validate it.
@@ -57,7 +58,8 @@ public class SAML2TokenProcessor implements Processor {
 
     private String id;
     private Element samlTokenElement;
-
+    private static boolean isBootStrapped = false;
+    private static Lock bootstrapLock = new ReentrantLock();
 
     public void handleToken(Element elem, Crypto crypto, Crypto decCrypto, CallbackHandler cb,
                             WSDocInfo wsDocInfo, Vector returnResults, WSSConfig config) throws WSSecurityException {
@@ -98,8 +100,7 @@ public class SAML2TokenProcessor implements Processor {
     public Assertion buildAssertion(Element elem) throws WSSecurityException {
         Assertion samlAssertion;
         try {
-            SAMLInitializer.doBootstrap();
-
+            doBootstrap();
             // Unmarshall and build the assertion from the DOM element.
             String keyInfoElementString = elem.toString();
             DocumentBuilderFactory documentBuilderFactory = XMLUtils.getSecuredDocumentBuilder();
@@ -136,6 +137,21 @@ public class SAML2TokenProcessor implements Processor {
         return samlAssertion;
     }
 
+    public static void doBootstrap() throws ConfigurationException {
+        if (!isBootStrapped) {
+            bootstrapLock.lock();
+            try {
+                if (!isBootStrapped) {
+                    SAMLInitializer.doBootstrap();
+                    isBootStrapped = true;
+                }
+            } catch (Exception e) {
+                throw new ConfigurationException("Error when Bootstrapping SAML2 library", e);
+            } finally {
+                bootstrapLock.unlock();
+            }
+        }
+    }
 
     public Element getSamlTokenElement() {
         return samlTokenElement;
