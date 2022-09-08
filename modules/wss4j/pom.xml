@@ -459,7 +459,7 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>org.apache.santuario</groupId>
+            <groupId>org.wso2.santuario.orbit</groupId>
             <artifactId>xmlsec</artifactId>
             <scope>compile</scope>
         </dependency>

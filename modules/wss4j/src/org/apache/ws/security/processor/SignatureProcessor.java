@@ -237,7 +237,7 @@ public class SignatureProcessor implements Processor {
 
         XMLSignature sig = null;
         try {
-            sig = new XMLSignature(elem, null);
+            sig = new XMLSignature(elem, null, true);
         } catch (XMLSecurityException e2) {
             throw new WSSecurityException(
                 WSSecurityException.FAILED_CHECK, "noXMLSig", null, e2

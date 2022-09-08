@@ -57,7 +57,7 @@
             </exclusions>
         </dependency>
         <dependency>
-            <groupId>org.apache.santuario</groupId>
+            <groupId>org.wso2.santuario.orbit</groupId>
             <artifactId>xmlsec</artifactId>
             <optional>true</optional>
         </dependency>
