@@ -137,7 +137,7 @@ public class SAML2TokenProcessor implements Processor {
         return samlAssertion;
     }
 
-    public static void doBootstrap() throws ConfigurationException {
+    public static void doBootstrap() throws InitializationException {
         if (!isBootStrapped) {
             bootstrapLock.lock();
             try {
@@ -146,7 +146,7 @@ public class SAML2TokenProcessor implements Processor {
                     isBootStrapped = true;
                 }
             } catch (Exception e) {
-                throw new ConfigurationException("Error when Bootstrapping SAML2 library", e);
+                throw new InitializationException("Error when Bootstrapping SAML2 library", e);
             } finally {
                 bootstrapLock.unlock();
             }
