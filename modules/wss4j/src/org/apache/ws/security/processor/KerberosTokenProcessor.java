@@ -268,7 +268,7 @@ public class KerberosTokenProcessor implements Processor {
 		XMLSignature sig = null;
 
 		try {
-			sig = new XMLSignature(elem, null);
+			sig = new XMLSignature(elem, null, true);
 		} catch (XMLSecurityException e) {
 			log.error("Fail to build the XMLSignature");
 			throw new WSSecurityException(6, "noXMLSig");
