@@ -178,7 +178,7 @@
         <exp.pkg.version.wss4j>${wss4j.version}</exp.pkg.version.wss4j>
         <imp.pkg.version.wss4j>[${wss4j.version}, 2.0.0)</imp.pkg.version.wss4j>
         <exp.pkg.version.xmlsec>1.4.2-patched</exp.pkg.version.xmlsec>
-        <imp.pkg.version.xmlsec>[1.4.2, 2.0.0)</imp.pkg.version.xmlsec>
+        <imp.pkg.version.xmlsec>[1.4.2, 3.0.0)</imp.pkg.version.xmlsec>
         <imp.pkg.version.bcp>[1.49.0.wso2v2, 1.50.0)</imp.pkg.version.bcp>
         <imp.pkg.version.axis2>[1.4.0, 2.0.0)</imp.pkg.version.axis2>
         <imp.pkg.version.xmlsoap>[1.0.0, 2.0.0)</imp.pkg.version.xmlsoap>
