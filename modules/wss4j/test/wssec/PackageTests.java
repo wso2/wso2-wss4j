@@ -51,9 +51,6 @@ public class PackageTests extends TestCase {
         suite.addTestSuite(TestWSSecurityNew16.class);
         suite.addTestSuite(TestWSSecurityNew17.class);
         suite.addTestSuite(TestWSSecurityNewSOAP12.class);
-        suite.addTestSuite(TestWSSecurityNewST1.class);
-        suite.addTestSuite(TestWSSecurityNewST2.class);
-        suite.addTestSuite(TestWSSecurityNewST3.class);
         suite.addTestSuite(TestWSSecurityNewDK.class);
         suite.addTestSuite(TestWSSecurityNewSCT.class);
         suite.addTestSuite(TestWSSecurityUserProcessor.class);
@@ -63,7 +60,6 @@ public class PackageTests extends TestCase {
         suite.addTestSuite(TestWSSecurityDataRef1.class);
         suite.addTestSuite(TestWSSecurityCertError.class);
         suite.addTestSuite(TestWSSecurityEncryptionParts.class);
-        suite.addTestSuite(TestWSSecuritySignatureParts.class);
         suite.addTestSuite(TestWSSecurityUTSignature.class);
         suite.addTestSuite(TestWSSecurityWSS60.class);
         suite.addTestSuite(TestWSSecurityWSS86.class);
@@ -71,7 +67,6 @@ public class PackageTests extends TestCase {
         suite.addTestSuite(TestWSSecurityTimestamp.class);
         suite.addTestSuite(SignatureKeyValueTest.class);
         suite.addTestSuite(TestWSSecurityResultsOrder.class);
-        suite.addTestSuite(TestWSSecurityWSS178.class);
         suite.addTestSuite(TestWSSecurityWSS194.class);
         suite.addTestSuite(TestWSSecurityWSS199.class);
         suite.addTestSuite(TestWSSecurityWSS234.class);
