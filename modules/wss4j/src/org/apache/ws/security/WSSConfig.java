@@ -49,6 +49,9 @@ public class WSSConfig {
     
     private static final Log log = LogFactory.getLog(WSSConfig.class.getName());
 
+    public static final String BOUNCY_CASTLE_PROVIDER = "BC";
+    public static final String BOUNCY_CASTLE_FIPS_PROVIDER = "BCFIPS";
+
     /**
      * The default collection of actions supported by the toolkit.
      */
@@ -305,7 +308,12 @@ public class WSSConfig {
                  * The last provider added has precedence, that is if JuiCE can be added
                  * then WSS4J uses this provider.
                  */
-                addJceProvider("BC", "org.bouncycastle.jce.provider.BouncyCastleProvider");
+                String jceProvider = getPreferredJceProvider();
+                if (BOUNCY_CASTLE_FIPS_PROVIDER.equals(jceProvider)) {
+                    addJceProvider(BOUNCY_CASTLE_FIPS_PROVIDER, "org.bouncycastle.jcajce.provider.BouncyCastleFipsProvider");
+                } else {
+                    addJceProvider(BOUNCY_CASTLE_PROVIDER, "org.bouncycastle.jce.provider.BouncyCastleProvider");
+                }
                 addJceProvider("JuiCE", "org.apache.security.juice.provider.JuiCEProviderOpenSSL");
             }
             //Transform.init();
@@ -667,5 +675,18 @@ public class WSSConfig {
             return true;
         }
         return false;
+    }
+
+    /**
+     * Get the preferred JCE provider.
+     *
+     * @return the preferred JCE provider.
+     */
+    private static String getPreferredJceProvider() {
+        String provider = System.getProperty("security.jce.provider");
+        if (BOUNCY_CASTLE_FIPS_PROVIDER.equalsIgnoreCase(provider)) {
+            return BOUNCY_CASTLE_FIPS_PROVIDER;
+        }
+        return BOUNCY_CASTLE_PROVIDER;
     }
 }

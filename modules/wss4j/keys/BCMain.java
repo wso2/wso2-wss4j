@@ -19,6 +19,9 @@ import java.security.interfaces.RSAPrivateCrtKey;
 import java.util.Enumeration;
 
 public class BCMain {
+    public static final String BOUNCY_CASTLE_PROVIDER = "BC";
+    public static final String BOUNCY_CASTLE_FIPS_PROVIDER = "BCFIPS";
+
     public static void main(String[] args) {
         //==============================
         // Setup stuff
@@ -35,9 +38,16 @@ public class BCMain {
         char[] pkcs12Password = "security".toCharArray();
 
         //Plug the Provider into the JCA/JCE
-        Security.addProvider(new BouncyCastleProvider());
-
-
+        String jceProvider = getPreferredJceProvider();
+        String providerClass;
+        if (BOUNCY_CASTLE_FIPS_PROVIDER.equals(jceProvider)) {
+            providerClass = "org.bouncycastle.jcajce.provider.BouncyCastleFipsProvider";
+        } else if (BOUNCY_CASTLE_PROVIDER.equals(jceProvider)) {
+            providerClass = "org.bouncycastle.jce.provider.BouncyCastleProvider";
+        } else {
+            throw new NoSuchProviderException("Configured JCE provider " + jceProvider + " is not supported");
+        }
+        Security.addProvider((Provider) Class.forName(providerClass).getDeclaredConstructor().newInstance());
 
         //================================
         // JKS Stuff
@@ -154,7 +164,7 @@ public class BCMain {
 
         KeyStore pkcs12KeyStore = null;
         try {
-            pkcs12KeyStore = KeyStore.getInstance("PKCS12", "BC");
+            pkcs12KeyStore = KeyStore.getInstance("PKCS12", jceProvider);
             System.out.println("Create PKCS#12 KeyStore Object.");
         } catch (KeyStoreException e) {
             e.printStackTrace();
@@ -292,5 +302,18 @@ public class BCMain {
             e.printStackTrace();
             System.exit(1);
         }
+    }
+
+    /**
+     * Get the preferred JCE provider.
+     *
+     * @return the preferred JCE provider.
+     */
+    private static String getPreferredJceProvider() {
+        String provider = System.getProperty("security.jce.provider");
+        if (BOUNCY_CASTLE_FIPS_PROVIDER.equalsIgnoreCase(provider)) {
+            return BOUNCY_CASTLE_FIPS_PROVIDER;
+        }
+        return BOUNCY_CASTLE_PROVIDER;
     }
 }
