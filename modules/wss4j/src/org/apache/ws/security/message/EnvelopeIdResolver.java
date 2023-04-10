@@ -27,6 +27,7 @@ import org.apache.ws.security.WSDocInfo;
 import org.apache.ws.security.util.URI;
 import org.apache.ws.security.util.WSSecurityUtil;
 import org.apache.xml.security.signature.XMLSignatureInput;
+import org.apache.xml.security.utils.resolver.ResourceResolverContext;
 import org.apache.xml.security.utils.resolver.ResourceResolverException;
 import org.apache.xml.security.utils.resolver.ResourceResolverSpi;
 import org.w3c.dom.Attr;
@@ -65,7 +66,34 @@ public class EnvelopeIdResolver extends ResourceResolverSpi {
 
     private EnvelopeIdResolver() {
     }
-    
+
+    /**
+     * This is the workhorse method used to resolve resources.
+     *
+     * @param resourceResolverContext
+     * @return
+     * @throws ResourceResolverException
+     */
+    @Override
+    public XMLSignatureInput engineResolveURI(ResourceResolverContext resourceResolverContext)
+            throws ResourceResolverException {
+
+        return this.engineResolve(resourceResolverContext.attr, resourceResolverContext.baseUri);
+    }
+
+    /**
+     * This method helps the ResourceResolver to decide whether a
+     * ResourceResolverSpi is able to perform the requested action.
+     *
+     * @param resourceResolverContext
+     * @return
+     */
+    @Override
+    public boolean engineCanResolveURI(ResourceResolverContext resourceResolverContext) {
+
+        return this.engineCanResolve(resourceResolverContext.attr, resourceResolverContext.baseUri);
+    }
+
     /**
      * @param docInfo The WSDocInfo object to be used for resolving elements
      */
@@ -124,7 +152,7 @@ public class EnvelopeIdResolver extends ResourceResolverSpi {
             if (selectedElem == null) {
                 throw new ResourceResolverException("generic.EmptyMessage",
                         new Object[]{"Body element not found"},
-                        uri,
+                        String.valueOf(uri),
                         BaseURI);
             }
             String cId = selectedElem.getAttributeNS(WSConstants.WSU_NS, "Id");
@@ -145,7 +173,7 @@ public class EnvelopeIdResolver extends ResourceResolverSpi {
                 if (cId == null) {
                     throw new ResourceResolverException("generic.EmptyMessage",
                             new Object[]{"Id not found"},
-                            uri,
+                            String.valueOf(uri),
                             BaseURI);
                 }
             }
