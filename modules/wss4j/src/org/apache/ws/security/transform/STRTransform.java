@@ -30,6 +30,7 @@ import org.apache.ws.security.util.WSSecurityUtil;
 import org.apache.xml.security.c14n.CanonicalizationException;
 import org.apache.xml.security.c14n.Canonicalizer;
 import org.apache.xml.security.c14n.InvalidCanonicalizerException;
+import org.apache.xml.security.exceptions.XMLSecurityException;
 import org.apache.xml.security.signature.XMLSignatureInput;
 import org.apache.xml.security.transforms.Transform;
 import org.apache.xml.security.transforms.TransformSpi;
@@ -81,6 +82,18 @@ public class STRTransform extends TransformSpi {
 
     public boolean returnsNodeSet() {
         return false;
+    }
+
+    @Override
+    protected XMLSignatureInput enginePerformTransform(XMLSignatureInput xmlSignatureInput, OutputStream outputStream,
+                                                       Element element, String baseURI, boolean secureValidation)
+            throws IOException, TransformationException {
+
+        try {
+            return enginePerformTransform(xmlSignatureInput, new Transform(element, baseURI));
+        } catch (XMLSecurityException e) {
+            throw new TransformationException(e);
+        }
     }
 
     /**
@@ -204,11 +217,11 @@ public class STRTransform extends TransformSpi {
             //
             // C14n with specified algorithm. According to WSS Specification.
             //
-            buf = canon.canonicalizeSubtree(dereferencedToken, "#default");
+            ByteArrayOutputStream writer = new ByteArrayOutputStream();
+            canon.canonicalizeSubtree(dereferencedToken, writer);
+
             if (doDebug) {
-                bos = new ByteArrayOutputStream(buf.length);
-                bos.write(buf, 0, buf.length);
-                log.debug("after c14n: " + bos.toString());
+                log.debug("after c14n: " + new String(writer.toByteArray()));
             }
 
             //
@@ -224,7 +237,7 @@ public class STRTransform extends TransformSpi {
             // return new XMLSignatureInput(buf);
             
             // start of HACK
-            StringBuffer bf = new StringBuffer(new String(buf));
+            StringBuffer bf = new StringBuffer(new String(writer.toByteArray()));
             String bf1 = bf.toString();
 
             //
