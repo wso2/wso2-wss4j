@@ -162,7 +162,7 @@
         <opensaml.version>3.3.1</opensaml.version>
         <saml.common.util.version>1.0.10</saml.common.util.version>
         <saml.common.util.version.range>[1.0.3,2.0.0)</saml.common.util.version.range>
-        <slf4j.jdk14.version>1.7.26</slf4j.jdk14.version>
+        <slf4j.jdk14.version>2.0.12</slf4j.jdk14.version>
         <wss4j.version>1.6.0-wso2v8-SNAPSHOT</wss4j.version>
         <exp.pkg.version.wss4j>${wss4j.version}</exp.pkg.version.wss4j>
         <imp.pkg.version.wss4j>[${wss4j.version}, 2.0.0)</imp.pkg.version.wss4j>
