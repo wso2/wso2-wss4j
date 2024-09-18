@@ -317,6 +317,7 @@
                     <includes>
                         <include>**/PackageTests.java</include>
                     </includes>
+                    <argLine>$(argLine}</argLine>
                 </configuration>
             </plugin>
             <plugin>
@@ -331,7 +332,6 @@
                         </goals>
                         <configuration>
                             <propertyName>argLine</propertyName>
-                            <destFile>${project.build.directory}/jacoco.exec</destFile>
                         </configuration>
                     </execution>
                     <execution>
