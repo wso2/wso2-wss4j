@@ -196,8 +196,8 @@
         <info-reports.plugin.version>3.0.0</info-reports.plugin.version>
         <maven.buildnumber.plugin.version>1.4</maven.buildnumber.plugin.version>
 
-        <src.java.version>1.7</src.java.version>
-        <target.java.version>1.7</target.java.version>
+        <src.java.version>8</src.java.version>
+        <target.java.version>8</target.java.version>
     </properties>
 
     <build>
